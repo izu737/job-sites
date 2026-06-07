@@ -44,12 +44,13 @@ nav{background:var(--white);border-bottom:1px solid var(--border);position:stick
 .card-sub{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
 .card-sub-item{font-size:14px;color:var(--muted);padding:4px 0}
 .card-meta{margin-top:16px;font-size:14px;color:var(--subtle)}
-.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px}
-.team-card{text-align:center}
-.team-photo{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--dark) 0%,#333 100%);margin:0 auto 24px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;justify-items:center}
+.team-card{text-align:center;display:flex;flex-direction:column;align-items:center;padding:1.5rem}
+.team-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 24px}
+.team-photo-fallback{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--dark) 0%,#333 100%);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:600;margin:0 auto 24px}
 .team-name{font-size:20px;font-weight:600;margin-bottom:4px}
 .team-title{font-size:14px;color:var(--subtle);margin-bottom:16px}
-.team-bio{font-size:14px;color:var(--muted);line-height:1.7}
+.team-bio{font-size:14px;color:var(--muted);line-height:1.7;max-width:280px}
 .process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}
 .process-card{position:relative;padding-left:48px}
 .step-num{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--black);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
