@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Stage 4 Solutions</title>
+<link href='https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap' rel='stylesheet'>
+<style>
+:root{--white:#fff;--black:#000;--bg:#f7f7f8;--muted:#666;--subtle:#999;--border:#e5e5e5;--dark:#0d0d0d}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--black);font-family:'DM Sans',Arial,sans-serif;font-size:16px;line-height:1.6}
+a{text-decoration:none;color:inherit}
+.container{max-width:1200px;margin:0 auto;padding:0 48px}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--black);color:var(--white);border:none;border-radius:100px;padding:14px 28px;font-size:15px;font-weight:500;cursor:pointer;transition:opacity 0.2s}
+.btn:hover{opacity:0.85}
+.btn-outline{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.4)}
+.btn-sm{padding:10px 20px;font-size:14px}
+.btn-arrow{width:28px;height:28px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center}
+.btn-arrow svg{width:12px;height:12px}
+.btn-outline .btn-arrow{background:rgba(255,255,255,0.2)}
+.btn-outline .btn-arrow svg path{stroke:var(--white)}
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-size:18px;font-weight:700}
+.hero{background:var(--bg);padding:100px 0 80px;text-align:center}
+.hero h1{font-size:56px;font-weight:700;line-height:1.08;letter-spacing:-2.5px;max-width:850px;margin:0 auto 24px}
+.hero-sub{font-size:18px;color:var(--muted);max-width:600px;margin:0 auto 48px;line-height:1.7}
+.stats-bar{display:flex;justify-content:center;gap:56px;padding:48px 0;margin-bottom:32px}
+.stat-item{text-align:center}
+.stat-val{font-size:36px;font-weight:700;display:block;letter-spacing:-1px}
+.stat-lbl{font-size:13px;color:var(--subtle);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+.section{padding:100px 0}
+.section-white{background:var(--white)}
+.section-header{margin-bottom:56px}
+.section-header h2{font-size:44px;font-weight:700;letter-spacing:-1.5px;margin-bottom:16px}
+.section-header p{color:var(--muted);font-size:18px;max-width:600px}
+.section-header.centered{text-align:center}
+.section-header.centered p{margin:0 auto}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.card{background:var(--white);border-radius:16px;padding:36px;border:1px solid var(--border);transition:box-shadow 0.2s}
+.card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+.card-title{font-size:20px;font-weight:600;margin-bottom:12px}
+.card-desc{font-size:15px;color:var(--muted);line-height:1.7}
+.card-sub{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.card-sub-item{font-size:14px;color:var(--muted);padding:4px 0}
+.card-meta{margin-top:16px;font-size:14px;color:var(--subtle)}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;justify-items:center}
+.team-card{text-align:center;display:flex;flex-direction:column;align-items:center;padding:1.5rem}
+.team-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;margin:0 auto 24px}
+.team-photo-fallback{width:140px;height:140px;border-radius:50%;background:linear-gradient(135deg,var(--dark) 0%,#333 100%);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:600;margin:0 auto 24px}
+.team-name{font-size:20px;font-weight:600;margin-bottom:4px}
+.team-title{font-size:14px;color:var(--subtle);margin-bottom:16px}
+.team-bio{font-size:14px;color:var(--muted);line-height:1.7;max-width:280px}
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px}
+.process-card{position:relative;padding-left:48px}
+.step-num{position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--black);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.step-title{font-size:18px;font-weight:600;margin-bottom:8px}
+.step-desc{font-size:15px;color:var(--muted);line-height:1.7}
+.testimonial-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:32px}
+.testimonial-card{background:var(--white);border-radius:16px;padding:40px;border:1px solid var(--border)}
+.testimonial-quote{font-size:18px;line-height:1.7;margin-bottom:24px;font-style:italic;color:var(--muted)}
+.testimonial-author{font-weight:600}
+.testimonial-title{font-size:14px;color:var(--subtle);margin-top:4px}
+.clients-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:40px;padding:32px 0}
+.client-name{font-size:15px;color:var(--subtle);font-weight:500}
+.faq-list{max-width:800px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);padding:28px 0}
+.faq-q{font-size:18px;font-weight:600;margin-bottom:12px}
+.faq-a{font-size:15px;color:var(--muted);line-height:1.7}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.pricing-card{background:var(--white);border-radius:16px;padding:40px;border:1px solid var(--border);text-align:center}
+.pricing-name{font-size:20px;font-weight:600;margin-bottom:8px}
+.pricing-price{font-size:36px;font-weight:700;margin-bottom:8px}
+.pricing-desc{font-size:14px;color:var(--muted);margin-bottom:24px}
+.pricing-features{text-align:left;margin-bottom:24px}
+.pricing-feature{font-size:14px;padding:8px 0;border-bottom:1px solid var(--border)}
+.about-content{max-width:800px}
+.about-content h2{font-size:36px;font-weight:700;margin-bottom:20px}
+.about-content p{font-size:16px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.about-meta{margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
+.about-meta-item{font-size:14px;margin-bottom:8px}
+.about-meta-label{color:var(--subtle)}
+.awards-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:24px}
+.award-item{background:var(--white);border-radius:12px;padding:24px 32px;border:1px solid var(--border);text-align:center}
+.award-name{font-size:15px;font-weight:600}
+.award-year{font-size:13px;color:var(--subtle);margin-top:4px}
+.locations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+.location-card{background:var(--white);border-radius:12px;padding:28px;border:1px solid var(--border)}
+.location-name{font-size:18px;font-weight:600;margin-bottom:8px}
+.location-address{font-size:14px;color:var(--muted)}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px}
+.value-card{padding:32px}
+.value-title{font-size:18px;font-weight:600;margin-bottom:12px}
+.value-desc{font-size:15px;color:var(--muted);line-height:1.7}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.results-quote{font-size:22px;font-style:italic;line-height:1.6;color:var(--muted);border-left:4px solid var(--border);padding-left:28px}
+.results-author{margin-top:20px;font-size:15px;color:var(--subtle)}
+.cta-section{background:var(--dark);color:var(--white);padding:100px 0;text-align:center}
+.cta-section h2{font-size:40px;font-weight:700;margin-bottom:20px}
+.cta-section p{color:rgba(255,255,255,0.6);margin-bottom:40px;font-size:18px}
+.cta-fine{margin-top:28px;font-size:13px;color:rgba(255,255,255,0.4)}
+footer{background:var(--dark);color:var(--white);padding:80px 0 40px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:64px;margin-bottom:64px}
+.footer-tagline{color:rgba(255,255,255,0.5);font-size:15px;margin-top:16px;line-height:1.7}
+.footer-col h4{font-size:14px;font-weight:600;margin-bottom:20px;text-transform:uppercase;letter-spacing:0.5px}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:12px}
+.footer-col a{font-size:14px;color:rgba(255,255,255,0.5);transition:color 0.2s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;font-size:13px;color:rgba(255,255,255,0.3)}
+@media(max-width:768px){.container{padding:0 24px}.hero{padding:60px 0 40px}.hero h1{font-size:36px}.section{padding:60px 0}.section-header h2{font-size:32px}.results-grid,.footer-grid{grid-template-columns:1fr}.stats-bar{flex-wrap:wrap;gap:32px}}
+</style>
+</head>
+<body>
+<nav><div class='container'><div class='nav-inner'><div class='nav-logo'>Stage 4 Solutions</div><a href='#contact' class='btn btn-sm'>Get in touch<span class='btn-arrow'><svg viewBox='0 0 14 14' fill='none'><path d='M2.917 7h8.166M7.583 3.5L11.083 7l-3.5 3.5' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg></span></a></div></div></nav>
+<section class='hero'><div class='container'><h1>Resourcing and consulting solutions tailored to your budget and goals</h1><a href='#contact' class='btn'>Get in touch<span class='btn-arrow'><svg viewBox='0 0 14 14' fill='none'><path d='M2.917 7h8.166M7.583 3.5L11.083 7l-3.5 3.5' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg></span></a></div></section>
+<div class='container'><div class='stats-bar'><div class='stat-item'><span class='stat-val'>20+ years</span><span class='stat-lbl'>of experience enabling success</span></div><div class='stat-item'><span class='stat-val'>100%</span><span class='stat-lbl'>client referenceability</span></div><div class='stat-item'><span class='stat-val'>60%</span><span class='stat-lbl'>diversity (minorities, women)</span></div><div class='stat-item'><span class='stat-val'>5000+</span><span class='stat-lbl'>successful client projects</span></div><div class='stat-item'><span class='stat-val'>40+</span><span class='stat-lbl'>industry awards won</span></div></div></div>
+
+<section class='section'><div class='container'><div class='section-header'><h2>Services</h2></div><div class='cards-grid'><div class='card'><div class='card-title'>Marketing</div><div class='card-desc'>We offer customized marketing solutions – from market and product strategy development to flawless execution of marketing deliverables.</div></div><div class='card'><div class='card-title'>Technology</div><div class='card-desc'>We provide strategic technology consulting and staffing solutions to drive your technology projects forward and meet your team's needs.</div></div><div class='card'><div class='card-title'>Business Operations</div><div class='card-desc'>Our consulting and staffing solutions help streamline business operations and drive success across supply chain, finance, customer support, and strategy teams.</div></div></div></div></section>
+
+
+
+<section class='section'><div class='container'><div class='section-header centered'><h2>What Clients Say</h2></div><div class='testimonial-grid'><div class='testimonial-card'><div class='testimonial-quote'>Stage 4 Solutions delivered relevant, highly capable talent aligned to our needs in a very short timeframe. Their team took the time to understand our business goals, asked thoughtful and detailed questions of each role, and quickly translated that understanding into a strong, well-qualified slate of candidates for our review. They were easy to work with and brought a truly customer-centric approach throughout the engagement.</div><div class='testimonial-author'>Jamie Ward</div><div class='testimonial-title'>Global Lead, Customer Success Transformation & Strategy, ServiceNow</div></div><div class='testimonial-card'><div class='testimonial-quote'>Stage 4 Solutions has been a consistently high-performing vendor in Magnit's ServiceNow MSP program. They have consistently ranked among our top suppliers, demonstrating a strong commitment to quality, reliability, and service excellence. Their ability to provide top-tier candidates, along with their efficient processes and proactive communication, makes them a trusted partner. We appreciate their partnership and the value they bring to our program.</div><div class='testimonial-author'>Arun Pope</div><div class='testimonial-title'>Client Services Consultant, Magnit</div></div><div class='testimonial-card'><div class='testimonial-quote'>Stage 4 Solutions has been instrumental in supporting my organization's interim staffing needs. Their team is impressively responsive and always available to address any concerns or questions promptly. The candidates they provide are consistently exceptional, fitting seamlessly into our team and delivering desired results. Their dedication to understanding our unique requirements ensures a perfect match every time. I would highly recommend Stage 4 Solutions to organizations seeking interim staffing solutions.</div><div class='testimonial-author'>Blaine Schultz</div><div class='testimonial-title'>Global Partner Solutions Sales Leader, NetApp</div></div></div></div></section>
+
+
+<section class='section section-white'><div class='container'><div class='section-header centered'><h2>Clients</h2></div><div class='clients-bar'><span class='client-name'>VMware</span><span class='client-name'>Vocera</span><span class='client-name'>WEAVAI</span><span class='client-name'>WEKA</span><span class='client-name'>Western Digital</span><span class='client-name'>Amazon</span><span class='client-name'>Axcient</span><span class='client-name'>Beyond</span><span class='client-name'>Celigo</span><span class='client-name'>Centrify</span><span class='client-name'>CISCO</span><span class='client-name'>Cohesity</span><span class='client-name'>Commvault</span><span class='client-name'>Copado</span><span class='client-name'>Cyral</span><span class='client-name'>Datameer</span><span class='client-name'>Datera</span><span class='client-name'>Dell</span><span class='client-name'>Druva</span><span class='client-name'>Enphase</span><span class='client-name'>Equinix</span><span class='client-name'>Explorium</span><span class='client-name'>FalconStor</span><span class='client-name'>Fujitsu</span><span class='client-name'>Gap</span><span class='client-name'>GE</span><span class='client-name'>General</span><span class='client-name'>HPE</span><span class='client-name'>HP</span><span class='client-name'>Hitachi</span><span class='client-name'>IBM</span><span class='client-name'>Infosys</span><span class='client-name'>Jive Software</span><span class='client-name'>Laminar</span><span class='client-name'>Lockheed Martin</span><span class='client-name'>Malware Bytes</span><span class='client-name'>Medallia</span><span class='client-name'>Meltano</span><span class='client-name'>Microsoft</span><span class='client-name'>Neo4j</span><span class='client-name'>NetApp</span><span class='client-name'>Nokia</span><span class='client-name'>Palo Alto Networks</span><span class='client-name'>Pigment</span><span class='client-name'>Poly</span><span class='client-name'>Propelo</span><span class='client-name'>PsiQuantum</span><span class='client-name'>Pure Storage</span><span class='client-name'>Qubole</span><span class='client-name'>Reltio</span><span class='client-name'>Riverbed</span><span class='client-name'>Santa Clara County</span><span class='client-name'>Salesforce</span><span class='client-name'>SAP</span><span class='client-name'>Serena</span><span class='client-name'>ServiceNow</span><span class='client-name'>SiFive</span><span class='client-name'>Skoll Foundation</span><span class='client-name'>Symantec</span><span class='client-name'>Synack</span><span class='client-name'>Tealium</span><span class='client-name'>Telmai</span><span class='client-name'>Tigera</span><span class='client-name'>Traceable</span><span class='client-name'>US Air Force</span><span class='client-name'>USMSPB</span><span class='client-name'>Veeam</span><span class='client-name'>Verizon</span><span class='client-name'>Vizient</span></div></div></section>
+
+
+
+
+<section class='cta-section' id='contact'><div class='container'><h2>Get in touch</h2><p></p><a href='mailto:' class='btn btn-outline'>Get in touch<span class='btn-arrow'><svg viewBox='0 0 14 14' fill='none'><path d='M2.917 7h8.166M7.583 3.5L11.083 7l-3.5 3.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg></span></a></div></section>
+<footer><div class='container'><div class='footer-grid'><div><div class='nav-logo' style='color:#fff;'>Stage 4 Solutions</div><p class='footer-tagline'></p></div><div class='footer-col'><h4>Company</h4><ul><li><a href='#'>Verticals</a></li><li><a href='#'>Services</a></li></ul></div></div><div class='footer-bottom'>© 2026 Stage 4 Solutions. All rights reserved.</div></div></footer></body></html>
