@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V2Soft – Smarter, Faster, AI-Powered Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #0066ff;
+    --accent2: #00d4ff;
+    --bg-dark: #050508;
+    --bg-mid: #0a0a0f;
+    --bg-card: #111118;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --border: rgba(255,255,255,0.08);
+    --gradient: linear-gradient(135deg, #0066ff, #00d4ff);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* ── ANIMATIONS ── */
+  .animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(5, 5, 8, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 var(--border);
+    padding: 14px 60px;
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-logo span {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 6px;
+    transition: color 0.25s, background 0.25s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .nav-cta {
+    background: var(--gradient);
+    color: #fff !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 9px 20px !important;
+    transition: opacity 0.25s, transform 0.25s !important;
+  }
+  .nav-cta:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    background: var(--gradient) !important;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 120px 60px 80px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-dark);
+    z-index: 0;
+  }
+
+  /* orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    animation: float linear infinite;
+  }
+  .orb1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #0066ff 0%, transparent 70%);
+    top: -150px; left: -100px;
+    animation-duration: 18s;
+  }
+  .orb2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
+    bottom: -100px; right: -80px;
+    animation-duration: 22s;
+    animation-direction: reverse;
+  }
+  .orb3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, #6600ff 0%, transparent 70%);
+    top: 40%; left: 50%;
+    animation-duration: 26s;
+  }
+
+  @keyframes float {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(30px, -30px) scale(1.05); }
+    66%  { transform: translate(-20px, 20px) scale(0.97); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
+  /* grid lines */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 102, 255, 0.12);
+    border: 1px solid rgba(0, 102, 255, 0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-headline {
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.08;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.75) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-headline .highlight {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto 40px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gradient);
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 102, 255, 0.45);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 14px 28px;
+    border-radius: 10px;
+    transition: background 0.25s, transform 0.25s;
+  }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.35);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollDown 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollDown {
+    0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50% { opacity: 1; transform: scaleY(1); }
+    100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── STATS ── */
+  #stats {
+    background: var(--bg-mid);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 60px;
+  }
+
+  .stats-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 30px 20px;
+    position: relative;
+  }
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 20%; height: 60%;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .stat-value {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECTION COMMON ── */
+  section { padding: 100px 60px; }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    background: rgba(0, 102, 255, 0.1);
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    border-radius: 100px;
+    padding: 4px 14px;
+    margin-bottom: 18px;
+  }
+
+  .section-heading {
+    font-size: clamp(34px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--bg-dark); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0,102,255,0.15);
+    border-color: rgba(0, 102, 255, 0.2);
+  }
+  .service-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: rgba(0, 102, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .service-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    color: #fff;
+  }
+
+  .service-card p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+  .service-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(0, 102, 255, 0.08);
+    border: 1px solid rgba(0, 102, 255, 0.15);
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--bg-mid);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 420px;
+  }
+
+  .about-visual-card {
+    position: absolute;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .about-card-main {
+    top: 0; left: 0; right: 60px;
+    bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(135deg, #0a0a1a 0%, #0f0f1f 100%);
+    overflow: hidden;
+  }
+
+  .about-card-main::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,102,255,0.25) 0%, transparent 70%);
+  }
+
+  .about-card-small {
+    bottom: 0; right: 0;
+    width: 200px;
+    background: var(--gradient);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .about-card-small .num {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .about-card-small .lbl {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  .about-text h2 { margin-bottom: 20px; }
+
+  .about-text p {
+    font-size: 17px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .about-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .about-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+  }
+  .about-badge::before {
+    content: '✓';
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(0,102,255,0.15);
+    color: var(--accent);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ── TEAM ── */
+  #team {
+    background: var(--bg-dark);
+  }
+
+  .team-message {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .team-message::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,102,255,0.1) 0%, transparent 60%);
+  }
+  .team-message h3 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .team-message p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto 28px;
+    position: relative;
+  }
+
+  /* ── CTA SECTION ── */
+  #cta-section {
+    background: linear-gradient(135deg, #030312 0%, #060618 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 100px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,102,255,0.12) 0%, transparent 65%);
+  }
+
+  .cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-inner h2 {
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+
+  .cta-inner p {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #020204;
+    border-top: 1px solid var(--border);
+    padding: 70px 60px 36px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 50px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+  }
+
+  .footer-brand .nav-logo {
+    margin-bottom: 14px;
+    display: inline-flex;
+  }
+
+  .footer-brand p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 260px;
+  }
+
+  .footer-col h4 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 18px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-col ul a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: #fff; }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .footer-bottom a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 10px;
+  }
+
+  .social-link {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .social-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,102,255,0.08);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    nav { padding: 18px 30px; }
+    nav.scrolled { padding: 12px 30px; }
+    section { padding: 80px 30px; }
+    #stats { padding: 50px 30px; }
+    .about-grid { grid-template-columns: 1fr; gap: 50px; }
+    .about-visual { height: 280px; }
+    footer { padding: 60px 30px 30px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav.scrolled { padding: 12px 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 24px 80px; }
+    section { padding: 70px 24px; }
+    #stats { padding: 40px 24px; }
+    .stats-inner { grid-template-columns: 1fr; }
+    .stat-item:not(:last-child)::after { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    footer { padding: 50px 24px 24px; }
+    .footer-top { grid-template-columns: 1fr; gap: 30px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .cta-inner h2 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="mainNav">
+  <a href="https://www.v2soft.com" target="_blank" rel="noopener noreferrer" class="nav-logo">
+    V2<span>Soft</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://www.v2soft.com/ai-solutions/gen-ai-services" target="_blank" rel="noopener noreferrer">AI Solutions</a></li>
+    <li><a href="https://www.v2soft.com/services/workforce/staffing-solutions" target="_blank" rel="noopener noreferrer">Services</a></li>
+    <li><a href="https://www.v2soft.com/industries/automotive-industry" target="_blank" rel="noopener noreferrer">Industries</a></li>
+    <li><a href="https://www.v2soft.com/aboutus" target="_blank" rel="noopener noreferrer">About Us</a></li>
+    <li><a href="https://www.v2soft.com/careers" target="_blank" rel="noopener noreferrer">Careers</a></li>
+    <li><a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer" class="nav-cta">Contact Us</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge animate">Powered by Sanciti AI</div>
+    <h1 class="hero-headline animate animate-delay-1">
+      SMARTER, FASTER,<br><span class="highlight">AI-POWERED</span> SOLUTIONS.
+    </h1>
+    <p class="hero-sub animate animate-delay-2">
+      Powered by Sanciti AI we embed AI into the core of your business, enhancing workflows, accelerating decisions, and unlocking new value across every function.
+    </p>
+    <div class="hero-actions animate animate-delay-3">
+      <a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        Request Demo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://www.v2soft.com/ai-solutions/gen-ai-services" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+        Explore AI Solutions
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat-item animate">
+      <span class="stat-value" data-target="28" data-suffix="%" data-display="25-30%">25-30%</span>
+      <span class="stat-label">Faster Time-To-Market</span>
+    </div>
+    <div class="stat-item animate animate-delay-1">
+      <span class="stat-value" data-target="55" data-suffix="%" data-display="50-60%">50-60%</span>
+      <span class="stat-label">Lower Cost Of Delivery</span>
+    </div>
+    <div class="stat-item animate animate-delay-2">
+      <span class="stat-value" style="font-size:28px; letter-spacing:-0.5px;">Higher Quality</span>
+      <span class="stat-label">Of Code And Test Coverage</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="section-inner">
+    <div class="animate">
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-heading">AI-POWERED SERVICES</h2>
+      <p class="section-sub">Transformative solutions engineered to accelerate your enterprise at every layer — from intelligent automation to expert workforce deployment.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card animate animate-delay-1">
+        <div class="service-icon">🤖</div>
+        <h3>GEN AI Services</h3>
+        <p>Full-spectrum generative AI capabilities embedded into your enterprise operations and development lifecycle.</p>
+        <div class="service-tags">
+          <span class="service-tag">AI Testing</span>
+          <span class="service-tag">AI Applications</span>
+          <span class="service-tag">AI Cloud</span>
+          <span class="service-tag">AI Governance</span>
+        </div>
+      </div>
+      <div class="service-card animate animate-delay-2">
+        <div class="service-icon">⚡</div>
+        <h3>Sanciti AI &amp; Agentic AI</h3>
+        <p>Proprietary AI platform and agentic capabilities to modernize your legacy systems and unlock next-generation value.</p>
+        <div class="service-tags">
+          <span class="service-tag">LEGMOD</span>
+          <span class="service-tag">Legacy Modernization</span>
+        </div>
+      </div>
+      <div class="service-card animate animate-delay-3">
+        <div class="service-icon">👥</div>
+        <h3>Workforce Solutions</h3>
+        <p>Flexible, scalable talent delivery models matched to your project demands and long-term growth strategy.</p>
+        <div class="service-tags">
+          <span class="service-tag">Contract Staffing</span>
+          <span class="service-tag">Managed Capacity</span>
+          <span class="service-tag">Permanent Staffing</span>
+        </div>
+      </div>
+      <div class="service-card animate animate-delay-4">
+        <div class="service-icon">🛠️</div>
+        <h3>Managed Services</h3>
+        <p>End-to-end application management and global delivery models that reduce overhead while maintaining quality.</p>
+        <div class="service-tags">
+          <span class="service-tag">Managed Applications</span>
+          <span class="service-tag">Offshore/Nearshore</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-visual animate">
+        <div class="about-visual-card about-card-main">
+          <div style="position:relative; z-index:1;">
+            <div style="font-size:11px; text-transform:uppercase; letter-spacing:2px; color:var(--accent2); margin-bottom:8px; font-weight:600;">Powered by</div>
+            <div style="font-size:28px; font-weight:700; letter-spacing:-1px; line-height:1.1; margin-bottom:8px;">Sanciti AI<br>Platform</div>
+            <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">Enterprise-grade AI infrastructure for rapid innovation and competitive advantage.</div>
+          </div>
+        </div>
+        <div class="about-visual-card about-card-small">
+          <span class="num">25+</span>
+          <span class="lbl">Years of Innovation</span>
+        </div>
+      </div>
+      <div class="about-text animate animate-delay-2">
+        <div class="section-tag">About V2Soft</div>
+        <h2 class="section-heading">Innovative Technology Solutions</h2>
+        <p>Innovation in Technology is no longer something that is "nice to have", it is an essential part of choices being made in today's enterprise world.</p>
+        <p>Using the right partner and method, companies can leverage innovative technologies to create rapid response today, shape their path for the future, and gain an edge over the competition.</p>
+        <div class="about-badges">
+          <div class="about-badge">AI-First Approach</div>
+          <div class="about-badge">Enterprise Proven</div>
+          <div class="about-badge">Global Delivery</div>
+          <div class="about-badge">ISO Certified</div>
+        </div>
+        <div style="margin-top: 28px;">
+          <a href="https://www.v2soft.com/aboutus" target="_blank" rel="noopener noreferrer" class="btn-primary">Learn More About Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section id="team">
+  <div class="section-inner">
+    <div class="animate" style="text-align:center; margin-bottom: 40px;">
+      <div class="section-tag">Our People</div>
+      <h2 class="section-heading">Leadership Team</h2>
+    </div>
+    <div class="team-message animate animate-delay-1">
+      <h3>Visionary Leadership Driving Transformation</h3>
+      <p>Our leadership team combines decades of enterprise technology expertise with a bold vision for an AI-powered future — guiding V2Soft's mission to deliver smarter, faster outcomes for every client.</p>
+      <a href="https://www.v2soft.com/about-us/leadership-team" target="_blank" rel="noopener noreferrer" class="btn-secondary">Meet the Leadership Team →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA SECTION ── -->
+<div id="cta-section">
+  <div class="cta-inner">
+    <div class="section-tag animate" style="display:inline-block;">Get Started</div>
+    <h2 class="animate animate-delay-1">Ready to Transform<br>Your Enterprise with AI?</h2>
+    <p class="animate animate-delay-2">Partner with V2Soft to embed intelligence into every layer of your business and unlock measurable results — faster than you thought possible.</p>
+    <div class="animate animate-delay-3">
+      <a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:16px; padding:16px 36px;">
+        Request a Demo
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="https://www.v2soft.com" target="_blank" rel="noopener noreferrer" class="nav-logo" style="margin-bottom:14px;">V2<span>Soft</span></a>
+      <p>Embedding AI into the core of your business to enhance workflows, accelerate decisions, and unlock new value across every function.</p>
+      <div class="footer-social" style="margin-top:20px;">
+        <a href="https://www.v2soft.com" target="_blank" rel="noopener noreferrer" class="social-link" title="Website">🌐</a>
+        <a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer" class="social-link" title="Contact">✉</a>
+        <a href="https://www.v2soft.com/careers" target="_blank" rel="noopener noreferrer" class="social-link" title="Careers">💼</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="https://www.v2soft.com/aboutus" target="_blank" rel="noopener noreferrer">About V2Soft</a></li>
+        <li><a href="https://www.v2soft.com/about-us/leadership-team" target="_blank" rel="noopener noreferrer">Leadership Team</a></li>
+        <li><a href="https://www.v2soft.com/v2soft-awards" target="_blank" rel="noopener noreferrer">Awards</a></li>
+        <li><a href="https://www.v2soft.com/v2soft-certifications" target="_blank" rel="noopener noreferrer">Certifications</a></li>
+        <li><a href="https://www.v2soft.com/supplier-diversity" target="_blank" rel="noopener noreferrer">Supplier Diversity</a></li>
+        <li><a href="https://www.v2soft.com/v2care" target="_blank" rel="noopener noreferrer">Social Responsibility</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://www.v2soft.com/latest-news" target="_blank" rel="noopener noreferrer">News</a></li>
+        <li><a href="https://www.v2soft.com/blog" target="_blank" rel="noopener noreferrer">Blog</a></li>
+        <li><a href="https://www.v2soft.com/ai-solutions/gen-ai-services" target="_blank" rel="noopener noreferrer">AI Solutions</a></li>
+        <li><a href="https://www.v2soft.com/industries/automotive-industry" target="_blank" rel="noopener noreferrer">Industries</a></li>
+        <li><a href="https://www.v2soft.com/services/workforce/staffing-solutions" target="_blank" rel="noopener noreferrer">Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer">Contact Us</a></li>
+        <li><a href="https://www.v2soft.com/contact-us/v2soft-locations" target="_blank" rel="noopener noreferrer">V2Soft Offices</a></li>
+        <li><a href="https://www.v2soft.com/careers" target="_blank" rel="noopener noreferrer">Environment &amp; Culture</a></li>
+        <li><a href="https://www.v2soft.com/careers/job-openings" target="_blank" rel="noopener noreferrer">View Open Jobs</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© <span id="year"></span> V2Soft. All rights reserved. Built with AI precision.</p>
+    <a href="https://www.v2soft.com/contactus" target="_blank" rel="noopener noreferrer">Contact V2Soft →</a>
+  </div>
+</footer>
+
+<script>
+  // ── Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Nav scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // ── IntersectionObserver for animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // ── Stat counter animation
+  function animateCounter(el) {
+    const display = el.dataset.display;
+    if (!display) return;
+
+    // Parse numeric value from display string (take the second number for ranges like "25-30%")
+    const raw = display.replace('%', '').replace('+', '');
+    const parts = raw.split('-');
+    const targetVal = parseFloat(parts[parts.length - 1]);
+    const suffix = display.includes('%') ? '%' : (display.includes('+') ? '+' : '');
+    const prefix = parts.length > 1 ? parts[0] + '-' : '';
+    
+    if (isNaN(targetVal)) return;
+
+    const duration = 1500;
+    const startTime = performance.now();
+    const startVal = parts.length > 1 ? parseFloat(parts[0]) : 0;
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      
+      if (parts.length > 1) {
+        const currentStart = Math.floor(startVal + eased * (targetVal - startVal - (targetVal - startVal) * 0.3));
+        const currentEnd = Math.floor(startVal + eased * (targetVal - startVal));
+        el.textContent = Math.min(currentStart, targetVal - Math.round((targetVal - startVal)*0.3)) + '-' + currentEnd + suffix;
+      } else {
+        const current = Math.floor(eased * targetVal);
+        el.textContent = current + suffix;
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = display;
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  // Trigger stat counters when stats section is visible
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.stat-value[data-display]').forEach(el => {
+          animateCounter(el);
+        });
+        statsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsSection = document.getElementById('stats');
+  if (statsSection) statsObserver.observe(statsSection);
+
+  // ── Trigger hero animations immediately
+  setTimeout(() => {
+    document.querySelectorAll('#hero .animate').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 100);
+</script>
+</body>
+</html>
