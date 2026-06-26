@@ -4,270 +4,170 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MacPhail Center for Music</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --primary: #000000;
     --secondary: #ffffff;
-    --accent: #C8102E;
-    --accent2: #1a1a2e;
-    --text-dark: #111111;
-    --text-mid: #444444;
-    --text-light: #888888;
-    --surface: #f7f7f7;
-    --surface2: #efefef;
-    --nav-height: 72px;
+    --accent: #c8102e;
+    --accent-light: #e8304e;
+    --gray-100: #f8f8f8;
+    --gray-200: #efefef;
+    --gray-400: #999;
+    --gray-600: #555;
+    --gray-800: #222;
+    --transition: 0.6s ease;
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: #ffffff;
-    color: var(--text-dark);
-    overflow-x: hidden;
-    line-height: 1.7;
+    background: var(--secondary);
+    color: var(--primary);
     font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
   }
 
-  /* ─── NAV ─────────────────────────────────────────────── */
+  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 1000;
-    height: var(--nav-height);
+    padding: 24px 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 5%;
-    transition: background 0.4s ease, box-shadow 0.4s ease;
-    background: transparent;
+    transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
   }
-
   nav.scrolled {
     background: rgba(0,0,0,0.96);
+    padding: 16px 48px;
     box-shadow: 0 2px 30px rgba(0,0,0,0.3);
   }
-
   .nav-logo {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--secondary);
     letter-spacing: -0.5px;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-
-  .nav-logo span {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    background: var(--accent);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-    align-items: center;
-  }
-
+  .nav-logo span.accent { color: var(--accent); }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
   .nav-links a {
     color: rgba(255,255,255,0.85);
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
-    letter-spacing: 0.3px;
-    transition: color 0.2s ease;
+    letter-spacing: 0.2px;
+    transition: color 0.3s;
   }
-
-  .nav-links a:hover { color: #ffffff; }
-
+  .nav-links a:hover { color: var(--accent-light); }
   .nav-cta {
     background: var(--accent);
     color: #fff !important;
     padding: 10px 22px;
     border-radius: 6px;
     font-weight: 600 !important;
-    transition: background 0.2s ease, transform 0.2s ease !important;
+    font-size: 14px !important;
+    transition: background 0.3s, transform 0.3s !important;
   }
+  .nav-cta:hover { background: var(--accent-light) !important; transform: translateY(-1px); }
 
-  .nav-cta:hover { background: #a00d24 !important; transform: translateY(-1px); }
-
-  .nav-right { display: flex; align-items: center; gap: 32px; }
-
-  /* ─── HERO ────────────────────────────────────────────── */
-  .hero {
-    position: relative;
+  /* ── HERO ── */
+  #hero {
     min-height: 100vh;
+    background: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
     text-align: center;
-    background: #050505;
-    overflow: hidden;
-    padding: 120px 5% 80px;
+    padding: 120px 48px 80px;
   }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
   .orb {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
     opacity: 0.35;
-    animation: floatOrb 10s ease-in-out infinite;
-  }
-
-  .orb1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, #C8102E 0%, transparent 70%);
-    top: -150px; left: -100px;
-    animation-delay: 0s;
-  }
-
-  .orb2 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, #8B0000 0%, transparent 70%);
-    bottom: -100px; right: -80px;
-    animation-delay: -3s;
-  }
-
-  .orb3 {
-    width: 350px; height: 350px;
-    background: radial-gradient(circle, #2d0a6e 0%, transparent 70%);
-    top: 40%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: -6s;
-  }
-
-  @keyframes floatOrb {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 30px) scale(0.97); }
-  }
-
-  .hero-grid-overlay {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
+    animation: floatOrb 8s ease-in-out infinite alternate;
     pointer-events: none;
   }
+  .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #c8102e, transparent); top: -150px; left: -150px; animation-delay: 0s; }
+  .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #8b0000, transparent); bottom: -100px; right: -100px; animation-delay: 2s; }
+  .orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, #c8102e88, transparent); top: 40%; left: 55%; animation-delay: 4s; }
 
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 820px;
+  @keyframes floatOrb {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(30px, 40px) scale(1.08); }
   }
 
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(200,16,46,0.15);
-    border: 1px solid rgba(200,16,46,0.3);
-    color: #ff6b81;
+  .hero-inner { position: relative; z-index: 2; max-width: 900px; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(200,16,46,0.18);
+    border: 1px solid rgba(200,16,46,0.4);
+    color: #e8304e;
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 7px 18px;
-    border-radius: 100px;
+    padding: 8px 20px;
+    border-radius: 50px;
     margin-bottom: 28px;
-    animation: fadeInDown 0.8s ease forwards;
   }
-
   .hero-headline {
-    font-size: clamp(48px, 6.5vw, 72px);
+    font-size: clamp(48px, 7vw, 76px);
     font-weight: 700;
     letter-spacing: -2px;
-    color: #ffffff;
-    line-height: 1.08;
+    line-height: 1.1;
+    color: var(--secondary);
     margin-bottom: 24px;
-    animation: fadeInUp 0.9s ease 0.15s both;
   }
-
-  .hero-headline .accent-word {
-    color: var(--accent);
-    position: relative;
-    display: inline-block;
-  }
-
+  .hero-headline em { color: var(--accent); font-style: normal; }
   .hero-sub {
-    font-size: 19px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.75;
-    max-width: 580px;
+    font-size: clamp(17px, 2vw, 21px);
+    color: rgba(255,255,255,0.7);
+    max-width: 640px;
     margin: 0 auto 40px;
-    animation: fadeInUp 0.9s ease 0.3s both;
+    line-height: 1.65;
   }
-
-  .hero-actions {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeInUp 0.9s ease 0.45s both;
-  }
-
+  .hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
   .btn-primary {
+    display: inline-block;
     background: var(--accent);
     color: #fff;
     padding: 16px 36px;
     border-radius: 8px;
-    font-size: 16px;
     font-weight: 600;
+    font-size: 16px;
     text-decoration: none;
-    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 24px rgba(200,16,46,0.35);
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 20px rgba(200,16,46,0.35);
   }
-
-  .btn-primary:hover {
-    background: #a00d24;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(200,16,46,0.45);
-  }
-
-  .btn-secondary {
-    background: rgba(255,255,255,0.08);
-    color: #fff;
+  .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,16,46,0.5); }
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: rgba(255,255,255,0.85);
     padding: 16px 36px;
     border-radius: 8px;
-    font-size: 16px;
     font-weight: 600;
+    font-size: 16px;
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.2);
-    transition: background 0.2s, transform 0.2s;
-    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: border-color 0.3s, color 0.3s, transform 0.3s;
   }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent-light); transform: translateY(-2px); }
 
-  .btn-secondary:hover {
-    background: rgba(255,255,255,0.14);
-    transform: translateY(-2px);
-  }
-
-  .hero-scroll-hint {
+  .scroll-indicator {
     position: absolute;
     bottom: 36px;
     left: 50%;
@@ -276,843 +176,522 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.4);
     font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
     animation: bounce 2s ease-in-out infinite;
   }
+  .scroll-indicator svg { opacity: 0.5; }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
 
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
-  }
-
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ─── SECTIONS ────────────────────────────────────────── */
-  section { padding: 100px 5%; }
-
+  /* ── SECTIONS COMMON ── */
+  section { padding: 100px 48px; }
   .section-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-block;
+    color: var(--accent);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--accent);
     margin-bottom: 16px;
   }
-
-  .section-label::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 2px;
-    background: var(--accent);
-    border-radius: 2px;
-  }
-
-  .section-heading {
-    font-size: clamp(36px, 4vw, 52px);
+  .section-title {
+    font-size: clamp(36px, 5vw, 52px);
     font-weight: 700;
     letter-spacing: -1.5px;
     line-height: 1.1;
-    color: var(--text-dark);
     margin-bottom: 20px;
   }
-
   .section-sub {
     font-size: 18px;
-    color: var(--text-mid);
-    max-width: 560px;
-    line-height: 1.75;
+    color: var(--gray-600);
+    max-width: 600px;
+    line-height: 1.7;
     margin-bottom: 60px;
   }
+  .section-header { max-width: 1200px; margin: 0 auto 64px; }
 
-  /* ─── MISSION STRIP ───────────────────────────────────── */
-  .mission-strip {
-    background: var(--primary);
-    color: #fff;
-    padding: 70px 5%;
-    text-align: center;
-  }
-
-  .mission-strip .big-quote {
-    font-size: clamp(22px, 3vw, 34px);
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    line-height: 1.5;
-    max-width: 800px;
+  /* ── ABOUT ── */
+  #about { background: var(--gray-100); }
+  .about-grid {
+    max-width: 1200px;
     margin: 0 auto;
-    color: rgba(255,255,255,0.9);
-  }
-
-  .mission-strip .big-quote em {
-    color: var(--accent);
-    font-style: normal;
-  }
-
-  /* ─── PROGRAMS ────────────────────────────────────────── */
-  .programs-section { background: #ffffff; }
-
-  .programs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 28px;
-    margin-top: 0;
-  }
-
-  .program-card {
-    background: #fff;
-    border: 1px solid #e8e8e8;
-    border-radius: 16px;
-    padding: 36px 32px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    cursor: default;
-  }
-
-  .program-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px;
-    height: 0;
-    background: var(--accent);
-    border-radius: 0 0 4px 0;
-    transition: height 0.4s ease;
-  }
-
-  .program-card:hover::before { height: 100%; }
-
-  .program-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-    border-color: transparent;
-  }
-
-  .card-icon {
-    width: 52px;
-    height: 52px;
-    background: rgba(200,16,46,0.08);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 22px;
-    font-size: 24px;
-  }
-
-  .card-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 12px;
-    letter-spacing: -0.3px;
-  }
-
-  .card-desc {
-    font-size: 15px;
-    color: var(--text-mid);
-    line-height: 1.7;
-  }
-
-  /* ─── IMPACT ──────────────────────────────────────────── */
-  .impact-section {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a0008 50%, #0a0a0a 100%);
-    color: #fff;
-    text-align: center;
-  }
-
-  .impact-section .section-heading { color: #fff; }
-  .impact-section .section-label { color: #ff6b81; }
-  .impact-section .section-label::before { background: #ff6b81; }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2px;
-    margin-top: 60px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 20px;
-    overflow: hidden;
-  }
-
-  .stat-item {
-    padding: 50px 30px;
-    background: rgba(255,255,255,0.03);
-    transition: background 0.3s;
-    text-align: center;
-  }
-
-  .stat-item:hover { background: rgba(200,16,46,0.12); }
-
-  .stat-number {
-    font-size: clamp(44px, 5vw, 64px);
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -2px;
-    line-height: 1;
-    margin-bottom: 12px;
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  /* ─── COMMUNITY ───────────────────────────────────────── */
-  .community-section { background: var(--surface); }
-
-  .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 80px;
     align-items: center;
   }
-
-  .two-col-text .section-sub { margin-bottom: 36px; }
-
-  .feature-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  .about-visual {
+    position: relative;
   }
-
-  .feature-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    font-size: 16px;
-    color: var(--text-mid);
-  }
-
-  .feature-list .check {
-    width: 22px;
-    height: 22px;
-    background: rgba(200,16,46,0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-    font-size: 11px;
-    color: var(--accent);
-    font-weight: 700;
-  }
-
-  .visual-block {
+  .about-card {
+    background: var(--primary);
     border-radius: 20px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #1a0008 0%, #0d0d0d 100%);
-    padding: 60px 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-height: 420px;
-    justify-content: center;
-    position: relative;
-  }
-
-  .visual-block::before {
-    content: '♪';
-    position: absolute;
-    font-size: 220px;
-    color: rgba(200,16,46,0.07);
-    top: 50%;
-    left: 50%;
-    transform: translate(-40%, -50%);
-    pointer-events: none;
-    line-height: 1;
-  }
-
-  .visual-block-quote {
-    font-size: clamp(22px, 2.5vw, 30px);
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.5px;
-    line-height: 1.35;
-    position: relative;
-    z-index: 1;
-  }
-
-  .visual-block-quote em {
-    color: var(--accent);
-    font-style: normal;
-  }
-
-  .visual-block-author {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 0.5px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ─── LOCATIONS ───────────────────────────────────────── */
-  .locations-section { background: #fff; }
-
-  .locations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 24px;
-    margin-top: 0;
-  }
-
-  .location-card {
-    border: 1px solid #e4e4e4;
-    border-radius: 14px;
-    padding: 30px 28px;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-  }
-
-  .location-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 50px rgba(0,0,0,0.08);
-    border-color: var(--accent);
-  }
-
-  .location-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
-    display: block;
-  }
-
-  .location-name {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-  }
-
-  .location-detail {
-    font-size: 14px;
-    color: var(--text-light);
-    line-height: 1.65;
-  }
-
-  /* ─── TESTIMONIALS ────────────────────────────────────── */
-  .testimonials-section {
-    background: linear-gradient(160deg, #fafafa 0%, #f0f0f0 100%);
-  }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 24px;
-  }
-
-  .testimonial-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 36px 32px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-  }
-
-  .testimonial-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  }
-
-  .quote-mark {
-    font-size: 64px;
-    color: var(--accent);
-    opacity: 0.15;
-    line-height: 0.8;
-    font-family: Georgia, serif;
-    margin-bottom: 12px;
-    display: block;
-  }
-
-  .testimonial-text {
-    font-size: 16px;
-    color: var(--text-mid);
-    line-height: 1.75;
-    font-style: italic;
-    margin-bottom: 24px;
-  }
-
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .author-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent) 0%, #8B0000 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  .author-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-dark);
-  }
-
-  .author-role {
-    font-size: 13px;
-    color: var(--text-light);
-  }
-
-  /* ─── CTA BANNER ──────────────────────────────────────── */
-  .cta-section {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1c0008 60%, #0a0a0a 100%);
-    text-align: center;
-    padding: 120px 5%;
+    padding: 56px 48px;
+    color: var(--secondary);
     position: relative;
     overflow: hidden;
   }
-
-  .cta-section::before {
+  .about-card::before {
     content: '';
     position: absolute;
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(200,16,46,0.18) 0%, transparent 60%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(200,16,46,0.3), transparent);
+    border-radius: 50%;
+  }
+  .about-card-stat { font-size: 64px; font-weight: 700; color: var(--accent); letter-spacing: -2px; line-height: 1; }
+  .about-card-label { font-size: 16px; color: rgba(255,255,255,0.65); margin-top: 8px; }
+  .about-card-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 32px 0; }
+  .about-card-quote { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.85); font-style: italic; }
+  .about-content {}
+  .about-story { font-size: 17px; color: var(--gray-600); line-height: 1.75; }
+  .about-story p + p { margin-top: 20px; }
+  .about-highlights { display: flex; gap: 32px; margin-top: 40px; flex-wrap: wrap; }
+  .about-highlight { display: flex; align-items: flex-start; gap: 12px; }
+  .about-highlight-icon {
+    width: 40px; height: 40px;
+    background: rgba(200,16,46,0.1);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent);
+    font-size: 18px;
+  }
+  .about-highlight-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .about-highlight-text p { font-size: 14px; color: var(--gray-600); }
+
+  /* ── PROGRAMS ── */
+  #programs { background: var(--secondary); }
+  .programs-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+  }
+  .program-card {
+    background: var(--gray-100);
+    border-radius: 16px;
+    padding: 40px 36px;
+    border: 1.5px solid var(--gray-200);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .program-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .program-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); border-color: rgba(200,16,46,0.2); }
+  .program-card:hover::before { transform: scaleX(1); }
+  .program-icon {
+    width: 52px; height: 52px;
+    background: rgba(200,16,46,0.1);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
+  .program-title { font-size: 21px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .program-desc { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+
+  /* ── IMPACT / STATS ── */
+  #impact { background: var(--primary); padding: 80px 48px; }
+  .impact-inner { max-width: 1200px; margin: 0 auto; }
+  .impact-title { font-size: clamp(36px, 5vw, 52px); font-weight: 700; letter-spacing: -1.5px; color: var(--secondary); margin-bottom: 16px; }
+  .impact-sub { font-size: 18px; color: rgba(255,255,255,0.6); max-width: 540px; margin-bottom: 64px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .stat-item {
+    padding: 48px 36px;
+    background: rgba(255,255,255,0.03);
+    text-align: center;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .stat-item:hover { background: rgba(200,16,46,0.1); }
+  .stat-number {
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .stat-label { font-size: 15px; color: rgba(255,255,255,0.6); font-weight: 500; }
+
+  /* ── COMMUNITY ── */
+  #community { background: var(--gray-100); }
+  .community-inner { max-width: 1200px; margin: 0 auto; }
+  .community-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .community-card {
+    background: var(--secondary);
+    border-radius: 16px;
+    padding: 36px 32px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    border: 1.5px solid var(--gray-200);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .community-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+  .community-tag {
+    display: inline-block;
+    background: rgba(200,16,46,0.1);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .community-title { font-size: 19px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .community-text { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+
+  /* ── GIVE ── */
+  #give {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0008 50%, #0a0a0a 100%);
+    text-align: center;
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  #give::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(200,16,46,0.15), transparent 70%);
     pointer-events: none;
   }
+  .give-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 2; }
+  .give-title { font-size: clamp(40px, 6vw, 64px); font-weight: 700; letter-spacing: -2px; color: var(--secondary); margin-bottom: 24px; line-height: 1.1; }
+  .give-title em { color: var(--accent); font-style: normal; }
+  .give-sub { font-size: 19px; color: rgba(255,255,255,0.65); margin-bottom: 44px; line-height: 1.65; }
+  .give-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
-  .cta-section .section-heading { color: #fff; font-size: clamp(36px, 4.5vw, 56px); margin-bottom: 20px; }
-  .cta-section p { color: rgba(255,255,255,0.6); font-size: 18px; max-width: 540px; margin: 0 auto 44px; line-height: 1.75; }
-
-  /* ─── FOOTER ──────────────────────────────────────────── */
+  /* ── FOOTER ── */
   footer {
     background: #050505;
-    color: rgba(255,255,255,0.55);
-    padding: 70px 5% 40px;
+    padding: 64px 48px 32px;
+    color: rgba(255,255,255,0.6);
   }
-
-  .footer-inner {
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-top {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 60px;
-    padding-bottom: 50px;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 32px;
   }
+  .footer-brand {}
+  .footer-logo { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px; margin-bottom: 14px; }
+  .footer-logo span { color: var(--accent); }
+  .footer-tagline { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.5); max-width: 260px; }
+  .footer-col h4 { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+  .footer-col a { display: block; font-size: 14px; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 10px; transition: color 0.3s; }
+  .footer-col a:hover { color: var(--accent-light); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .footer-copy { font-size: 13px; color: rgba(255,255,255,0.3); }
+  .footer-accent { color: var(--accent); }
 
-  .footer-brand .nav-logo { font-size: 18px; margin-bottom: 16px; color: #fff; }
-
-  .footer-tagline {
-    font-size: 15px;
-    color: rgba(255,255,255,0.45);
-    line-height: 1.75;
-    max-width: 280px;
-    margin-bottom: 24px;
-  }
-
-  .footer-col-title {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 20px;
-  }
-
-  .footer-links-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .footer-links-list a {
-    color: rgba(255,255,255,0.5);
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.2s;
-  }
-
-  .footer-links-list a:hover { color: #fff; }
-
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 30px;
-    font-size: 13px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .footer-bottom a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
-  .footer-bottom a:hover { color: rgba(255,255,255,0.7); }
-
-  /* ─── ANIMATE ─────────────────────────────────────────── */
-  .animate {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .animate.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
+  /* ── ANIMATIONS ── */
+  .animate { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .animate.visible { opacity: 1; transform: translateY(0); }
   .animate-delay-1 { transition-delay: 0.1s; }
   .animate-delay-2 { transition-delay: 0.2s; }
   .animate-delay-3 { transition-delay: 0.3s; }
   .animate-delay-4 { transition-delay: 0.4s; }
   .animate-delay-5 { transition-delay: 0.5s; }
 
-  /* ─── RESPONSIVE ──────────────────────────────────────── */
+  /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    .two-col { grid-template-columns: 1fr; gap: 48px; }
-    .footer-inner { grid-template-columns: 1fr 1fr; }
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
     .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    #hero { padding: 100px 24px 72px; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    #impact { padding: 72px 24px; }
+    #give { padding: 80px 24px; }
+    footer { padding: 48px 24px 28px; }
   }
-
   @media (max-width: 600px) {
-    .footer-inner { grid-template-columns: 1fr; gap: 36px; }
-    .hero-headline { font-size: 40px; letter-spacing: -1px; }
+    .footer-top { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
-    section { padding: 72px 5%; }
+    .hero-ctas { flex-direction: column; align-items: center; }
+    .give-ctas { flex-direction: column; align-items: center; }
   }
 </style>
 </head>
 <body>
 
-<!-- ─── NAVIGATION ─────────────────────────────────────── -->
-<nav id="main-nav">
+<!-- ── NAV ── -->
+<nav>
   <a href="http://www.macphail.org" target="_blank" rel="noopener noreferrer" class="nav-logo">
-    <span>M</span>
-    MacPhail Center for Music
+    MacPhail <span class="accent">●</span>
   </a>
-  <ul class="nav-links">
-    <li><a href="http://www.macphail.org/programs" target="_blank" rel="noopener noreferrer">Programs</a></li>
-    <li><a href="http://www.macphail.org/lessons" target="_blank" rel="noopener noreferrer">Lessons</a></li>
-    <li><a href="http://www.macphail.org/about" target="_blank" rel="noopener noreferrer">About</a></li>
-    <li><a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer">Give</a></li>
-    <li><a href="http://www.macphail.org/enroll" target="_blank" rel="noopener noreferrer" class="nav-cta">Enroll Today</a></li>
-  </ul>
+  <div class="nav-links">
+    <a href="http://www.macphail.org/lessons" target="_blank" rel="noopener noreferrer">Lessons</a>
+    <a href="http://www.macphail.org/programs" target="_blank" rel="noopener noreferrer">Programs</a>
+    <a href="http://www.macphail.org/community" target="_blank" rel="noopener noreferrer">Community</a>
+    <a href="http://www.macphail.org/about" target="_blank" rel="noopener noreferrer">About</a>
+    <a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer">Give</a>
+    <a href="http://www.macphail.org/register" target="_blank" rel="noopener noreferrer" class="nav-cta">Enroll Now</a>
+  </div>
 </nav>
 
-<!-- ─── HERO ───────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
-    <div class="hero-grid-overlay"></div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">♪ Minneapolis &amp; Beyond</div>
-    <h1 class="hero-headline">
-      Music Changes<br><span class="accent-word">Everything.</span>
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-inner">
+    <div class="hero-badge animate">Music Education Since 1894</div>
+    <h1 class="hero-headline animate animate-delay-1">
+      Where Music <em>Transforms</em><br>Every Life It Touches
     </h1>
-    <p class="hero-sub">
-      MacPhail Center for Music is a nonprofit music school dedicated to transforming lives through extraordinary musical education — for every age, every skill level, every community.
+    <p class="hero-sub animate animate-delay-2">
+      MacPhail Center for Music is one of the nation's largest community music schools — offering world-class lessons, ensembles, early childhood programs, and community outreach across the Twin Cities.
     </p>
-    <div class="hero-actions">
-      <a href="http://www.macphail.org/enroll" target="_blank" rel="noopener noreferrer" class="btn-primary">Start Your Journey</a>
-      <a href="http://www.macphail.org/programs" target="_blank" rel="noopener noreferrer" class="btn-secondary">Explore Programs</a>
+    <div class="hero-ctas animate animate-delay-3">
+      <a href="http://www.macphail.org/register" target="_blank" rel="noopener noreferrer" class="btn-primary">Start Your Journey</a>
+      <a href="http://www.macphail.org/programs" target="_blank" rel="noopener noreferrer" class="btn-outline">Explore Programs</a>
     </div>
   </div>
-  <div class="hero-scroll-hint">
-    <div class="scroll-line"></div>
-    Scroll
+  <div class="scroll-indicator">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- ─── MISSION STRIP ──────────────────────────────────── -->
-<div class="mission-strip">
-  <p class="big-quote animate">
-    "We believe that <em>access to music education</em> is a fundamental human right — and we're here to make that possible for every person in our community."
-  </p>
-</div>
-
-<!-- ─── PROGRAMS ───────────────────────────────────────── -->
-<section class="programs-section">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div class="animate">
-      <span class="section-label">What We Offer</span>
-      <h2 class="section-heading">World-Class Music Programs</h2>
-      <p class="section-sub">From beginner lessons to advanced performance ensembles, MacPhail offers a full spectrum of musical experiences for learners of all ages.</p>
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual animate">
+      <div class="about-card">
+        <div class="about-card-stat">130<span style="font-size:40px;color:rgba(255,255,255,0.5)">+</span></div>
+        <div class="about-card-label">Years of Musical Excellence</div>
+        <hr class="about-card-divider">
+        <div class="about-card-quote">"Music education for everyone — regardless of ability to pay."</div>
+      </div>
     </div>
-    <div class="programs-grid">
-      <div class="program-card animate animate-delay-1">
-        <div class="card-icon">🎵</div>
-        <div class="card-title">Private Lessons</div>
-        <div class="card-desc">One-on-one instruction in piano, violin, guitar, voice, drums, and dozens more instruments — tailored to your pace and goals.</div>
+    <div class="about-content animate animate-delay-2">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title">A Legacy Built on<br>the Power of Music</h2>
+      <div class="about-story">
+        <p>Founded in 1894, MacPhail Center for Music has spent more than a century dedicated to making high-quality music education accessible to all people across the Twin Cities and beyond.</p>
+        <p>From private lessons to group classes, early childhood music to adult learning, orchestral ensembles to community outreach — MacPhail is where passion meets purpose, and every student finds their voice.</p>
+        <p>With multiple locations across the Minneapolis-Saint Paul metro area, MacPhail serves thousands of students every year, connecting communities through the universal language of music.</p>
       </div>
-      <div class="program-card animate animate-delay-2">
-        <div class="card-icon">🎻</div>
-        <div class="card-title">Early Childhood Music</div>
-        <div class="card-desc">Suzuki, Music Together, and movement-based programs that build a lifelong love of music from the very first notes — starting at birth.</div>
-      </div>
-      <div class="program-card animate animate-delay-3">
-        <div class="card-icon">🎹</div>
-        <div class="card-title">Group Classes</div>
-        <div class="card-desc">Collaborative learning environments where students develop musicianship, theory, and performance skills alongside peers.</div>
-      </div>
-      <div class="program-card animate animate-delay-4">
-        <div class="card-icon">🎺</div>
-        <div class="card-title">Ensembles &amp; Orchestras</div>
-        <div class="card-desc">Youth orchestras, chamber groups, jazz ensembles, and choirs — building artistry, discipline, and the joy of making music together.</div>
-      </div>
-      <div class="program-card animate animate-delay-5">
-        <div class="card-icon">🌍</div>
-        <div class="card-title">Community Programs</div>
-        <div class="card-desc">Reaching underserved communities through scholarships, outreach, and partnerships — because everyone deserves music education.</div>
-      </div>
-      <div class="program-card animate animate-delay-1">
-        <div class="card-icon">🎓</div>
-        <div class="card-title">Adult Education</div>
-        <div class="card-desc">It's never too late to start or return to music. Our adult programs are designed for busy lives and lifelong learning.</div>
+      <div class="about-highlights">
+        <div class="about-highlight">
+          <div class="about-highlight-icon">🎵</div>
+          <div class="about-highlight-text">
+            <h4>All Ages Welcome</h4>
+            <p>From infants to seniors, every stage of life.</p>
+          </div>
+        </div>
+        <div class="about-highlight">
+          <div class="about-highlight-icon">🏙️</div>
+          <div class="about-highlight-text">
+            <h4>Multiple Locations</h4>
+            <p>Campuses across the Twin Cities metro.</p>
+          </div>
+        </div>
+        <div class="about-highlight">
+          <div class="about-highlight-icon">🤝</div>
+          <div class="about-highlight-text">
+            <h4>Tuition Assistance</h4>
+            <p>No financial barrier to learning music.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── IMPACT STATS ────────────────────────────────────── -->
-<section class="impact-section">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div class="animate">
-      <span class="section-label" style="color:#ff6b81">Our Impact</span>
-      <h2 class="section-heading" style="color:#fff;">A Century of Musical Lives Changed</h2>
-      <p class="section-sub" style="color:rgba(255,255,255,0.55); max-width:560px;">For over 100 years, MacPhail has been at the heart of music education in Minnesota. The numbers speak for themselves.</p>
+<!-- ── PROGRAMS ── -->
+<section id="programs">
+  <div class="section-header animate">
+    <span class="section-label">What We Offer</span>
+    <h2 class="section-title">Programs for<br>Every Musician</h2>
+    <p class="section-sub">Whether you're picking up an instrument for the first time or refining decades of skill, MacPhail has a program designed for you.</p>
+  </div>
+  <div class="programs-grid">
+    <div class="program-card animate animate-delay-1">
+      <div class="program-icon">🎸</div>
+      <h3 class="program-title">Private Lessons</h3>
+      <p class="program-desc">One-on-one instruction with expert faculty across dozens of instruments and voice. Tailored to your goals, pace, and musical style.</p>
     </div>
-    <div class="stats-grid">
-      <div class="stat-item animate animate-delay-1">
-        <span class="stat-number" data-target="100" data-suffix="+">0</span>
+    <div class="program-card animate animate-delay-2">
+      <div class="program-icon">🎻</div>
+      <h3 class="program-title">Group Classes & Ensembles</h3>
+      <p class="program-desc">Orchestra, chamber music, jazz ensembles, choir, and more. Play alongside peers, build ensemble skills, and perform on stage.</p>
+    </div>
+    <div class="program-card animate animate-delay-3">
+      <div class="program-icon">👶</div>
+      <h3 class="program-title">Early Childhood Music</h3>
+      <p class="program-desc">Music Together® and other early learning programs for babies, toddlers, and preschoolers — and their caregivers — to explore music together.</p>
+    </div>
+    <div class="program-card animate animate-delay-4">
+      <div class="program-icon">🏫</div>
+      <h3 class="program-title">School Partnerships</h3>
+      <p class="program-desc">In-school and after-school programs that bring professional music instruction directly into classrooms and community centers.</p>
+    </div>
+    <div class="program-card animate animate-delay-5">
+      <div class="program-icon">🎓</div>
+      <h3 class="program-title">Adult Learning</h3>
+      <p class="program-desc">It's never too late to start or return to music. Adult group classes and private lessons for all experience levels and all instruments.</p>
+    </div>
+    <div class="program-card animate">
+      <div class="program-icon">🎤</div>
+      <h3 class="program-title">Summer & Intensives</h3>
+      <p class="program-desc">Summer camps, master classes, workshops, and intensive programs that accelerate growth and ignite a lifelong love of music.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── IMPACT / STATS ── -->
+<section id="impact">
+  <div class="impact-inner">
+    <div class="animate">
+      <span class="section-label" style="color: rgba(200,16,46,0.8);">Our Impact</span>
+      <h2 class="impact-title">Music Changing<br>Lives Every Day</h2>
+      <p class="impact-sub">The numbers behind a century of musical transformation in the Twin Cities community.</p>
+    </div>
+    <div class="stats-grid animate animate-delay-1">
+      <div class="stat-item">
+        <span class="stat-number" data-target="15000" data-suffix="+">0</span>
+        <span class="stat-label">Students Served Annually</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="130" data-suffix="+">0</span>
         <span class="stat-label">Years of Excellence</span>
       </div>
-      <div class="stat-item animate animate-delay-2">
-        <span class="stat-number" data-target="5000" data-suffix="+">0</span>
-        <span class="stat-label">Students Per Year</span>
+      <div class="stat-item">
+        <span class="stat-number" data-target="200" data-suffix="+">0</span>
+        <span class="stat-label">Expert Faculty Members</span>
       </div>
-      <div class="stat-item animate animate-delay-3">
-        <span class="stat-number" data-target="300" data-suffix="+">0</span>
-        <span class="stat-label">Faculty Members</span>
+      <div class="stat-item">
+        <span class="stat-number" data-target="60" data-suffix="+">0</span>
+        <span class="stat-label">Instruments & Disciplines</span>
       </div>
-      <div class="stat-item animate animate-delay-4">
-        <span class="stat-number" data-target="40" data-suffix="+">0</span>
-        <span class="stat-label">Instruments Taught</span>
-      </div>
-      <div class="stat-item animate animate-delay-5">
-        <span class="stat-number" data-target="5" data-suffix="">0</span>
-        <span class="stat-label">Twin Cities Locations</span>
+      <div class="stat-item">
+        <span class="stat-number" data-target="5" data-suffix=" Locations">0</span>
+        <span class="stat-label">Twin Cities Campuses</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── COMMUNITY ───────────────────────────────────────── -->
-<section class="community-section">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div class="two-col">
-      <div class="two-col-text animate">
-        <span class="section-label">Our Mission</span>
-        <h2 class="section-heading">Music for Every Person in Our Community</h2>
-        <p class="section-sub">MacPhail is more than a music school. We are a community institution committed to equity, access, and the belief that music transforms lives at every stage.</p>
-        <ul class="feature-list">
-          <li><span class="check">✓</span><span>Scholarship and financial aid programs to ensure cost is never a barrier</span></li>
-          <li><span class="check">✓</span><span>Suzuki-trained and internationally recognized faculty</span></li>
-          <li><span class="check">✓</span><span>In-school and community outreach programs across Minneapolis</span></li>
-          <li><span class="check">✓</span><span>State-of-the-art performance venues and recording facilities</span></li>
-          <li><span class="check">✓</span><span>Flexible scheduling including in-person, hybrid, and online lessons</span></li>
-          <li><span class="check">✓</span><span>Programs rooted in diversity, equity, and cultural celebration</span></li>
-        </ul>
+<!-- ── COMMUNITY ── -->
+<section id="community">
+  <div class="community-inner">
+    <div class="section-header animate">
+      <span class="section-label">Community & Access</span>
+      <h2 class="section-title">Music for<br>Everyone</h2>
+      <p class="section-sub">MacPhail believes access to music education should never be limited by circumstance. Our community initiatives open doors for all.</p>
+    </div>
+    <div class="community-grid">
+      <div class="community-card animate animate-delay-1">
+        <div class="community-tag">Financial Access</div>
+        <h3 class="community-title">Tuition Assistance Program</h3>
+        <p class="community-text">Need-based financial aid ensures that cost is never a barrier. MacPhail awards hundreds of thousands of dollars in assistance each year to students of all ages.</p>
       </div>
-      <div class="animate animate-delay-2">
-        <div class="visual-block">
-          <div class="visual-block-quote">
-            "Music is not a luxury.<br>It's a <em>fundamental part</em><br>of what makes us human."
-          </div>
-          <div class="visual-block-author">— MacPhail Center for Music</div>
-        </div>
+      <div class="community-card animate animate-delay-2">
+        <div class="community-tag">In-School Programs</div>
+        <h3 class="community-title">Partnership with Schools</h3>
+        <p class="community-text">MacPhail partners with Minneapolis, Saint Paul, and suburban schools to deliver music education where students already are — in classrooms, libraries, and after-school programs.</p>
+      </div>
+      <div class="community-card animate animate-delay-3">
+        <div class="community-tag">Outreach</div>
+        <h3 class="community-title">Community Ensembles</h3>
+        <p class="community-text">Free and low-cost ensemble opportunities for youth and adults who might not otherwise have access to performance and collaborative music-making experiences.</p>
+      </div>
+      <div class="community-card animate animate-delay-4">
+        <div class="community-tag">Adaptive Programs</div>
+        <h3 class="community-title">Music for All Abilities</h3>
+        <p class="community-text">Adaptive and inclusive programs support students with disabilities, ensuring that the transformative power of music is truly available to every person in our community.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── LOCATIONS ───────────────────────────────────────── -->
-<section class="locations-section">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div class="animate">
-      <span class="section-label">Find Us</span>
-      <h2 class="section-heading">Serving the Twin Cities &amp; Beyond</h2>
-      <p class="section-sub">With multiple convenient locations, world-class online learning, and in-school programs, MacPhail meets you where you are.</p>
-    </div>
-    <div class="locations-grid">
-      <div class="location-card animate animate-delay-1">
-        <span class="location-icon">🏛️</span>
-        <div class="location-name">Minneapolis — Downtown</div>
-        <div class="location-detail">501 S 2nd Street<br>Minneapolis, MN 55401<br>Our flagship campus</div>
-      </div>
-      <div class="location-card animate animate-delay-2">
-        <span class="location-icon">📍</span>
-        <div class="location-name">Chaska</div>
-        <div class="location-detail">Serving the southwest metro with the same world-class instruction MacPhail is known for.</div>
-      </div>
-      <div class="location-card animate animate-delay-3">
-        <span class="location-icon">📍</span>
-        <div class="location-name">Eden Prairie</div>
-        <div class="location-detail">Convenient south metro location for families and adult learners across the region.</div>
-      </div>
-      <div class="location-card animate animate-delay-4">
-        <span class="location-icon">📍</span>
-        <div class="location-name">Richfield</div>
-        <div class="location-detail">Bringing MacPhail's mission to the heart of south Minneapolis and its surrounding neighborhoods.</div>
-      </div>
-      <div class="location-card animate animate-delay-5">
-        <span class="location-icon">💻</span>
-        <div class="location-name">Online Learning</div>
-        <div class="location-detail">Live, interactive lessons and classes available from anywhere in the world. Great sound, real connection.</div>
-      </div>
+<!-- ── CTA / GIVE ── -->
+<section id="give">
+  <div class="give-inner">
+    <span class="section-label animate" style="color: rgba(200,16,46,0.8);">Support MacPhail</span>
+    <h2 class="give-title animate animate-delay-1">Give the Gift of <em>Music</em></h2>
+    <p class="give-sub animate animate-delay-2">Your donation helps ensure every child, regardless of their background or financial situation, has access to the life-changing power of music education. Join thousands of donors who make MacPhail possible.</p>
+    <div class="give-ctas animate animate-delay-3">
+      <a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer" class="btn-primary">Donate Today</a>
+      <a href="http://www.macphail.org/register" target="_blank" rel="noopener noreferrer" class="btn-outline">Enroll a Student</a>
     </div>
   </div>
 </section>
 
-<!-- ─── TESTIMONIALS ────────────────────────────────────── -->
-<section class="testimonials-section">
-  <div style="max-width:1200px; margin:0 auto;">
-    <div class="animate">
-      <span class="section-label">Voices</span>
-      <h2 class="section-heading">What Our Community Says</h2>
-      <p class="section-sub">From students and families to alumni and community partners — hear why MacPhail matters.</p>
-    </div>
-    <div class="testimonials-grid" style="margin-top:0;">
-      <div class="testimonial-card animate animate-delay-1">
-        <span class="quote-mark">"</span>
-        <p class="testimonial-text">MacPhail didn't just teach my daughter violin — it gave her confidence, discipline, and a community she calls her second family. We can't imagine our lives without it.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">SK</div>
-          <div>
-            <div class="author-name">Sarah K.</div>
-            <div class="author-role">Parent of MacPhail Student</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card animate animate-delay-2">
-        <span class="quote-mark">"</span>
-        <p class="testimonial-text">I started piano lessons at MacPhail at age 58. I was terrified. Eighteen months later, I performed in my first recital. The faculty here makes miracles happen every day.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">RJ</div>
-          <div>
-            <div class="author-name">Robert J.</div>
-            <div class="author-role">Adult Learner</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card animate animate-delay-3">
-        <span class="quote-mark">"</span>
-        <p class="testimonial-text">The scholarship program made MacPhail possible for our family. My son has gone from barely holding a bow to leading section in the youth orchestra. This place changes lives.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">MT</div>
-          <div>
-            <div class="author-name">Maria T.</div>
-            <div class="author-role">Scholarship Family</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── CTA SECTION ────────────────────────────────────── -->
-<section class="cta-section">
-  <div style="position:relative; z-index:1; max-width:680px; margin:0 auto;">
-    <div class="animate">
-      <span class="section-label" style="color:#ff6b81; justify-content:center; display:flex;">Get Started</span>
-      <h2 class="section-heading">Ready to Begin Your Musical Journey?</h2>
-      <p>Whether you're enrolling a toddler, a teenager, or yourself — MacPhail has a program designed for you. Take the first step today.</p>
-      <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-        <a href="http://www.macphail.org/enroll" target="_blank" rel="noopener noreferrer" class="btn-primary">Enroll Now</a>
-        <a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer" class="btn-secondary">Support MacPhail</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── FOOTER ─────────────────────────────────────────── -->
+<!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-inner" style="max-width:1200px; margin:0 auto;">
-    <div class="footer-brand">
-      <a href="http://www.macphail.org" target="_blank" rel="noopener noreferrer" class="nav-logo" style="display:inline-flex; margin-bottom:16px;">
-        <span>M</span>
-        MacPhail Center for Music
-      </a>
-      <p class="footer-tagline">Transforming lives through extraordinary musical education since 1907. A nonprofit music school serving the greater Twin Cities community.</p>
-      <div style="display:flex; gap:14px; margin-top:8px;">
-        <a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.45); font-size:13px; text-decoration:none; border:1px solid rgba(255,255,255,0.12); padding:8px 16px; border-radius:6px; transition:all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'; this.style.borderColor='rgba(255,255,255,0.12)'">Donate</a>
-        <a href="http://www.macphail.org/contact" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.45); font-size:13px; text-decoration:none; border:1px solid rgba(255,255,255,0.12); padding:8px 16px; border-radius:6px; transition:all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'; this.style.borderColor='rgba(255,255,255,0.12)'">Contact</a>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">MacPhail <span>Center for Music</span></div>
+        <p class="footer-tagline">Transforming lives through the power of music education — serving the Twin Cities since 1894.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Programs</h4>
+        <a href="http://www.macphail.org/lessons" target="_blank" rel="noopener noreferrer">Private Lessons</a>
+        <a href="http://www.macphail.org/programs/ensembles" target="_blank" rel="noopener noreferrer">Ensembles</a>
+        <a href="http://www.macphail.org/programs/early-childhood" target="_blank" rel="noopener noreferrer">Early Childhood</a>
+        <a href="http://www.macphail.org/programs/adult" target="_blank" rel="noopener noreferrer">Adult Programs</a>
+        <a href="http://www.macphail.org/programs/summer" target="_blank" rel="noopener noreferrer">Summer Programs</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="http://www.macphail.org/community" target="_blank" rel="noopener noreferrer">Community Programs</a>
+        <a href="http://www.macphail.org/community/tuition-assistance" target="_blank" rel="noopener noreferrer">Tuition Assistance</a>
+        <a href="http://www.macphail.org/community/school-partnerships" target="_blank" rel="noopener noreferrer">School Partnerships</a>
+        <a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer">Give & Support</a>
+      </div>
+      <div class="footer-col">
+        <h4>MacPhail</h4>
+        <a href="http://www.macphail.org/about" target="_blank" rel="noopener noreferrer">About Us</a>
+        <a href="http://www.macphail.org/faculty" target="_blank" rel="noopener noreferrer">Faculty</a>
+        <a href="http://www.macphail.org/locations" target="_blank" rel="noopener noreferrer">Locations</a>
+        <a href="http://www.macphail.org/events" target="_blank" rel="noopener noreferrer">Events & Concerts</a>
+        <a href="http://www.macphail.org/contact" target="_blank" rel="noopener noreferrer">Contact Us</a>
       </div>
     </div>
-    <div>
-      <div class="footer-col-title">Programs</div>
-      <ul class="footer-links-list">
-        <li><a href="http://www.macphail.org/programs/private-lessons" target="_blank" rel="noopener noreferrer">Private Lessons</a></li>
-        <li><a href="http://www.macphail.org/programs/early-childhood" target="_blank" rel="noopener noreferrer">Early Childhood</a></li>
-        <li><a href="http://www.macphail.org/programs/group-classes" target="_blank" rel="noopener noreferrer">Group Classes</a></li>
-        <li><a href="http://www.macphail.org/programs/ensembles" target="_blank" rel="noopener noreferrer">Ensembles</a></li>
-        <li><a href="http://www.macphail.org/programs/adult" target="_blank" rel="noopener noreferrer">Adult Programs</a></li>
-        <li><a href="http://www.macphail.org/programs/online" target="_blank" rel="noopener noreferrer">Online Learning</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Organization</div>
-      <ul class="footer-links-list">
-        <li><a href="http://www.macphail.org/about" target="_blank" rel="noopener noreferrer">About MacPhail</a></li>
-        <li><a href="http://www.macphail.org/faculty" target="_blank" rel="noopener noreferrer">Faculty</a></li>
-        <li><a href="http://www.macphail.org/locations" target="_blank" rel="noopener noreferrer">Locations</a></li>
-        <li><a href="http://www.macphail.org/give" target="_blank" rel="noopener noreferrer">Give &amp; Support</a></li>
-        <li><a href="http://www.macphail.org/news" target="_blank" rel="noopener noreferrer">News &amp; Events</a></li>
-        <li><a href="http://www.macphail.org/careers" target="_blank" rel="noopener noreferrer">Careers</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom" style="max-width:1200px; margin:0 auto;">
-    <span>© <span id="year"></span> MacPhail Center for Music. All rights reserved.</span>
-    <div style="display:flex; gap:24px;">
-      <a href="http://www.macphail.org/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
-      <a href="http://www.macphail.org/accessibility" target="_blank" rel="noopener noreferrer">Accessibility</a>
-      <a href="http://www.macphail.org/sitemap" target="_blank" rel="noopener noreferrer">Sitemap</a>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; <span id="year"></span> MacPhail Center for Music. All rights reserved.</p>
+      <p class="footer-copy">Built with <span class="footer-accent">♥</span> for music education.</p>
     </div>
   </div>
 </footer>
 
 <script>
-  // ── Year
+  // ── YEAR ──
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ── Nav scroll
+  // ── NAV SCROLL ──
   window.addEventListener('scroll', () => {
     const nav = document.querySelector('nav');
     if (window.scrollY > 50) {
@@ -1122,7 +701,7 @@
     }
   });
 
-  // ── Intersection observer for .animate
+  // ── INTERSECTION OBSERVER (animate on scroll) ──
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1133,7 +712,7 @@
 
   document.querySelectorAll('.animate').forEach(el => observer.observe(el));
 
-  // ── Stat counter animation
+  // ── STAT COUNTER ──
   function animateCounter(el, target) {
     let start = 0;
     const duration = 1800;
@@ -1142,8 +721,8 @@
     function update(currentTime) {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const value = Math.floor(ease * target);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.floor(eased * target);
       el.textContent = value.toLocaleString() + suffix;
       if (progress < 1) requestAnimationFrame(update);
     }
@@ -1153,21 +732,17 @@
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const target = parseInt(entry.target.dataset.target, 10);
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10);
         if (!isNaN(target)) {
-          animateCounter(entry.target, target);
-          statObserver.unobserve(entry.target);
+          animateCounter(el, target);
+          statObserver.unobserve(el);
         }
       }
     });
   }, { threshold: 0.3 });
 
   document.querySelectorAll('.stat-number[data-target]').forEach(el => statObserver.observe(el));
-
-  // ── Staggered card animations
-  document.querySelectorAll('.programs-grid .program-card, .locations-grid .location-card, .testimonials-grid .testimonial-card').forEach((card, i) => {
-    card.style.transitionDelay = (i * 0.08) + 's';
-  });
 </script>
 </body>
 </html>
