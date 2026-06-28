@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virtual Internships</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,43 +11,458 @@
   :root {
     --primary: #000000;
     --secondary: #ffffff;
-    --accent: #5B5BD6;
-    --accent-light: #7B7BE8;
-    --accent-soft: rgba(91,91,214,0.08);
-    --text-body: #3a3a3a;
-    --text-muted: #6b6b6b;
-    --border: rgba(0,0,0,0.08);
-    --card-bg: #f9f9f9;
-    --dark-bg: #0a0a0a;
-    --dark-surface: #111111;
+    --accent: #6c47ff;
+    --accent-light: #8b6bff;
+    --accent-soft: rgba(108,71,255,0.08);
+    --gray-50: #f9f9fb;
+    --gray-100: #f0f0f5;
+    --gray-200: #e2e2ea;
+    --gray-400: #9898ae;
+    --gray-600: #5a5a72;
+    --gray-800: #1a1a2e;
+    --text: #0f0f1a;
+    --text-light: #5a5a72;
     --radius: 16px;
     --radius-sm: 10px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.07);
-    --shadow-hover: 0 16px 48px rgba(0,0,0,0.14);
-    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 16px 48px rgba(0,0,0,0.14);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    font-size: 17px;
+    background: #ffffff;
+    color: var(--text);
     line-height: 1.7;
-    color: var(--text-body);
-    background: var(--secondary);
     overflow-x: hidden;
   }
 
-  /* ─── SCROLLBAR ─── */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #f1f1f1; }
-  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(255,255,255,0.97);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    padding: 14px 40px;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    transition: color 0.4s ease;
+  }
+  nav.scrolled .nav-logo { color: var(--text); }
+  .nav-links { display: flex; align-items: center; gap: 8px; }
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 16px rgba(108,71,255,0.35);
+  }
+  .nav-cta:hover {
+    background: var(--accent-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(108,71,255,0.45);
+  }
 
-  /* ─── ANIMATION ─── */
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #0a0a14;
+    text-align: center;
+    padding: 120px 40px 80px;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    animation: floatOrb 8s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #6c47ff 0%, transparent 70%);
+    top: -200px; left: -150px;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+    bottom: -150px; right: -100px;
+    animation-delay: -3s;
+  }
+  .orb-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -5s;
+    opacity: 0.3;
+  }
+  @keyframes floatOrb {
+    0%, 100% { transform: translateY(0) scale(1); }
+    33% { transform: translateY(-30px) scale(1.04); }
+    66% { transform: translateY(20px) scale(0.97); }
+  }
+  .orb-3 { animation-name: floatOrb3; }
+  @keyframes floatOrb3 {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -58%) scale(1.06); }
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108,71,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,71,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(108,71,255,0.18);
+    border: 1px solid rgba(108,71,255,0.4);
+    color: #c4b5fd;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 28px;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: #a78bfa;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -2px;
+    line-height: 1.08;
+    margin-bottom: 24px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, #a78bfa, #6c47ff, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 20px);
+    color: rgba(255,255,255,0.65);
+    max-width: 620px;
+    margin: 0 auto 40px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(108,71,255,0.4);
+  }
+  .btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(108,71,255,0.5);
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-2px);
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.35);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+  @keyframes scrollDown {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.5); opacity: 0.4; }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 40px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .section-heading {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    line-height: 1.12;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 560px;
+    line-height: 1.75;
+  }
+  .section-header { margin-bottom: 60px; }
+
+  /* ── PORTFOLIO ── */
+  .portfolio { background: var(--gray-50); }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .portfolio-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 32px;
+    border: 1px solid var(--gray-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .portfolio-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), #a855f7);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .portfolio-card:hover::before { transform: scaleX(1); }
+  .portfolio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+  }
+  .portfolio-card.clickable { cursor: pointer; text-decoration: none; color: inherit; display: flex; }
+  .portfolio-card-icon {
+    width: 48px; height: 48px;
+    background: var(--accent-soft);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .portfolio-card-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .portfolio-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .portfolio-card-desc {
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.7;
+    flex: 1;
+  }
+  .portfolio-card-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: auto;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .portfolio-card:hover .portfolio-card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .portfolio-card-arrow svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 2.5; }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: linear-gradient(135deg, #0a0a14 0%, #1a0a3e 50%, #0a1428 100%);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .cta-section .orb {
+    pointer-events: none;
+  }
+  .cta-orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(108,71,255,0.3) 0%, transparent 70%);
+    top: -200px; right: -100px;
+  }
+  .cta-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
+    bottom: -150px; left: -100px;
+  }
+  .cta-inner { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+  .cta-section .section-heading { color: #fff; }
+  .cta-section .section-sub { color: rgba(255,255,255,0.6); margin: 0 auto 40px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #07070f;
+    color: rgba(255,255,255,0.5);
+    padding: 60px 40px 40px;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .footer-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  .footer-brand-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+  .footer-tagline {
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+    max-width: 280px;
+    line-height: 1.65;
+  }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .footer-copy { color: rgba(255,255,255,0.3); }
+  .footer-made { color: rgba(255,255,255,0.2); font-size: 13px; }
+
+  /* ── DIVIDER ── */
+  .divider-wave {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+  .divider-wave svg { display: block; width: 100%; }
+
+  /* ── ANIMATIONS ── */
   .animate {
     opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(30px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
   }
   .animate.visible {
     opacity: 1;
@@ -62,775 +475,333 @@
   .animate-delay-5 { transition-delay: 0.5s; }
   .animate-delay-6 { transition-delay: 0.6s; }
 
-  /* ─── NAVIGATION ─── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 1000;
-    padding: 20px 60px;
+  /* ── VALUE PROPS ── */
+  .value-props {
+    background: #fff;
+    border-top: 1px solid var(--gray-100);
+  }
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+  }
+  .value-card {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
-    background: transparent;
+    flex-direction: column;
+    gap: 16px;
   }
-  nav.scrolled {
-    background: rgba(255,255,255,0.96);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
-    padding: 14px 60px;
-  }
-  .nav-logo {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--secondary);
-    text-decoration: none;
-    letter-spacing: -0.5px;
-    transition: color var(--transition);
-  }
-  nav.scrolled .nav-logo { color: var(--primary); }
-  .nav-links { display: flex; align-items: center; gap: 32px; }
-  .nav-links a {
-    color: rgba(255,255,255,0.85);
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
-    transition: color var(--transition);
-  }
-  .nav-links a:hover { color: var(--secondary); }
-  nav.scrolled .nav-links a { color: var(--text-muted); }
-  nav.scrolled .nav-links a:hover { color: var(--primary); }
-  .nav-cta {
-    background: var(--accent);
-    color: #fff !important;
-    padding: 10px 22px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 14px !important;
-    transition: background var(--transition), transform var(--transition), box-shadow var(--transition) !important;
-    text-decoration: none;
-  }
-  .nav-cta:hover {
-    background: var(--accent-light) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(91,91,214,0.35) !important;
-  }
-  nav.scrolled .nav-cta { color: #fff !important; }
-
-  /* ─── HERO ─── */
-  .hero {
-    position: relative;
-    min-height: 100vh;
+  .value-icon {
+    width: 52px; height: 52px;
+    background: var(--accent-soft);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .value-icon svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .value-card h3 { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .value-card p { font-size: 15px; color: var(--text-light); line-height: 1.7; }
+
+  /* ── NUMBER STRIP ── */
+  .number-strip {
+    background: linear-gradient(135deg, #6c47ff 0%, #a855f7 50%, #3b82f6 100%);
+    padding: 64px 40px;
+  }
+  .number-strip-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
     text-align: center;
-    background: var(--primary);
-    overflow: hidden;
-    padding: 120px 40px 80px;
   }
-  .hero-orbs {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.55;
-    animation: float 8s ease-in-out infinite;
-  }
-  .orb-1 {
-    width: 520px; height: 520px;
-    background: radial-gradient(circle, #5B5BD6, transparent 70%);
-    top: -120px; left: -100px;
-    animation-delay: 0s;
-  }
-  .orb-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, #7B7BE8, transparent 70%);
-    bottom: -80px; right: -60px;
-    animation-delay: -3s;
-  }
-  .orb-3 {
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, #9B9BF0, transparent 70%);
-    top: 40%; left: 55%;
-    animation-delay: -5s;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    33% { transform: translateY(-30px) scale(1.04); }
-    66% { transform: translateY(18px) scale(0.97); }
-  }
-  .hero-grid-overlay {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 860px;
-  }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(91,91,214,0.18);
-    border: 1px solid rgba(91,91,214,0.35);
-    color: #a8a8f0;
-    padding: 7px 18px;
-    border-radius: 50px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    margin-bottom: 28px;
-    text-transform: uppercase;
-  }
-  .hero-badge span { width: 6px; height: 6px; background: #5B5BD6; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.4);opacity:0.7;} }
-  .hero h1 {
-    font-size: clamp(44px, 6vw, 72px);
+  .number-item {}
+  .number-value {
+    font-size: clamp(36px, 4vw, 52px);
     font-weight: 700;
-    color: var(--secondary);
-    letter-spacing: -2px;
-    line-height: 1.08;
-    margin-bottom: 24px;
-  }
-  .hero h1 em {
-    font-style: normal;
-    background: linear-gradient(135deg, #7B7BE8, #a8a8f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero p {
-    font-size: clamp(17px, 2vw, 20px);
-    color: rgba(255,255,255,0.68);
-    max-width: 600px;
-    margin: 0 auto 40px;
-    line-height: 1.75;
-  }
-  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
     color: #fff;
-    padding: 16px 36px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
-    box-shadow: 0 8px 30px rgba(91,91,214,0.4);
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 48px rgba(91,91,214,0.5);
-    background: var(--accent-light);
-  }
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.85);
-    padding: 16px 36px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.15);
-    transition: background var(--transition), border-color var(--transition), transform var(--transition);
-  }
-  .btn-secondary:hover {
-    background: rgba(255,255,255,0.14);
-    border-color: rgba(255,255,255,0.3);
-    transform: translateY(-2px);
-  }
-  .hero-scroll {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.4);
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    animation: bounce 2s ease-in-out infinite;
-  }
-  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(6px);} }
-  .hero-scroll svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.4); }
-
-  /* ─── SECTIONS SHARED ─── */
-  section { padding: 100px 60px; }
-  .section-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--accent);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .section-label::before {
-    content: '';
-    width: 20px; height: 2px;
-    background: var(--accent);
-    border-radius: 2px;
-  }
-  .section-heading {
-    font-size: clamp(32px, 4vw, 48px);
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: -1.5px;
-    line-height: 1.15;
-    margin-bottom: 16px;
-  }
-  .section-subheading {
-    font-size: 18px;
-    color: var(--text-muted);
-    max-width: 560px;
-    line-height: 1.75;
-    margin-bottom: 60px;
-  }
-  .container { max-width: 1200px; margin: 0 auto; }
-
-  /* ─── PORTFOLIO ─── */
-  .portfolio { background: #fafafa; }
-  .portfolio-header { text-align: center; }
-  .portfolio-header .section-subheading { margin-left: auto; margin-right: auto; }
-  .portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 28px;
-  }
-  .portfolio-card {
-    background: var(--secondary);
-    border-radius: var(--radius);
-    padding: 36px 32px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    cursor: pointer;
-  }
-  .portfolio-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    opacity: 0;
-    transition: opacity var(--transition);
-  }
-  .portfolio-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-hover);
-    border-color: rgba(91,91,214,0.2);
-  }
-  .portfolio-card:hover::before { opacity: 1; }
-  .portfolio-card-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 50px;
-    letter-spacing: 0.5px;
-    width: fit-content;
-  }
-  .portfolio-card-icon {
-    width: 44px; height: 44px;
-    background: var(--accent-soft);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .portfolio-card-icon svg { width: 22px; height: 22px; stroke: var(--accent); }
-  .portfolio-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: -0.3px;
-    line-height: 1.4;
-  }
-  .portfolio-card p {
-    font-size: 15px;
-    color: var(--text-muted);
-    line-height: 1.7;
-    flex: 1;
-  }
-  .portfolio-card-arrow {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 8px;
-    transition: gap var(--transition);
-  }
-  .portfolio-card:hover .portfolio-card-arrow { gap: 10px; }
-  .portfolio-card-arrow svg { width: 16px; height: 16px; stroke: var(--accent); }
-
-  /* ─── CTA SECTION ─── */
-  .cta-section {
-    background: var(--dark-bg);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    padding: 120px 60px;
-  }
-  .cta-orbs { position: absolute; inset: 0; pointer-events: none; }
-  .cta-orb-1 {
-    position: absolute;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(91,91,214,0.22), transparent 70%);
-    top: -150px; left: -100px;
-    border-radius: 50%;
-  }
-  .cta-orb-2 {
-    position: absolute;
-    width: 350px; height: 350px;
-    background: radial-gradient(circle, rgba(123,123,232,0.18), transparent 70%);
-    bottom: -100px; right: -80px;
-    border-radius: 50%;
-  }
-  .cta-content { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; }
-  .cta-content h2 {
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 700;
-    color: var(--secondary);
-    letter-spacing: -1.5px;
-    margin-bottom: 20px;
-    line-height: 1.15;
-  }
-  .cta-content h2 em {
-    font-style: normal;
-    background: linear-gradient(135deg, #7B7BE8, #a8a8f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .cta-content p {
-    font-size: 18px;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 44px;
-    line-height: 1.75;
-  }
-  .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--dark-surface);
-    padding: 60px 60px 36px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-  }
-  .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  .footer-brand h3 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--secondary);
-    letter-spacing: -0.5px;
-    margin-bottom: 10px;
-  }
-  .footer-brand p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    max-width: 280px;
-    line-height: 1.7;
-  }
-  .footer-links-group h4 {
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  .footer-links-group a {
-    display: block;
-    font-size: 14px;
-    color: rgba(255,255,255,0.45);
-    text-decoration: none;
-    margin-bottom: 10px;
-    transition: color var(--transition);
-  }
-  .footer-links-group a:hover { color: var(--secondary); }
-  .footer-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .footer-bottom p {
-    font-size: 13px;
-    color: rgba(255,255,255,0.3);
-  }
-  .footer-accent {
-    width: 32px; height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    border-radius: 2px;
-    margin-bottom: 20px;
-  }
-
-  /* ─── VALUE STRIP ─── */
-  .value-strip {
-    background: var(--primary);
-    padding: 56px 60px;
-    overflow: hidden;
-  }
-  .value-strip-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-  }
-  .value-item {
-    text-align: center;
-    color: var(--secondary);
-  }
-  .value-item-icon {
-    width: 56px; height: 56px;
-    background: rgba(91,91,214,0.2);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-  }
-  .value-item-icon svg { width: 28px; height: 28px; stroke: #a8a8f0; }
-  .value-item h3 {
-    font-size: 17px;
-    font-weight: 600;
+    letter-spacing: -2px;
+    line-height: 1;
     margin-bottom: 8px;
-    letter-spacing: -0.3px;
   }
-  .value-item p {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.7;
-  }
-
-  /* ─── DIVIDER ─── */
-  .section-divider {
-    width: 60px; height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    border-radius: 2px;
-    margin: 0 auto 52px;
-  }
-  .section-divider-left {
-    width: 60px; height: 4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    border-radius: 2px;
-    margin: 0 0 52px;
+  .number-label {
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
   }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    nav.scrolled { padding: 12px 24px; }
-    .nav-links { display: none; }
-    section { padding: 72px 28px; }
-    .hero { padding: 100px 24px 72px; }
-    .cta-section { padding: 80px 28px; }
-    footer { padding: 48px 28px 28px; }
-    .value-strip { padding: 48px 28px; }
-    .value-strip-inner { grid-template-columns: 1fr; gap: 28px; }
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav.scrolled { padding: 12px 20px; }
+    section { padding: 70px 20px; }
     .portfolio-grid { grid-template-columns: 1fr; }
+    .value-grid { grid-template-columns: 1fr; }
+    .number-strip-grid { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
+    .hero { padding: 100px 20px 80px; }
     .footer-top { flex-direction: column; }
-  }
-  @media (max-width: 600px) {
-    .hero h1 { letter-spacing: -1px; }
-    .portfolio-card { padding: 26px 22px; }
-    .hero-actions { flex-direction: column; align-items: center; }
-    .cta-actions { flex-direction: column; align-items: center; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
 <body>
 
-<!-- ─── NAVIGATION ─── -->
-<nav id="navbar">
+<!-- ── NAV ── -->
+<nav id="mainNav">
   <a href="https://virtualinternships.com" class="nav-logo" target="_blank" rel="noopener noreferrer">Virtual Internships</a>
   <div class="nav-links">
-    <a href="https://virtualinternships.com/host-a-company" target="_blank" rel="noopener noreferrer">For Companies</a>
-    <a href="https://virtualinternships.com/universities" target="_blank" rel="noopener noreferrer">For Universities</a>
-    <a href="https://virtualinternships.com/interns" target="_blank" rel="noopener noreferrer">For Interns</a>
-    <a href="https://virtualinternships.com/blog" target="_blank" rel="noopener noreferrer">Resources</a>
-    <a href="https://virtualinternships.com/about-us" target="_blank" rel="noopener noreferrer">About</a>
-    <a href="https://app.virtualinternships.com" class="nav-cta" target="_blank" rel="noopener noreferrer">Get Started</a>
+    <a href="https://virtualinternships.com/host-company/" class="nav-cta" target="_blank" rel="noopener noreferrer">Get Started →</a>
   </div>
 </nav>
 
-<!-- ─── HERO ─── -->
-<section class="hero">
-  <div class="hero-orbs">
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
+    <div class="hero-grid"></div>
   </div>
-  <div class="hero-grid-overlay"></div>
   <div class="hero-content">
-    <div class="hero-badge animate"><span></span> Global Internship Platform</div>
-    <h1 class="animate animate-delay-1">
-      Connecting Talent to<br><em>Global Opportunity</em>
+    <div class="hero-badge animate animate-delay-1" style="opacity:1;transform:none;">
+      <span class="hero-badge-dot"></span>
+      The Future of Work Experience
+    </div>
+    <h1 class="animate animate-delay-2" style="opacity:1;transform:none;">
+      Remote Internships<br><span>Without Borders</span>
     </h1>
-    <p class="animate animate-delay-2">
-      Virtual Internships bridges the gap between education and the working world — empowering students, universities, and companies to thrive through remote, real-world experience.
+    <p class="hero-sub animate animate-delay-3" style="opacity:1;transform:none;">
+      Connect with world-class talent or launch your career through meaningful, structured virtual internship experiences — accessible from anywhere in the world.
     </p>
-    <div class="hero-actions animate animate-delay-3">
-      <a href="https://virtualinternships.com/host-a-company" target="_blank" rel="noopener noreferrer" class="btn-primary">
+    <div class="hero-ctas animate animate-delay-4" style="opacity:1;transform:none;">
+      <a href="https://virtualinternships.com/host-company/" class="btn-primary" target="_blank" rel="noopener noreferrer">
         Host an Intern
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
-      <a href="https://virtualinternships.com/interns" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+      <a href="https://virtualinternships.com/intern/" class="btn-ghost" target="_blank" rel="noopener noreferrer">
         Find an Internship
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
   <div class="hero-scroll">
-    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-    Scroll
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- ─── VALUE STRIP ─── -->
-<div class="value-strip">
-  <div class="value-strip-inner">
-    <div class="value-item animate">
-      <div class="value-item-icon">
-        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 4-10z"/></svg>
-      </div>
-      <h3>Global Reach</h3>
-      <p>Match students and companies across borders through fully remote, structured internship programs.</p>
+<!-- ── NUMBER STRIP ── -->
+<div class="number-strip">
+  <div class="number-strip-grid">
+    <div class="number-item animate">
+      <div class="number-value">100<span style="font-size:0.55em;opacity:0.8">+</span></div>
+      <div class="number-label">Countries Represented</div>
     </div>
-    <div class="value-item animate animate-delay-2">
-      <div class="value-item-icon">
-        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      </div>
-      <h3>Vetted Host Companies</h3>
-      <p>A curated network of real companies offering meaningful work, mentorship, and career-defining experiences.</p>
+    <div class="number-item animate animate-delay-1">
+      <div class="number-value">10K<span style="font-size:0.55em;opacity:0.8">+</span></div>
+      <div class="number-label">Interns Placed Globally</div>
     </div>
-    <div class="value-item animate animate-delay-4">
-      <div class="value-item-icon">
-        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-      </div>
-      <h3>Measurable Outcomes</h3>
-      <p>Track progress, assess skills, and demonstrate real impact for both interns and host organizations.</p>
+    <div class="number-item animate animate-delay-2">
+      <div class="number-value">500<span style="font-size:0.55em;opacity:0.8">+</span></div>
+      <div class="number-label">Host Companies</div>
+    </div>
+    <div class="number-item animate animate-delay-3">
+      <div class="number-value">95<span style="font-size:0.55em;opacity:0.8">%</span></div>
+      <div class="number-label">Satisfaction Rate</div>
     </div>
   </div>
 </div>
 
-<!-- ─── PORTFOLIO / STORIES ─── -->
-<section class="portfolio">
+<!-- ── VALUE PROPS ── -->
+<section class="value-props">
   <div class="container">
-    <div class="portfolio-header animate">
-      <div class="section-label">Success Stories & Insights</div>
-      <h2 class="section-heading">Real Stories.<br>Real Impact.</h2>
-      <p class="section-subheading">From students gaining career-defining experience to companies building resilient remote teams — explore the stories shaping the future of work.</p>
-      <div class="section-divider"></div>
+    <div class="section-header">
+      <div class="animate"><span class="section-label">Why Virtual Internships</span></div>
+      <h2 class="section-heading animate animate-delay-1">Built for the modern<br>world of work</h2>
+      <p class="section-sub animate animate-delay-2">A fully managed platform that bridges the gap between emerging talent and forward-thinking companies — entirely online.</p>
+    </div>
+    <div class="value-grid">
+      <div class="value-card animate">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Global Talent Access</h3>
+        <p>Tap into a diverse pool of motivated students and graduates from over 100 countries, ready to contribute from day one.</p>
+      </div>
+      <div class="value-card animate animate-delay-1">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Fully Managed Process</h3>
+        <p>From matching to mentorship frameworks — we handle the logistics so your team can focus on what matters most.</p>
+      </div>
+      <div class="value-card animate animate-delay-2">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Real Business Impact</h3>
+        <p>Interns contribute across sales, marketing, product, and engineering — delivering measurable value to your organization.</p>
+      </div>
+      <div class="value-card animate animate-delay-3">
+        <div class="value-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Inclusive by Design</h3>
+        <p>Breaking down barriers for first-generation students, international learners, and underrepresented talent worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PORTFOLIO ── -->
+<section class="portfolio" id="stories">
+  <div class="container">
+    <div class="section-header">
+      <div class="animate"><span class="section-label">Stories & Insights</span></div>
+      <h2 class="section-heading animate animate-delay-1">Real stories.<br>Real impact.</h2>
+      <p class="section-sub animate animate-delay-2">From startup founders to first-gen students — hear how virtual internships are reshaping careers and businesses across the globe.</p>
     </div>
     <div class="portfolio-grid">
 
-      <div class="portfolio-card animate animate-delay-1">
+      <div class="portfolio-card animate">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/></svg>
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         </div>
-        <div class="portfolio-card-tag">Company Story</div>
-        <h3>Expanding Capacity in Growing Businesses Through Remote Interns</h3>
-        <p>Startup CEO, Mojdeh, talks through the integration of interns into her team, and the contributions they've made across sales, marketing, and product divisions of a small and growing company.</p>
+        <div class="portfolio-card-title">Expanding Capacity in Growing Businesses Through Remote Interns</div>
+        <div class="portfolio-card-desc">Startup CEO, Mojdeh, talks through the integration of interns into her team, and the contributions they've made across sales, marketing, and product divisions of a small and growing company.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-
-      <div class="portfolio-card animate animate-delay-2">
-        <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-        </div>
-        <div class="portfolio-card-tag">Thought Leadership</div>
-        <h3>Industry and Academic Can Collaborate to Build a Stronger Talent Pool</h3>
-        <p>Hear the perspectives of industry leaders, educators, and interns on how experiential learning can help close the gap between education and working world demands.</p>
-        <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-
-      <div class="portfolio-card animate animate-delay-3">
-        <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
-        <div class="portfolio-card-tag">Intern Story</div>
-        <h3>How an Internship Helped a First-Gen Student Achieve Their Goals</h3>
-        <p>Jocelyn shares how a remote internship enabled her to gain valuable experience whilst working part-time and studying full-time as a first-gen student.</p>
-        <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-1">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <div class="portfolio-card-tag">Company Story</div>
-        <h3>How Virtual Internships Became an Extension of Our HR Department</h3>
-        <p>Canada-based cybersecurity company founder shares how after initial skepticism, the virtual internships program became an essential part of reshaping and expanding their remote team.</p>
+        <div class="portfolio-card-title">Industry and Academic Can Collaborate to Build a Stronger Talent Pool</div>
+        <div class="portfolio-card-desc">Hear the perspectives of industry leaders, educators, and interns on how experiential learning can help close the gap between education and working world demands.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-2">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <div class="portfolio-card-tag">Talent Strategy</div>
-        <h3>Mentoring to Build the Talent Pool of the Future</h3>
-        <p>Startup founder, Graham, shares his approach to building a talent pipeline through mentoring virtual interns and how this has revolutionized their talent strategy.</p>
+        <div class="portfolio-card-title">How an Internship Helped a First-Gen Student Achieve Their Goals</div>
+        <div class="portfolio-card-desc">Jocelyn shares how a remote internship enabled her to gain valuable experience whilst working part-time and studying full-time as a first-gen student.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-3">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
         </div>
-        <div class="portfolio-card-tag">Community Q&A</div>
-        <h3>FAQs Answered from Our VI Host Company Community</h3>
-        <p>Join our Co-Founder, Ed, as he answers all the burning questions about hosting interns as part of our company community.</p>
+        <div class="portfolio-card-title">How Virtual Internships Become an Extension of Our HR Department</div>
+        <div class="portfolio-card-desc">Canada-based cybersecurity company founder shares how after initial skepticism, the virtual internships program became an essential part of reshaping and expanding their remote team.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <div class="portfolio-card animate animate-delay-4">
+        <div class="portfolio-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="portfolio-card-title">Mentoring to Build the Talent Pool of the Future</div>
+        <div class="portfolio-card-desc">Startup founder, Graham, shares his approach to building a talent pipeline through mentoring virtual interns and how this has revolutionized their talent strategy.</div>
+        <div class="portfolio-card-arrow">
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <div class="portfolio-card animate animate-delay-5">
+        <div class="portfolio-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="portfolio-card-title">FAQs Answered from Our VI Host Company Community</div>
+        <div class="portfolio-card-desc">Join our Co-Founder, Ed, as he answers all the burning questions about hosting interns as part of our company community.</div>
+        <div class="portfolio-card-arrow">
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <div class="portfolio-card animate">
+        <div class="portfolio-card-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="portfolio-card-title">How to Better Prepare Graduates for the Future of Work in The AI Era</div>
+        <div class="portfolio-card-desc">Internship expert and higher education thought leader, Michael True, shares insights on the role of higher education in equipping the future workforce in the AI era.</div>
+        <div class="portfolio-card-arrow">
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-1">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
-        <div class="portfolio-card-tag">Future of Work</div>
-        <h3>How to Better Prepare Graduates for the Future of Work in The AI Era</h3>
-        <p>Internship expert and higher education thought leader, Michael True, shares insights on the role of higher education in equipping the future workforce in the AI era.</p>
+        <div class="portfolio-card-title">Making Global Internships Accessible: Case Studies</div>
+        <div class="portfolio-card-desc">Hear from Co-Founder, Ed, as he shares real examples of how Virtual Internships is breaking barriers, fostering inclusivity, and enhancing employability for diverse populations.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-2">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
-        <div class="portfolio-card-tag">Inclusion</div>
-        <h3>Making Global Internships Accessible: Case Studies</h3>
-        <p>Hear from Co-Founder, Ed, as he shares real examples of how Virtual Internships is breaking barriers, fostering inclusivity, and enhancing employability for diverse populations.</p>
+        <div class="portfolio-card-title">The Challenges State Universities in the US Face</div>
+        <div class="portfolio-card-desc">David Armstrong, international educator and former president of Broward College, USA, shares insights on the challenges higher education faces today and how to address the global skills gap.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
       <div class="portfolio-card animate animate-delay-3">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
-        <div class="portfolio-card-tag">Higher Education</div>
-        <h3>The Challenges State Universities in the US Face</h3>
-        <p>David Armstrong, international educator and former president of Broward College, USA, shares insights on the challenges higher education faces today and how to address the global skills gap.</p>
+        <div class="portfolio-card-title">How This Student Benefitted from a Remote Internship</div>
+        <div class="portfolio-card-desc">Meet Pham Hoäng Dan (Elena), an international student in the United States who leveraged a remote internship while studying.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
-      <div class="portfolio-card animate animate-delay-1">
+      <div class="portfolio-card animate animate-delay-4">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <div class="portfolio-card-tag">Intern Story</div>
-        <h3>How This Student Benefitted from a Remote Internship</h3>
-        <p>Meet Pham Hoäng Dan (Elena), an international student in the United States who leveraged a remote internship while studying.</p>
+        <div class="portfolio-card-title">Discover the Virtual Internships Platform for Interns</div>
+        <div class="portfolio-card-desc">Career path discovery has never been easier. With the Virtual Internships platform, you can create a profile within minutes and sign up to get matched with a global host company in your goal career industry.</div>
         <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
-      <div class="portfolio-card animate animate-delay-2">
+      <div class="portfolio-card animate animate-delay-5">
         <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 12h7"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
-        <div class="portfolio-card-tag">Platform</div>
-        <h3>Discover the Virtual Internships Platform for Interns</h3>
-        <p>Career path discovery has never been easier. With the Virtual Internships platform, you can create a profile within minutes and sign up to get matched with a global host company in your goal career industry.</p>
+        <div class="portfolio-card-title">Internship Success: How to Overcome Imposter Syndrome</div>
+        <div class="portfolio-card-desc">That feeling of self-doubt and inadequacy affects individuals at all levels, from CEOs to interns. Jason Kan, COO at Virtual Internships, delves into the phenomenon of Imposter Syndrome and provides valuable insights and strategies to overcome it.</div>
         <div class="portfolio-card-arrow">
-          Learn more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </div>
-      </div>
-
-      <div class="portfolio-card animate animate-delay-3">
-        <div class="portfolio-card-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-        </div>
-        <div class="portfolio-card-tag">Career Development</div>
-        <h3>Internship Success: How to Overcome Imposter Syndrome</h3>
-        <p>That feeling of self-doubt and inadequacy affects individuals at all levels, from CEOs to interns. Jason Kan, COO at Virtual Internships, delves into the phenomenon of Imposter Syndrome and provides valuable insights and strategies to overcome it.</p>
-        <div class="portfolio-card-arrow">
-          Read more
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Watch Story
+          <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </div>
 
@@ -838,78 +809,68 @@
   </div>
 </section>
 
-<!-- ─── CTA ─── -->
+<!-- ── CTA ── -->
 <section class="cta-section">
-  <div class="cta-orbs">
-    <div class="cta-orb-1"></div>
-    <div class="cta-orb-2"></div>
-  </div>
-  <div class="cta-content animate">
-    <div class="section-label" style="justify-content:center; color:#a8a8f0;">
-      <span style="width:20px;height:2px;background:#a8a8f0;border-radius:2px;"></span>
-      Ready to Get Started?
-    </div>
-    <h2>Launch Your <em>Internship Program</em> Today</h2>
-    <p>Join thousands of companies and universities already using Virtual Internships to discover talent, build teams, and close the skills gap — globally, remotely, at scale.</p>
-    <div class="cta-actions">
-      <a href="https://virtualinternships.com/host-a-company" target="_blank" rel="noopener noreferrer" class="btn-primary">
-        Host an Intern
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="https://virtualinternships.com/universities" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-        University Partnerships
-      </a>
+  <div class="orb cta-orb-1" style="position:absolute;"></div>
+  <div class="orb cta-orb-2" style="position:absolute;"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <div class="animate"><span class="section-label" style="background:rgba(108,71,255,0.25);color:#c4b5fd;">Get Started Today</span></div>
+      <h2 class="section-heading animate animate-delay-1" style="color:#fff;margin-bottom:16px;">Ready to build your<br>talent pipeline?</h2>
+      <p class="section-sub animate animate-delay-2" style="color:rgba(255,255,255,0.6);margin:0 auto 40px;">Join hundreds of companies already leveraging virtual internships to access world-class talent, scale their teams, and make a lasting impact on the next generation of professionals.</p>
+      <div class="hero-ctas animate animate-delay-3">
+        <a href="https://virtualinternships.com/host-company/" class="btn-primary" target="_blank" rel="noopener noreferrer">
+          Host an Intern →
+        </a>
+        <a href="https://virtualinternships.com/intern/" class="btn-ghost" target="_blank" rel="noopener noreferrer">
+          Find an Internship
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
+<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-accent"></div>
-        <h3>Virtual Internships</h3>
-        <p>Bridging the gap between education and the working world through remote, real-world internship experiences.</p>
+      <div>
+        <div class="footer-brand-name">Virtual Internships</div>
+        <div class="footer-tagline">Connecting ambitious talent with forward-thinking companies — anywhere in the world.</div>
       </div>
-      <div class="footer-links-group">
-        <h4>For Companies</h4>
-        <a href="https://virtualinternships.com/host-a-company" target="_blank" rel="noopener noreferrer">Host an Intern</a>
-        <a href="https://virtualinternships.com/pricing" target="_blank" rel="noopener noreferrer">Pricing</a>
-        <a href="https://virtualinternships.com/case-studies" target="_blank" rel="noopener noreferrer">Case Studies</a>
-      </div>
-      <div class="footer-links-group">
-        <h4>For Universities</h4>
-        <a href="https://virtualinternships.com/universities" target="_blank" rel="noopener noreferrer">University Programs</a>
-        <a href="https://virtualinternships.com/partners" target="_blank" rel="noopener noreferrer">Become a Partner</a>
-      </div>
-      <div class="footer-links-group">
-        <h4>For Interns</h4>
-        <a href="https://virtualinternships.com/interns" target="_blank" rel="noopener noreferrer">Find an Internship</a>
-        <a href="https://app.virtualinternships.com" target="_blank" rel="noopener noreferrer">Create a Profile</a>
-        <a href="https://virtualinternships.com/blog" target="_blank" rel="noopener noreferrer">Career Resources</a>
-      </div>
-      <div class="footer-links-group">
-        <h4>Company</h4>
-        <a href="https://virtualinternships.com/about-us" target="_blank" rel="noopener noreferrer">About Us</a>
-        <a href="https://virtualinternships.com/blog" target="_blank" rel="noopener noreferrer">Blog</a>
-        <a href="https://virtualinternships.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
+      <div style="display:flex;gap:48px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">Company</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <a href="https://virtualinternships.com/about/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">About</a>
+            <a href="https://virtualinternships.com/blog/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Blog</a>
+            <a href="https://virtualinternships.com/contact/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;">Platform</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <a href="https://virtualinternships.com/host-company/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Host a Company</a>
+            <a href="https://virtualinternships.com/intern/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Find Internships</a>
+            <a href="https://virtualinternships.com/university/" target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">Universities</a>
+          </div>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; <span id="year"></span> Virtual Internships. All rights reserved.</p>
-      <p style="color:rgba(255,255,255,0.2); font-size:13px;">Connecting talent to global opportunity.</p>
+      <span class="footer-copy">© <span id="year"></span> Virtual Internships. All rights reserved.</span>
+      <span class="footer-made">virtualinternships.com</span>
     </div>
   </div>
 </footer>
 
 <script>
-  // ─── YEAR ───
+  // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ─── NAV SCROLL ───
-  const nav = document.getElementById('navbar');
+  // Nav scroll
   window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
     if (window.scrollY > 50) {
       nav.classList.add('scrolled');
     } else {
@@ -917,31 +878,46 @@
     }
   });
 
-  // ─── INTERSECTION OBSERVER (animate on scroll) ───
+  // IntersectionObserver for animations
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.08 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.animate').forEach(el => observer.observe(el));
 
-  // ─── PORTFOLIO CARD HOVER CURSOR ───
-  document.querySelectorAll('.portfolio-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.style.cursor = 'pointer';
-    });
+  // Stagger portfolio cards
+  const portfolioCards = document.querySelectorAll('.portfolio-card');
+  portfolioCards.forEach((card, i) => {
+    card.style.transitionDelay = ((i % 3) * 0.12) + 's';
   });
 
-  // ─── HERO PARALLAX ───
+  // Parallax orbs in hero (subtle)
   window.addEventListener('scroll', () => {
     const scrolled = window.scrollY;
-    const orbs = document.querySelectorAll('.orb');
-    orbs.forEach((orb, i) => {
-      const speed = (i + 1) * 0.12;
-      orb.style.transform = `translateY(${scrolled * speed}px)`;
+    const orb1 = document.querySelector('.orb-1');
+    const orb2 = document.querySelector('.orb-2');
+    if (orb1) orb1.style.transform = `translateY(${scrolled * 0.15}px)`;
+    if (orb2) orb2.style.transform = `translateY(${scrolled * -0.1}px)`;
+  });
+
+  // Number strip card hover 3d tilt
+  document.querySelectorAll('.portfolio-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -4;
+      const rotateY = ((x - centerX) / centerX) * 4;
+      card.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
     });
   });
 </script>
