@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellfound – Where startups and job seekers connect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #ff5c35;
+    --accent2: #6c63ff;
+    --gray-100: #f7f7f7;
+    --gray-200: #eeeeee;
+    --gray-400: #999999;
+    --gray-600: #555555;
+    --gray-800: #1a1a1a;
+    --radius: 16px;
+    --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--secondary);
+    color: var(--primary);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    padding: 14px 48px;
+  }
+
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--secondary);
+    transition: color 0.4s ease;
+  }
+
+  nav.scrolled .nav-logo { color: var(--primary); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    transition: color 0.3s ease;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .nav-links a:hover { color: #fff; }
+  .nav-links a:hover::after { width: 100%; }
+
+  nav.scrolled .nav-links a { color: var(--gray-600); }
+  nav.scrolled .nav-links a:hover { color: var(--primary); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .nav-cta::after { display: none !important; }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,92,53,0.4); background: #e04520; color: #fff !important; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    animation: orbFloat 10s ease-in-out infinite alternate;
+  }
+
+  .orb-1 {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #ff5c35, transparent 70%);
+    top: -120px; left: -100px;
+    animation-duration: 12s;
+  }
+
+  .orb-2 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, #6c63ff, transparent 70%);
+    bottom: -80px; right: -60px;
+    animation-duration: 9s;
+    animation-delay: -3s;
+  }
+
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #00c9a7, transparent 70%);
+    top: 50%; left: 55%;
+    animation-duration: 14s;
+    animation-delay: -6s;
+    opacity: 0.2;
+  }
+
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -40px) scale(1.08); }
+    100% { transform: translate(-20px, 30px) scale(0.95); }
+  }
+
+  .hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 32px;
+    backdrop-filter: blur(8px);
+    animation: fadeDown 0.8s var(--transition) both;
+  }
+
+  .hero-badge-dot {
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,92,53,0.6); }
+    50% { box-shadow: 0 0 0 6px rgba(255,92,53,0); }
+  }
+
+  .hero h1 {
+    font-size: clamp(48px, 7vw, 72px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--secondary);
+    line-height: 1.08;
+    margin-bottom: 24px;
+    animation: fadeUp 0.9s var(--transition) 0.15s both;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, #ff5c35, #ff8f6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.9s var(--transition) 0.3s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    box-shadow: 0 8px 32px rgba(255,92,53,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(255,92,53,0.5);
+    background: #e04520;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    padding: 16px 36px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .btn-secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    animation: fadeIn 1s ease 1s both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.5; }
+    50% { transform: scaleY(0.6); opacity: 1; }
+  }
+
+  /* ── STATS ── */
+  .stats-section {
+    background: var(--gray-100);
+    padding: 80px 48px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .stats-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: center;
+  }
+
+  .stat-card {
+    padding: 40px 24px;
+    background: var(--secondary);
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.08);
+  }
+
+  .stat-value {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--primary);
+    line-height: 1;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .stat-bar {
+    width: 40px; height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+
+  /* ── CLIENTS ── */
+  .clients-section {
+    padding: 96px 48px;
+    background: var(--secondary);
+    overflow: hidden;
+  }
+
+  .clients-label {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 52px;
+  }
+
+  .clients-track-wrapper {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  }
+
+  .clients-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 28s linear infinite;
+    width: max-content;
+  }
+
+  .clients-track:hover { animation-play-state: paused; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .client-name {
+    padding: 0 48px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-400);
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .client-name::after {
+    content: '·';
+    color: var(--gray-200);
+    font-size: 24px;
+  }
+
+  .client-name:hover { color: var(--primary); }
+
+  /* ── VALUE PROP ── */
+  .value-section {
+    padding: 120px 48px;
+    background: var(--primary);
+    color: var(--secondary);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .value-bg-accent {
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .value-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .value-text h2 {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .value-text h2 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .value-text p {
+    color: rgba(255,255,255,0.6);
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .value-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .value-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .value-card:hover {
+    background: rgba(255,255,255,0.09);
+    transform: translateX(6px);
+  }
+
+  .value-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .value-card-icon.orange { background: rgba(255,92,53,0.15); }
+  .value-card-icon.purple { background: rgba(108,99,255,0.15); }
+  .value-card-icon.teal { background: rgba(0,201,167,0.15); }
+
+  .value-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .value-card p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: #0a0a0a;
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(255,92,53,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    color: var(--secondary);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.5);
+    font-size: 18px;
+    max-width: 480px;
+    margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-section .btn-primary { position: relative; z-index: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050505;
+    padding: 60px 48px 36px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.3s ease;
+  }
+
+  .footer-nav a:hover { color: rgba(255,255,255,0.85); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer-copy span { color: var(--accent); }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+    font-style: italic;
+  }
+
+  /* ── ANIMATIONS ── */
+  .animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .section-tag::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 12px; height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { gap: 20px; }
+
+    .stats-grid { grid-template-columns: 1fr; max-width: 340px; }
+    .value-inner { grid-template-columns: 1fr; gap: 48px; }
+    .clients-section, .stats-section, .value-section, .cta-section { padding: 80px 24px; }
+    .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .footer-nav { flex-wrap: wrap; justify-content: center; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero h1 { font-size: 40px; letter-spacing: -1.5px; }
+    .hero-cta-group { flex-direction: column; align-items: center; }
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="main-nav">
+  <a href="https://wellfound.com" class="nav-logo" target="_blank" rel="noopener noreferrer">Wellfound</a>
+  <ul class="nav-links">
+    <li><a href="http://wellfound.com/discover" target="_blank" rel="noopener noreferrer">Discover</a></li>
+    <li><a href="http://wellfound.com/candidates/overview" target="_blank" rel="noopener noreferrer">For job seekers</a></li>
+    <li><a href="http://wellfound.com/recruit/overview" target="_blank" rel="noopener noreferrer">For companies</a></li>
+    <li><a href="http://wellfound.com/login" target="_blank" rel="noopener noreferrer">Log In</a></li>
+    <li><a href="https://wellfound.com/jobs" class="nav-cta" target="_blank" rel="noopener noreferrer">Find your next job</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      The #1 startup jobs platform
+    </div>
+    <h1>Where <span>startups</span> and job seekers connect</h1>
+    <div class="hero-cta-group">
+      <a href="https://wellfound.com/jobs" class="btn-primary" target="_blank" rel="noopener noreferrer">
+        Find your next job
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="http://wellfound.com/recruit/overview" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+        Hire top talent
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card animate">
+      <div class="stat-value" data-target="8" data-suffix="M+">0</div>
+      <div class="stat-bar"></div>
+      <div class="stat-label">Matches Made</div>
+    </div>
+    <div class="stat-card animate animate-delay-2">
+      <div class="stat-value" data-target="150" data-suffix="K+">0</div>
+      <div class="stat-bar"></div>
+      <div class="stat-label">Tech Jobs</div>
+    </div>
+    <div class="stat-card animate animate-delay-4">
+      <div class="stat-value" data-target="10" data-suffix="M+">0</div>
+      <div class="stat-bar"></div>
+      <div class="stat-label">Startup Ready Candidates</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUE PROP ── -->
+<section class="value-section">
+  <div class="value-bg-accent"></div>
+  <div class="value-inner">
+    <div class="value-text animate">
+      <span class="section-tag">Why Wellfound</span>
+      <h2>Built for the <em>startup</em> ecosystem</h2>
+      <p>Wellfound is purpose-built for the startup world — connecting ambitious talent with the companies shaping tomorrow. No noise, just the right match.</p>
+      <a href="http://wellfound.com/candidates/overview" class="btn-primary" target="_blank" rel="noopener noreferrer">
+        Explore for job seekers
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="value-cards animate animate-delay-2">
+      <div class="value-card">
+        <div class="value-card-icon orange">🚀</div>
+        <div>
+          <h4>Startup-First Jobs</h4>
+          <p>Access exclusive roles at high-growth startups before they hit mainstream boards.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon purple">⚡</div>
+        <div>
+          <h4>Instant Matches</h4>
+          <p>Intelligent matching surfaces opportunities aligned with your skills and ambitions.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="value-card-icon teal">🎯</div>
+        <div>
+          <h4>Vetted Talent Pool</h4>
+          <p>Employers access 10M+ startup-ready candidates ready to make an impact from day one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLIENTS ── -->
+<section class="clients-section">
+  <div class="clients-label animate">Trusted by the world's most ambitious companies</div>
+  <div class="clients-track-wrapper animate animate-delay-2">
+    <div class="clients-track" id="clients-track">
+      <span class="client-name">IFTTT</span>
+      <span class="client-name">Postmates</span>
+      <span class="client-name">Plaid</span>
+      <span class="client-name">Airtable</span>
+      <span class="client-name">NerdWallet</span>
+      <span class="client-name">Adonis</span>
+      <span class="client-name">ConsenSys</span>
+      <span class="client-name">Cruise</span>
+      <span class="client-name">DoorDash</span>
+      <span class="client-name">Roblox</span>
+      <span class="client-name">Honey</span>
+      <span class="client-name">Peloton</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="client-name">IFTTT</span>
+      <span class="client-name">Postmates</span>
+      <span class="client-name">Plaid</span>
+      <span class="client-name">Airtable</span>
+      <span class="client-name">NerdWallet</span>
+      <span class="client-name">Adonis</span>
+      <span class="client-name">ConsenSys</span>
+      <span class="client-name">Cruise</span>
+      <span class="client-name">DoorDash</span>
+      <span class="client-name">Roblox</span>
+      <span class="client-name">Honey</span>
+      <span class="client-name">Peloton</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <span class="section-tag animate" style="color: var(--accent);">Get started today</span>
+  <h2 class="animate animate-delay-1">Ready to find your<br>perfect match?</h2>
+  <p class="animate animate-delay-2">Join millions of candidates and thousands of startups already on Wellfound.</p>
+  <a href="https://wellfound.com/jobs" class="btn-primary animate animate-delay-3" target="_blank" rel="noopener noreferrer">
+    Find your next job
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-logo">Wellfound</div>
+      <ul class="footer-nav">
+        <li><a href="http://wellfound.com/discover" target="_blank" rel="noopener noreferrer">Discover</a></li>
+        <li><a href="http://wellfound.com/candidates/overview" target="_blank" rel="noopener noreferrer">For Job Seekers</a></li>
+        <li><a href="http://wellfound.com/recruit/overview" target="_blank" rel="noopener noreferrer">For Companies</a></li>
+        <li><a href="http://wellfound.com/login" target="_blank" rel="noopener noreferrer">Log In</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© <span id="year"></span> Wellfound. All rights reserved.</p>
+      <p class="footer-tagline">Where startups and job seekers connect.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Nav scroll
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── IntersectionObserver for animate
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // ── Stat counter animation
+  function animateCounter(el, target, suffix) {
+    const duration = 1800;
+    const startTime = performance.now();
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 4);
+      const value = Math.floor(ease * target);
+      el.textContent = value.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseFloat(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        animateCounter(el, target, suffix);
+        statsObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-value[data-target]').forEach(el => statsObserver.observe(el));
+
+  // ── Smooth parallax on hero orbs
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const orbs = document.querySelectorAll('.orb');
+    orbs.forEach((orb, i) => {
+      const speed = 0.15 + i * 0.08;
+      orb.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>
