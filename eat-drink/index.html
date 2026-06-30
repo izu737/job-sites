@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eat.Drink.Lagos — Lagos Food & Dining Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #c8a96e;
+    --accent-light: #e8d5b0;
+    --gray-100: #f7f7f5;
+    --gray-200: #eeede9;
+    --gray-400: #a0998e;
+    --gray-600: #5c5550;
+    --gray-800: #2a2520;
+    --radius: 4px;
+    --nav-height: 72px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--secondary);
+    color: var(--primary);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    transition: background 0.4s ease, box-shadow 0.4s ease, border-bottom 0.4s ease;
+    background: transparent;
+  }
+
+  nav.scrolled {
+    background: rgba(0,0,0,0.96);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  .nav-logo {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+    margin: 0 auto;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    transition: color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.6px !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--accent-light) !important;
+    transform: translateY(-1px);
+    color: #000 !important;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0 48px;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.22;
+    animation: floatOrb 14s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #c8a96e 0%, transparent 70%);
+    top: -180px; left: -120px;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, #8b6914 0%, transparent 70%);
+    bottom: -150px; right: -100px;
+    animation-delay: -5s;
+  }
+
+  .orb-3 {
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, #c8a96e 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -9s;
+  }
+
+  @keyframes floatOrb {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -50px) scale(1.08); }
+    66% { transform: translate(-30px, 30px) scale(0.94); }
+  }
+
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: heroFadeUp 0.9s ease 0.2s forwards;
+  }
+
+  .hero-headline {
+    font-size: clamp(52px, 8vw, 80px);
+    font-weight: 700;
+    letter-spacing: -3px;
+    line-height: 1.0;
+    color: #ffffff;
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: heroFadeUp 1s ease 0.45s forwards;
+  }
+
+  .hero-headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.62);
+    max-width: 580px;
+    margin: 0 auto 44px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: heroFadeUp 1s ease 0.68s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: heroFadeUp 1s ease 0.88s forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(200,169,110,0.35);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    padding: 16px 36px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.18);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  @keyframes heroFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: heroFadeUp 1s ease 1.4s forwards;
+  }
+
+  .scroll-dot {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(200,169,110,0.8), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.15); }
+  }
+
+  /* ─── MARQUEE STRIP ─── */
+  .marquee-strip {
+    background: var(--accent);
+    overflow: hidden;
+    padding: 14px 0;
+    border-top: 1px solid rgba(0,0,0,0.12);
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+
+  .marquee-item {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #000;
+    padding: 0 40px;
+    white-space: nowrap;
+  }
+
+  .marquee-item::before {
+    content: "✦";
+    margin-right: 40px;
+    opacity: 0.5;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTION SHARED ─── */
+  section {
+    padding: 120px 48px;
+  }
+
+  .section-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  .section-heading {
+    font-size: clamp(38px, 5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.08;
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 18px;
+    color: var(--gray-600);
+    max-width: 540px;
+    line-height: 1.65;
+  }
+
+  .section-header {
+    margin-bottom: 72px;
+  }
+
+  /* ─── REVIEWS SECTION ─── */
+  .reviews-section {
+    background: var(--gray-100);
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .review-card {
+    background: var(--secondary);
+    padding: 44px 38px;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.25s, transform 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .review-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .review-card:hover::before { opacity: 1; }
+
+  .review-card > * { position: relative; z-index: 1; }
+
+  .review-card:hover .review-number,
+  .review-card:hover .review-title,
+  .review-card:hover .review-desc,
+  .review-card:hover .review-result,
+  .review-card:hover .review-cta {
+    color: var(--secondary);
+  }
+
+  .review-card:hover .review-line { background: rgba(255,255,255,0.15); }
+
+  .review-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    transition: color 0.25s;
+  }
+
+  .review-card:hover .review-number { color: var(--accent); }
+
+  .review-title {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    color: var(--primary);
+    margin-bottom: 16px;
+    transition: color 0.25s;
+  }
+
+  .review-line {
+    width: 32px;
+    height: 1px;
+    background: var(--gray-200);
+    margin-bottom: 20px;
+    transition: background 0.25s;
+  }
+
+  .review-desc {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--gray-600);
+    flex: 1;
+    transition: color 0.25s;
+  }
+
+  .review-card:hover .review-desc { color: rgba(255,255,255,0.7); }
+
+  .review-result {
+    font-size: 13px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--gray-400);
+    margin-top: 20px;
+    line-height: 1.5;
+    transition: color 0.25s;
+  }
+
+  .review-card:hover .review-result { color: rgba(255,255,255,0.6); }
+
+  .review-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 32px;
+    transition: color 0.25s, gap 0.2s;
+  }
+
+  .review-card:hover .review-cta {
+    color: var(--accent-light);
+    gap: 12px;
+  }
+
+  .review-cta-arrow {
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+
+  .review-card:hover .review-cta-arrow { transform: translateX(4px); }
+
+  /* ─── ABOUT / EDITORIAL STRIP ─── */
+  .editorial-section {
+    background: var(--primary);
+    color: var(--secondary);
+    padding: 120px 48px;
+  }
+
+  .editorial-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+  }
+
+  .editorial-left .section-eyebrow { color: var(--accent); }
+
+  .editorial-left .section-heading {
+    color: var(--secondary);
+    margin-bottom: 28px;
+  }
+
+  .editorial-left p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.58);
+    margin-bottom: 18px;
+  }
+
+  .editorial-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .editorial-stat {
+    padding: 32px 36px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .editorial-stat:hover {
+    background: rgba(200,169,110,0.08);
+    border-color: rgba(200,169,110,0.25);
+  }
+
+  .editorial-stat-val {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .editorial-stat-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── ADVERTISE BANNER ─── */
+  .advertise-section {
+    background: var(--secondary);
+    padding: 120px 48px;
+  }
+
+  .advertise-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .advertise-banner {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    padding: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .advertise-banner::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .advertise-text { flex: 1; }
+
+  .advertise-text .section-eyebrow { margin-bottom: 12px; }
+
+  .advertise-heading {
+    font-size: clamp(30px, 3.5vw, 44px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+
+  .advertise-sub {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--gray-600);
+    max-width: 480px;
+  }
+
+  .advertise-cta { flex-shrink: 0; }
+
+  /* ─── RATING SECTION ─── */
+  .rating-section {
+    background: var(--gray-100);
+    padding: 120px 48px;
+  }
+
+  .rating-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .rating-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 64px;
+  }
+
+  .rating-card {
+    background: var(--secondary);
+    padding: 52px 40px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .rating-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+  }
+
+  .rating-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  .rating-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .rating-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+
+  .rating-desc {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--gray-600);
+  }
+
+  /* ─── FESTIVAL SECTION ─── */
+  .festival-section {
+    background: var(--primary);
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .festival-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 60px,
+      rgba(200,169,110,0.025) 60px,
+      rgba(200,169,110,0.025) 61px
+    );
+    pointer-events: none;
+  }
+
+  .festival-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 100px;
+    align-items: center;
+  }
+
+  .festival-left .section-eyebrow { color: var(--accent); }
+
+  .festival-title {
+    font-size: clamp(40px, 5.5vw, 64px);
+    font-weight: 700;
+    letter-spacing: -3px;
+    line-height: 1.0;
+    color: var(--secondary);
+    margin-bottom: 24px;
+  }
+
+  .festival-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .festival-sub {
+    font-size: 17px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 40px;
+    max-width: 480px;
+  }
+
+  .festival-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .festival-pill {
+    padding: 24px 28px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .festival-pill:hover {
+    border-color: rgba(200,169,110,0.4);
+    background: rgba(200,169,110,0.05);
+  }
+
+  .festival-pill-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    width: 52px;
+    text-align: center;
+  }
+
+  .festival-pill-text h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 4px;
+  }
+
+  .festival-pill-text p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.5;
+  }
+
+  /* ─── CTA SECTION ─── */
+  .cta-section {
+    background: var(--primary);
+    padding: 160px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-bg-orb {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,169,110,0.12) 0%, transparent 65%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-section .section-eyebrow {
+    text-align: center;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .cta-headline {
+    font-size: clamp(38px, 5.5vw, 60px);
+    font-weight: 700;
+    letter-spacing: -2.5px;
+    line-height: 1.05;
+    color: var(--secondary);
+    margin-bottom: 24px;
+  }
+
+  .cta-headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .cta-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.65;
+    margin-bottom: 48px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0a0908;
+    color: rgba(255,255,255,0.45);
+    padding: 72px 48px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+
+  .footer-brand {}
+
+  .footer-logo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    margin-bottom: 12px;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  .footer-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    max-width: 260px;
+    line-height: 1.6;
+  }
+
+  .footer-links-group h5 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 20px;
+  }
+
+  .footer-links-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-links-list a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+
+  .footer-links-list a:hover { color: var(--accent); }
+
+  .footer-contact a {
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+  }
+
+  .footer-contact a:hover { color: var(--accent); }
+
+  .footer-contact p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .footer-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 32px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer-copy span { color: var(--accent); }
+
+  .footer-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .animate {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+  .animate-delay-5 { transition-delay: 0.5s; }
+  .animate-delay-6 { transition-delay: 0.6s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { gap: 20px; }
+
+    section { padding: 80px 24px; }
+    .hero { padding: 0 24px; }
+
+    .editorial-inner { grid-template-columns: 1fr; gap: 60px; }
+    .festival-inner { grid-template-columns: 1fr; gap: 60px; }
+    .rating-grid { grid-template-columns: 1fr; }
+    .advertise-banner { flex-direction: column; padding: 48px 36px; text-align: center; }
+    .advertise-sub { margin: 0 auto; }
+    .footer-top { flex-direction: column; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .editorial-section { padding: 80px 24px; }
+    .advertise-section { padding: 80px 24px; }
+    .rating-section { padding: 80px 24px; }
+    .festival-section { padding: 80px 24px; }
+    .cta-section { padding: 100px 24px; }
+    footer { padding: 60px 24px 32px; }
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hero-headline { font-size: 44px; letter-spacing: -2px; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .rating-grid { grid-template-columns: 1fr; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="mainNav">
+  <a href="https://www.eatdrinklagos.com/" target="_blank" rel="noopener noreferrer" class="nav-logo">
+    Eat<span>.</span>Drink<span>.</span>Lagos
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://www.eatdrinklagos.com/festival" target="_blank" rel="noopener noreferrer">Festival</a></li>
+    <li><a href="https://www.eatdrinklagos.com/advertise-on-eatdrinklagos" target="_blank" rel="noopener noreferrer">Advertising</a></li>
+    <li><a href="https://www.eatdrinklagos.com/about" target="_blank" rel="noopener noreferrer">About</a></li>
+    <li><a href="https://www.eatdrinklagos.com/eatdrinklagos-rating" target="_blank" rel="noopener noreferrer">Rating</a></li>
+    <li><a href="https://www.eatdrinklagos.com/contact" target="_blank" rel="noopener noreferrer" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Lagos · Food · Drink · Culture</span>
+    <h1 class="hero-headline">Lagos Eats,<br><em>Honestly Reviewed</em></h1>
+    <p class="hero-sub">The city's most trusted guide to restaurants, cafés, and bars — written by people who actually go back for seconds.</p>
+    <div class="hero-actions">
+      <a href="https://www.eatdrinklagos.com/festival" target="_blank" rel="noopener noreferrer" class="btn-primary">Explore the Festival</a>
+      <a href="https://www.eatdrinklagos.com/eatdrinklagos-rating" target="_blank" rel="noopener noreferrer" class="btn-secondary">Our Rating System</a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- ─── MARQUEE ─── -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Restaurant Reviews</span>
+    <span class="marquee-item">Café Audits</span>
+    <span class="marquee-item">Bar Guides</span>
+    <span class="marquee-item">Lagos Food Festival</span>
+    <span class="marquee-item">Honest Opinions</span>
+    <span class="marquee-item">Victoria Island</span>
+    <span class="marquee-item">Ikoyi</span>
+    <span class="marquee-item">Lekki</span>
+    <span class="marquee-item">Restaurant Reviews</span>
+    <span class="marquee-item">Café Audits</span>
+    <span class="marquee-item">Bar Guides</span>
+    <span class="marquee-item">Lagos Food Festival</span>
+    <span class="marquee-item">Honest Opinions</span>
+    <span class="marquee-item">Victoria Island</span>
+    <span class="marquee-item">Ikoyi</span>
+    <span class="marquee-item">Lekki</span>
+  </div>
+</div>
+
+<!-- ─── REVIEWS ─── -->
+<section class="reviews-section">
+  <div class="section-inner">
+    <div class="section-header animate">
+      <p class="section-eyebrow">Latest Reviews</p>
+      <h2 class="section-heading">What We've Been<br>Eating Lately</h2>
+      <p class="section-sub">No PR visits, no sponsored tables. Just the food, the service, and a completely honest verdict.</p>
+    </div>
+    <div class="reviews-grid">
+      <a href="https://www.eatdrinklagos.com/review/2026/5/18/bakendales-patisserie-ikoyi" target="_blank" rel="noopener noreferrer" class="review-card animate animate-delay-1">
+        <div class="review-number">01 — Ikoyi</div>
+        <h3 class="review-title">Bakendales Patisserie, Ikoyi: Work From Cafe Audit</h3>
+        <div class="review-line"></div>
+        <p class="review-desc">Bakendales is doing the cafe thing properly: good pastries, good coffee, service that does not make you feel like a problem to be managed.</p>
+        <p class="review-result">The food earns repeat visits. The carrot muffin alone earns repeat visits.</p>
+        <span class="review-cta">Read Review <span class="review-cta-arrow">→</span></span>
+      </a>
+      <a href="https://www.eatdrinklagos.com/review/2026/5/18/cafe-blu-victoria-island" target="_blank" rel="noopener noreferrer" class="review-card animate animate-delay-2">
+        <div class="review-number">02 — Victoria Island</div>
+        <h3 class="review-title">Cafe Blu, VI: The French Toast Alone Is Worth the Drive</h3>
+        <div class="review-line"></div>
+        <p class="review-desc">Go. Specifically, go for the French Toast. If you are the kind of person who does the VI weekday-brunch circuit, add this to your rotation immediately.</p>
+        <span class="review-cta">Read Review <span class="review-cta-arrow">→</span></span>
+      </a>
+      <a href="https://www.eatdrinklagos.com/review/2026/5/11/review-lagosia-restaurant-victoria-island" target="_blank" rel="noopener noreferrer" class="review-card animate animate-delay-3">
+        <div class="review-number">03 — Victoria Island</div>
+        <h3 class="review-title">Review: Lagosia Restaurant (Victoria Island)</h3>
+        <div class="review-line"></div>
+        <p class="review-desc">Worth going? Yes, especially if you want proper Nigerian options in a calm VI dining room and you're happy to wait a bit for food.</p>
+        <span class="review-cta">Read Review <span class="review-cta-arrow">→</span></span>
+      </a>
+      <a href="https://www.eatdrinklagos.com/review/2026/5/11/review-zen-cafe-lekki" target="_blank" rel="noopener noreferrer" class="review-card animate animate-delay-4">
+        <div class="review-number">04 — Lekki</div>
+        <h3 class="review-title">Review: Zen Café (Lekki)</h3>
+        <div class="review-line"></div>
+        <p class="review-desc">The food is genuinely good and the prices are refreshingly honest, but someone needs to have a serious conversation with whoever is making the drinks.</p>
+        <span class="review-cta">Read Review <span class="review-cta-arrow">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EDITORIAL / ABOUT STRIP ─── -->
+<section class="editorial-section">
+  <div class="editorial-inner">
+    <div class="editorial-left animate">
+      <p class="section-eyebrow">About Eat.Drink.Lagos</p>
+      <h2 class="section-heading" style="color:#fff;">The City Deserves<br>Better Critics</h2>
+      <p>Lagos has more restaurants opening every month than most people can keep track of. Most of them are good. Some of them are exceptional. A few of them really should go back to the drawing board.</p>
+      <p>We tell you which is which. No fluff, no filler — just a clear-eyed assessment of whether the food is worth your time and your money.</p>
+      <div style="margin-top:36px;">
+        <a href="https://www.eatdrinklagos.com/about" target="_blank" rel="noopener noreferrer" class="btn-primary">Our Story</a>
+      </div>
+    </div>
+    <div class="editorial-right animate animate-delay-2">
+      <div class="editorial-stat">
+        <div class="editorial-stat-val">Lagos</div>
+        <div class="editorial-stat-label">Coverage across VI, Ikoyi, Lekki & beyond</div>
+      </div>
+      <div class="editorial-stat">
+        <div class="editorial-stat-val">Honest</div>
+        <div class="editorial-stat-label">No sponsored content. No paid reviews. Ever.</div>
+      </div>
+      <div class="editorial-stat">
+        <div class="editorial-stat-val">Annual</div>
+        <div class="editorial-stat-label">Lagos Food Festival — the city's dining event</div>
+      </div>
+      <div class="editorial-stat">
+        <div class="editorial-stat-val">Precise</div>
+        <div class="editorial-stat-label">A proprietary rating system that means something</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RATING SYSTEM ─── -->
+<section class="rating-section">
+  <div class="rating-inner">
+    <div class="animate" style="text-align:center; margin-bottom: 0;">
+      <p class="section-eyebrow" style="text-align:center;">The EDL Standard</p>
+      <h2 class="section-heading" style="text-align:center; letter-spacing:-2px;">How We Score<br>a Restaurant</h2>
+      <p class="section-sub" style="text-align:center; margin: 0 auto; max-width:520px;">Our rating system is built to separate the genuinely great from the merely decent. Four dimensions. One number that matters.</p>
+    </div>
+    <div class="rating-grid">
+      <div class="rating-card animate animate-delay-1">
+        <div class="rating-icon">🍽️</div>
+        <div class="rating-label">Dimension One</div>
+        <h3 class="rating-title">The Food</h3>
+        <p class="rating-desc">Taste, technique, consistency, and whether you find yourself thinking about the meal the following day.</p>
+      </div>
+      <div class="rating-card animate animate-delay-2">
+        <div class="rating-icon">🤝</div>
+        <div class="rating-label">Dimension Two</div>
+        <h3 class="rating-title">The Service</h3>
+        <p class="rating-desc">Not just friendliness — attentiveness, knowledge, and whether you feel like a guest or an inconvenience.</p>
+      </div>
+      <div class="rating-card animate animate-delay-3">
+        <div class="rating-icon">✦</div>
+        <div class="rating-label">Dimension Three</div>
+        <h3 class="rating-title">The Experience</h3>
+        <p class="rating-desc">Atmosphere, pacing, value, and whether the whole evening adds up to something worth repeating.</p>
+      </div>
+    </div>
+    <div class="animate" style="text-align:center; margin-top: 48px;">
+      <a href="https://www.eatdrinklagos.com/eatdrinklagos-rating" target="_blank" rel="noopener noreferrer" class="btn-primary">Read the Full Rating Guide</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FESTIVAL ─── -->
+<section class="festival-section">
+  <div class="festival-inner">
+    <div class="festival-left animate">
+      <p class="section-eyebrow">Annual Event</p>
+      <h2 class="festival-title">The Lagos<br><em>Food Festival</em></h2>
+      <p class="festival-sub">One weekend. The city's best restaurants, chefs, and food makers in one place. The EDL Festival is how Lagos celebrates its dining scene — properly.</p>
+      <a href="https://www.eatdrinklagos.com/festival" target="_blank" rel="noopener noreferrer" class="btn-primary">Learn About the Festival</a>
+    </div>
+    <div class="festival-right animate animate-delay-2">
+      <div class="festival-pill">
+        <div class="festival-pill-icon">🏆</div>
+        <div class="festival-pill-text">
+          <h4>Curated Vendors</h4>
+          <p>Only restaurants and makers who meet the EDL standard are invited to participate.</p>
+        </div>
+      </div>
+      <div class="festival-pill">
+        <div class="festival-pill-icon">👨‍🍳</div>
+        <div class="festival-pill-text">
+          <h4>Chef Showcases</h4>
+          <p>Live cooking demonstrations from Lagos's most exciting culinary talent.</p>
+        </div>
+      </div>
+      <div class="festival-pill">
+        <div class="festival-pill-icon">🥂</div>
+        <div class="festival-pill-text">
+          <h4>Drinks & Pairings</h4>
+          <p>Craft cocktails, natural wines, and local spirits chosen to complement the food.</p>
+        </div>
+      </div>
+      <div class="festival-pill">
+        <div class="festival-pill-icon">📍</div>
+        <div class="festival-pill-text">
+          <h4>Lagos, Every Year</h4>
+          <p>An annual fixture in the city's cultural calendar. Don't miss the next edition.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ADVERTISE ─── -->
+<section class="advertise-section">
+  <div class="advertise-inner">
+    <div class="advertise-banner animate">
+      <div class="advertise-text">
+        <p class="section-eyebrow">For Brands & Restaurants</p>
+        <h2 class="advertise-heading">Reach Lagos's<br>Most Engaged Diners</h2>
+        <p class="advertise-sub">Eat.Drink.Lagos readers are active, food-conscious, and spend. If your restaurant, product, or event belongs in front of them, let's talk about how that happens.</p>
+      </div>
+      <div class="advertise-cta">
+        <a href="https://www.eatdrinklagos.com/advertise-on-eatdrinklagos" target="_blank" rel="noopener noreferrer" class="btn-primary">Advertise With Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA SECTION ─── -->
+<section class="cta-section">
+  <div class="cta-bg-orb"></div>
+  <div class="cta-inner animate">
+    <p class="section-eyebrow">Stay in the Loop</p>
+    <h2 class="cta-headline">Never Miss a Good<br><em>Lagos Table</em></h2>
+    <p class="cta-sub">New reviews drop every week. Follow the conversations that matter to anyone serious about eating well in Lagos.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+      <a href="https://www.eatdrinklagos.com/contact" target="_blank" rel="noopener noreferrer" class="btn-primary">Get in Touch</a>
+      <a href="https://www.eatdrinklagos.com/about" target="_blank" rel="noopener noreferrer" class="btn-secondary">About EDL</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Eat<span>.</span>Drink<span>.</span>Lagos</div>
+        <p class="footer-tagline">Lagos's definitive guide to restaurants, cafés, bars, and the people who make the city's food scene worth talking about.</p>
+      </div>
+      <div class="footer-links-group">
+        <h5>Explore</h5>
+        <ul class="footer-links-list">
+          <li><a href="https://www.eatdrinklagos.com/festival" target="_blank" rel="noopener noreferrer">Festival</a></li>
+          <li><a href="https://www.eatdrinklagos.com/eatdrinklagos-rating" target="_blank" rel="noopener noreferrer">Rating System</a></li>
+          <li><a href="https://www.eatdrinklagos.com/about" target="_blank" rel="noopener noreferrer">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group">
+        <h5>Work With Us</h5>
+        <ul class="footer-links-list">
+          <li><a href="https://www.eatdrinklagos.com/advertise-on-eatdrinklagos" target="_blank" rel="noopener noreferrer">Advertising</a></li>
+          <li><a href="https://www.eatdrinklagos.com/contact" target="_blank" rel="noopener noreferrer">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group footer-contact">
+        <h5>Contact</h5>
+        <p><a href="mailto:editor@eatdrinklagos.com">editor@eatdrinklagos.com</a></p>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© <span id="year"></span> <span>Eat.Drink.Lagos</span>. All rights reserved.</p>
+      <p class="footer-badge">Lagos · Food · Culture</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── YEAR ───
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ─── NAV SCROLL ───
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ─── INTERSECTION OBSERVER FOR ANIMATIONS ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // ─── PARALLAX ORBS ───
+  window.addEventListener('mousemove', (e) => {
+    const orbs = document.querySelectorAll('.orb');
+    const xRatio = (e.clientX / window.innerWidth - 0.5);
+    const yRatio = (e.clientY / window.innerHeight - 0.5);
+    orbs.forEach((orb, i) => {
+      const depth = (i + 1) * 12;
+      orb.style.transform = `translate(${xRatio * depth}px, ${yRatio * depth}px)`;
+    });
+  }, { passive: true });
+
+  // ─── REVIEW CARD STAGGER ON SCROLL ───
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05 });
+
+  document.querySelectorAll('.review-card').forEach(card => cardObserver.observe(card));
+
+  // ─── FESTIVAL PILL HOVER MICRO-INTERACTION ───
+  document.querySelectorAll('.festival-pill').forEach(pill => {
+    pill.addEventListener('mouseenter', () => {
+      pill.style.transform = 'translateX(6px)';
+      pill.style.transition = 'transform 0.3s ease, border-color 0.3s, background 0.3s';
+    });
+    pill.addEventListener('mouseleave', () => {
+      pill.style.transform = 'translateX(0)';
+    });
+  });
+
+  // ─── EDITORIAL STAT HOVER ───
+  document.querySelectorAll('.editorial-stat').forEach(stat => {
+    stat.style.transition = 'background 0.3s, border-color 0.3s, transform 0.3s';
+    stat.addEventListener('mouseenter', () => {
+      stat.style.transform = 'translateX(8px)';
+    });
+    stat.addEventListener('mouseleave', () => {
+      stat.style.transform = 'translateX(0)';
+    });
+  });
+</script>
+</body>
+</html>
