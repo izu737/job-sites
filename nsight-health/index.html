@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nsight Health – Fully Managed Remote Care Solution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #1a73e8;
+    --accent-light: #e8f0fe;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-400: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+    --radius: 14px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-hover: 0 12px 40px rgba(0,0,0,0.16);
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(255,255,255,0.97);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+    padding: 14px 48px;
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  nav.scrolled .nav-logo { color: #000; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: color var(--transition), background var(--transition);
+    white-space: nowrap;
+  }
+  .nav-links a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+  }
+  nav.scrolled .nav-links a { color: var(--gray-800); }
+  nav.scrolled .nav-links a:hover { color: #000; background: var(--gray-100); }
+
+  .nav-cta {
+    background: #fff;
+    color: #000 !important;
+    padding: 9px 20px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    font-size: 13.5px !important;
+    border: 2px solid #fff;
+    transition: background var(--transition), color var(--transition), border-color var(--transition) !important;
+  }
+  .nav-cta:hover {
+    background: transparent !important;
+    color: #fff !important;
+  }
+  nav.scrolled .nav-cta {
+    background: #000;
+    color: #fff !important;
+    border-color: #000;
+  }
+  nav.scrolled .nav-cta:hover {
+    background: transparent !important;
+    color: #000 !important;
+  }
+
+  /* Hamburger for overflow nav items */
+  .nav-overflow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    padding: 120px 48px 80px;
+    text-align: center;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.45;
+    animation: orbFloat linear infinite;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #1a4fff 0%, transparent 70%);
+    top: -150px; left: -100px;
+    animation-duration: 18s;
+  }
+  .orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #00c6a7 0%, transparent 70%);
+    bottom: -100px; right: -80px;
+    animation-duration: 22s;
+    animation-delay: -8s;
+  }
+  .orb-3 {
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, #6e3aff 0%, transparent 70%);
+    top: 40%; left: 50%;
+    animation-duration: 15s;
+    animation-delay: -4s;
+    opacity: 0.25;
+  }
+  @keyframes orbFloat {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(40px, -30px) scale(1.05); }
+    66%  { transform: translate(-20px, 30px) scale(0.97); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
+  .hero-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.8);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 50px;
+    margin-bottom: 32px;
+    letter-spacing: 0.3px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: #00c6a7;
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.4); }
+  }
+
+  .hero h1 {
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, #4d9fff 0%, #00c6a7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: rgba(255,255,255,0.65);
+    max-width: 620px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.8s both;
+  }
+
+  .btn-primary {
+    background: #fff;
+    color: #000;
+    padding: 15px 32px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    display: inline-block;
+    letter-spacing: -0.2px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255,255,255,0.25);
+    background: #f0f0f0;
+  }
+  .btn-outline-white {
+    background: transparent;
+    color: rgba(255,255,255,0.85);
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: border-color var(--transition), color var(--transition), transform var(--transition);
+    display: inline-block;
+  }
+  .btn-outline-white:hover {
+    border-color: rgba(255,255,255,0.7);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    animation: fadeIn 1s ease 1.4s both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+  .animate-delay-5 { transition-delay: 0.5s; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 96px 48px; }
+  .section-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+    color: #000;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 17px;
+    color: var(--gray-600);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .text-center { text-align: center; }
+  .text-center .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: #000;
+    padding: 56px 48px;
+  }
+  .stats-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-value {
+    font-size: clamp(42px, 5vw, 64px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -2px;
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 8px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 60px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── SERVICES ── */
+  .services { background: #f8f9fb; }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    border: 1px solid var(--gray-200);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1a73e8, #00c6a7);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: transparent; }
+  .card:hover::before { transform: scaleX(1); }
+
+  .card-icon {
+    width: 48px; height: 48px;
+    background: var(--accent-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .card-icon svg { width: 22px; height: 22px; }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  .card-desc {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.65;
+  }
+  .card-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 10px;
+    border-radius: 50px;
+    margin-top: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── FEATURES ── */
+  .features { background: #fff; }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .feature-card {
+    background: #f8f9fb;
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    border: 1px solid transparent;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--gray-200);
+    background: #fff;
+  }
+  .feature-icon {
+    width: 42px; height: 42px;
+    background: #000;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+  }
+  .feature-icon svg { width: 20px; height: 20px; stroke: #fff; }
+  .feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials {
+    background: #000;
+    padding: 96px 48px;
+  }
+  .testimonials .section-title { color: #fff; }
+  .testimonials .section-label { color: #00c6a7; }
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+  .testimonial-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 40px 36px;
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  }
+  .testimonial-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-4px);
+  }
+  .quote-mark {
+    font-size: 64px;
+    line-height: 1;
+    color: rgba(255,255,255,0.12);
+    font-family: Georgia, serif;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .testimonial-quote {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a73e8, #00c6a7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .author-title {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: linear-gradient(135deg, #0a0a0a 0%, #111827 100%);
+    padding: 112px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(26,115,232,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { color: #fff; margin-bottom: 16px; }
+  .cta-section .section-sub { color: rgba(255,255,255,0.6); margin-left: auto; margin-right: auto; margin-bottom: 40px; }
+  .btn-cta {
+    background: #fff;
+    color: #000;
+    padding: 17px 40px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform var(--transition), box-shadow var(--transition);
+    letter-spacing: -0.2px;
+    position: relative;
+    z-index: 1;
+  }
+  .btn-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(255,255,255,0.2);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0a0a0a;
+    padding: 72px 48px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 64px;
+    margin-bottom: 56px;
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .footer-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.6;
+    max-width: 240px;
+  }
+  .footer-email {
+    margin-top: 20px;
+  }
+  .footer-email a {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .footer-email a:hover { color: #fff; }
+
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  .footer-col-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 16px;
+  }
+  .footer-col a {
+    display: block;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color var(--transition);
+  }
+  .footer-col a:hover { color: #fff; }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-copy {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+  }
+  .footer-bottom-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-bottom-links a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .footer-bottom-links a:hover { color: rgba(255,255,255,0.6); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--gray-200);
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    .stats-bar { padding: 48px 24px; }
+    .stats-inner { gap: 40px; }
+    .stat-divider { display: none; }
+    .hero { padding: 100px 24px 72px; }
+    .footer-top { grid-template-columns: 1fr; gap: 40px; }
+    .footer-links-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { padding: 56px 24px 32px; }
+    .testimonials { padding: 72px 24px; }
+    .cta-section { padding: 80px 24px; }
+  }
+  @media (max-width: 600px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .footer-links-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions a { text-align: center; }
+    .testimonial-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="main-nav">
+  <a href="https://nsightcare.com/" class="nav-logo" target="_blank" rel="noopener noreferrer">Nsight Health</a>
+  <div class="nav-links">
+    <a href="https://nsightcare.com/remote-patient-monitoring/" target="_blank" rel="noopener noreferrer">RPM</a>
+    <a href="https://nsightcare.com/chronic-care-management/" target="_blank" rel="noopener noreferrer">CCM</a>
+    <a href="https://nsightcare.com/principal-care-management/" target="_blank" rel="noopener noreferrer">PCM</a>
+    <a href="https://nsightcare.com/behavioral-health-integration/" target="_blank" rel="noopener noreferrer">BHI</a>
+    <a href="https://nsightcare.com/providers/" target="_blank" rel="noopener noreferrer">Providers</a>
+    <a href="https://nsightcare.com/health-systems/" target="_blank" rel="noopener noreferrer">Health Systems</a>
+    <a href="https://nsightcare.com/health-plans/" target="_blank" rel="noopener noreferrer">Health Plans</a>
+    <a href="https://nsightcare.com/acos/" target="_blank" rel="noopener noreferrer">ACOs</a>
+    <a href="https://nsightcare.com/about/" target="_blank" rel="noopener noreferrer">About</a>
+    <a href="https://nsightcare.com/schedule-a-demo" target="_blank" rel="noopener noreferrer" class="nav-cta">Schedule a Demo</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Fully Managed Remote Care Solution
+    </div>
+    <h1>Remote Care Delivery<br><span>Built for Scale</span></h1>
+    <p class="hero-sub">Nsight Health provides comprehensive, fully managed programs in Remote Patient Monitoring, Chronic Care Management, and more — enabling healthcare providers to deliver better outcomes without overburdening their teams.</p>
+    <div class="hero-actions">
+      <a href="https://nsightcare.com/schedule-a-demo" target="_blank" rel="noopener noreferrer" class="btn-primary">Schedule a Demo</a>
+      <a href="https://nsightcare.com/providers/" target="_blank" rel="noopener noreferrer" class="btn-outline-white">For Healthcare Providers</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item animate">
+      <span class="stat-value" data-target="1700" data-suffix="+" id="stat-0">0</span>
+      <span class="stat-label">Providers Nationwide</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<section class="services">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label animate">What We Offer</span>
+      <h2 class="section-title animate animate-delay-1">Core Programs</h2>
+      <p class="section-sub animate animate-delay-2">A full suite of CMS-reimbursable remote care programs, fully managed end-to-end so your practice can focus on patients.</p>
+    </div>
+    <div class="card-grid">
+
+      <div class="card animate animate-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="card-title">Remote Patient Monitoring (RPM)</div>
+        <div class="card-desc">FDA-cleared devices and clinical oversight to continuously monitor patient vitals and flag early risk signals before they escalate.</div>
+      </div>
+
+      <div class="card animate animate-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <div class="card-title">Chronic Care Management (CCM)</div>
+        <div class="card-desc">Structured monthly care management for patients with two or more chronic conditions, improving adherence and reducing hospitalizations.</div>
+      </div>
+
+      <div class="card animate animate-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+        </div>
+        <div class="card-title">Principal Care Management (PCM)</div>
+        <div class="card-desc">Focused chronic disease management for patients with a single high-complexity condition requiring intensive care coordination.</div>
+      </div>
+
+      <div class="card animate animate-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div class="card-title">Behavioral Health Integration (BHI)</div>
+        <div class="card-desc">Integration of behavioral health assessment and care management into primary care settings for whole-person patient support.</div>
+      </div>
+
+      <div class="card animate animate-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+            <polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </div>
+        <div class="card-title">Advanced Primary Care Management (APCM)</div>
+        <div class="card-desc">Comprehensive longitudinal primary care management designed to support patients across the full care continuum.</div>
+        <span class="card-badge">Coming Soon</span>
+      </div>
+
+      <div class="card animate animate-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10"/>
+            <path d="M12 20V4"/>
+            <path d="M6 20v-6"/>
+          </svg>
+        </div>
+        <div class="card-title">Remote Therapeutic Monitoring (RTM)</div>
+        <div class="card-desc">Monitoring of non-physiologic therapeutic data including medication adherence and therapy response for better treatment outcomes.</div>
+        <span class="card-badge">Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label animate">Clinical Focus Areas</span>
+      <h2 class="section-title animate animate-delay-1">RPM by Condition</h2>
+      <p class="section-sub animate animate-delay-2">Disease-specific remote monitoring programs designed around the clinical nuances of each condition.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card animate animate-delay-1">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="feature-title">Hypertension Management</div>
+        <div class="feature-desc">Continuous blood pressure monitoring with clinical alerting and care coordination support.</div>
+      </div>
+
+      <div class="feature-card animate animate-delay-2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+          </svg>
+        </div>
+        <div class="feature-title">Diabetes Management</div>
+        <div class="feature-desc">Glucose monitoring and trend analysis to support glycemic control and prevent complications.</div>
+      </div>
+
+      <div class="feature-card animate animate-delay-3">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <div class="feature-title">Heart Failure Management</div>
+        <div class="feature-desc">Weight and symptom monitoring with early decompensation detection to reduce readmissions.</div>
+      </div>
+
+      <div class="feature-card animate animate-delay-4">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="feature-title">COPD Management</div>
+        <div class="feature-desc">Oxygen saturation and respiratory rate monitoring to prevent acute exacerbations and hospitalizations.</div>
+      </div>
+
+      <div class="feature-card animate animate-delay-5">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="12" rx="10" ry="4"/>
+            <path d="M2 12c0 4.42 4.48 8 10 8s10-3.58 10-8"/>
+            <path d="M2 12c0-4.42 4.48-8 10-8s10 3.58 10 8"/>
+          </svg>
+        </div>
+        <div class="feature-title">CKD Management</div>
+        <div class="feature-desc">Blood pressure and fluid status monitoring to slow CKD progression and support nephrology care teams.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section class="testimonials">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label animate">What Providers Say</span>
+      <h2 class="section-title animate animate-delay-1">Trusted by Clinicians</h2>
+    </div>
+    <div class="testimonial-grid">
+
+      <div class="testimonial-card animate animate-delay-2">
+        <span class="quote-mark">"</span>
+        <p class="testimonial-quote">Nsight helped us expand chronic care delivery without over-extending our practice or our staff.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">GK</div>
+          <div>
+            <div class="author-name">Dr. Geoff Koff</div>
+            <div class="author-title">Pulmonologist</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO WE SERVE ── -->
+<section style="background:#f8f9fb; padding: 96px 48px;">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-label animate">Who We Serve</span>
+      <h2 class="section-title animate animate-delay-1">Built for the Entire Care Ecosystem</h2>
+      <p class="section-sub animate animate-delay-2">Nsight's platform and programs serve a diverse network of healthcare stakeholders.</p>
+    </div>
+    <div class="card-grid">
+
+      <div class="card animate animate-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="card-title">Healthcare Providers</div>
+        <div class="card-desc">Independent practices and provider groups looking to add remote care programs without hiring additional staff.</div>
+      </div>
+
+      <div class="card animate animate-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="card-title">Health Systems</div>
+        <div class="card-desc">Large health systems scaling enterprise-wide remote care programs across multiple facilities and care settings.</div>
+      </div>
+
+      <div class="card animate animate-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="card-title">Health Plans</div>
+        <div class="card-desc">Payers seeking to improve member outcomes, reduce high-cost utilization, and support value-based care initiatives.</div>
+      </div>
+
+      <div class="card animate animate-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="card-title">ACOs</div>
+        <div class="card-desc">Accountable Care Organizations using remote monitoring to proactively manage high-risk populations and hit quality benchmarks.</div>
+      </div>
+
+      <div class="card animate animate-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="card-title">Life Sciences</div>
+        <div class="card-desc">Pharmaceutical and medical device companies leveraging real-world data and remote monitoring for clinical research and outcomes studies.</div>
+      </div>
+
+      <div class="card animate animate-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="card-title">Patients</div>
+        <div class="card-desc">Empowering patients with connected devices and care team support to stay healthy between clinical visits.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <span class="section-label animate" style="color:#00c6a7;">Get Started</span>
+    <h2 class="section-title animate animate-delay-1">Schedule a Demo</h2>
+    <p class="section-sub animate animate-delay-2">30-minute strategy session. No obligation. See how Nsight Health can expand your care programs without expanding your team.</p>
+    <a href="https://nsightcare.com/schedule-a-demo" target="_blank" rel="noopener noreferrer" class="btn-cta animate animate-delay-3">Schedule a Demo →</a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">Nsight Health</span>
+        <p class="footer-tagline">Fully Managed Remote Care Solution</p>
+        <div class="footer-email">
+          <a href="mailto:support@nsightcare.com">support@nsightcare.com</a>
+        </div>
+      </div>
+      <div class="footer-links-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Programs</div>
+          <a href="https://nsightcare.com/remote-patient-monitoring/" target="_blank" rel="noopener noreferrer">Remote Patient Monitoring (RPM)</a>
+          <a href="https://nsightcare.com/chronic-care-management/" target="_blank" rel="noopener noreferrer">Chronic Care Management (CCM)</a>
+          <a href="https://nsightcare.com/principal-care-management/" target="_blank" rel="noopener noreferrer">Principal Care Management (PCM)</a>
+          <a href="https://nsightcare.com/behavioral-health-integration/" target="_blank" rel="noopener noreferrer">Behavioral Health Integration (BHI)</a>
+          <a href="https://nsightcare.com/devices/" target="_blank" rel="noopener noreferrer">FDA-Cleared Devices</a>
+          <a href="https://nsightcare.com/partnerships/" target="_blank" rel="noopener noreferrer">Partnerships</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Who We Serve</div>
+          <a href="https://getremotecare.com/" target="_blank" rel="noopener noreferrer">For Patients</a>
+          <a href="https://nsightcare.com/providers/" target="_blank" rel="noopener noreferrer">Healthcare Providers</a>
+          <a href="https://nsightcare.com/health-systems/" target="_blank" rel="noopener noreferrer">Health Systems</a>
+          <a href="https://nsightcare.com/health-plans/" target="_blank" rel="noopener noreferrer">Health Plans</a>
+          <a href="https://nsightcare.com/acos/" target="_blank" rel="noopener noreferrer">ACOs</a>
+          <a href="https://nsightcare.com/life-sciences/" target="_blank" rel="noopener noreferrer">Life Sciences</a>
+          <a href="https://forms.monday.com/forms/adc1246dcb9a36af8fc6d53509609493?r=use1" target="_blank" rel="noopener noreferrer">Patient Referral</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <a href="https://nsightcare.com/about/" target="_blank" rel="noopener noreferrer">About Nsight</a>
+          <a href="https://nsightcare.com/leadership/" target="_blank" rel="noopener noreferrer">Leadership</a>
+          <a href="https://nsightcare.com/compliance/" target="_blank" rel="noopener noreferrer">Compliance</a>
+          <a href="https://nsightcare.com/careers/" target="_blank" rel="noopener noreferrer">Careers</a>
+          <a href="https://nsightcare.com/press-releases/" target="_blank" rel="noopener noreferrer">Newsroom</a>
+          <a href="https://blog.nsightcare.com/nsight-health-blog/all" target="_blank" rel="noopener noreferrer">Articles</a>
+          <a href="https://nsightcare.com/contact/" target="_blank" rel="noopener noreferrer">Contact Us</a>
+          <a href="http://nsight.prvnt.ai/" target="_blank" rel="noopener noreferrer">Sign In</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© <span id="footer-year"></span> Nsight Health. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="https://nsightcare.com/compliance/" target="_blank" rel="noopener noreferrer">Compliance</a>
+        <a href="https://nsightcare.com/contact/" target="_blank" rel="noopener noreferrer">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── YEAR ──
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  // ── NAV SCROLL ──
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── INTERSECTION OBSERVER FOR ANIMATIONS ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // ── STAT COUNTER ANIMATION ──
+  function animateCounter(el, target, suffix) {
+    const duration = 1800;
+    const startTime = performance.now();
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.floor(eased * target);
+      el.textContent = value.toLocaleString() + (suffix || '');
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        el.textContent = target.toLocaleString() + (suffix || '');
+      }
+    }
+    requestAnimationFrame(update);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10);
+        const suffix = el.dataset.suffix || '';
+        animateCounter(el, target, suffix);
+        statsObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  const stat0 = document.getElementById('stat-0');
+  if (stat0) statsObserver.observe(stat0);
+</script>
+</body>
+</html>
