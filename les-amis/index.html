@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les Amis – Your Family of Girlfriends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #c9a96e;
+    --accent-soft: #e8d5b0;
+    --gray-100: #f8f7f5;
+    --gray-200: #efefed;
+    --gray-400: #a0998f;
+    --gray-600: #5c5650;
+    --gray-800: #1a1714;
+    --text: #1a1714;
+    --radius: 2px;
+    --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--secondary);
+    color: var(--text);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--gray-100); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* ── ANIMATIONS ── */
+  .animate {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+  .animate-delay-5 { transition-delay: 0.5s; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 28px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background var(--transition), padding var(--transition), box-shadow var(--transition);
+  }
+  nav.scrolled {
+    background: rgba(0,0,0,0.96);
+    padding: 18px 60px;
+    box-shadow: 0 2px 30px rgba(0,0,0,0.18);
+  }
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--secondary);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 26px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    border-radius: var(--radius);
+  }
+  .nav-cta:hover { background: var(--accent); color: #000; }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    overflow: hidden;
+  }
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 12s ease-in-out infinite;
+    opacity: 0.35;
+  }
+  .orb-1 {
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, #c9a96e 0%, transparent 70%);
+    top: -120px; left: -100px;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #8b6914 0%, transparent 70%);
+    bottom: -80px; right: -60px;
+    animation-delay: -4s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #d4b483 0%, transparent 70%);
+    top: 50%; left: 55%;
+    animation-delay: -8s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.05); }
+    66% { transform: translate(-20px, 30px) scale(0.97); }
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 40px;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    border: 1px solid rgba(201,169,110,0.35);
+    padding: 8px 20px;
+    border-radius: var(--radius);
+  }
+  .hero-headline {
+    font-size: clamp(52px, 7vw, 78px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.06;
+    color: var(--secondary);
+    margin-bottom: 30px;
+  }
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.62);
+    max-width: 560px;
+    margin: 0 auto 44px;
+    line-height: 1.75;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 16px 42px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: var(--radius);
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #b8944d; transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    padding: 16px 34px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+    border-radius: var(--radius);
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.5;
+  }
+  .hero-scroll-hint span {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* ── MANIFESTO STRIP ── */
+  #manifesto {
+    background: var(--accent);
+    padding: 22px 0;
+    overflow: hidden;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 60px;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-track span {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .ticker-dot {
+    color: rgba(0,0,0,0.4);
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 110px 60px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    display: block;
+  }
+  .section-heading {
+    font-size: clamp(36px, 4.5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 22px;
+  }
+  .section-heading em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gray-600);
+  }
+  .section-sub {
+    font-size: 17px;
+    color: var(--gray-600);
+    max-width: 560px;
+    line-height: 1.75;
+  }
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── PHILOSOPHY ── */
+  #philosophy {
+    background: var(--gray-100);
+  }
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .philosophy-text p {
+    color: var(--gray-600);
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 22px;
+  }
+  .philosophy-text p:last-child { margin-bottom: 0; }
+  .philosophy-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .phil-card {
+    background: var(--secondary);
+    padding: 36px 28px;
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .phil-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .phil-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+  .phil-card:hover::before { transform: scaleX(1); }
+  .phil-number {
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--gray-200);
+    line-height: 1;
+    margin-bottom: 14px;
+    letter-spacing: -2px;
+  }
+  .phil-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .phil-desc {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  /* ── COMMUNITY ── */
+  #community {
+    background: var(--primary);
+    color: var(--secondary);
+  }
+  #community .section-heading { color: var(--secondary); }
+  #community .section-sub { color: rgba(255,255,255,0.55); }
+  .community-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .community-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 44px 36px;
+    border-radius: var(--radius);
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  }
+  .community-card:hover {
+    background: rgba(201,169,110,0.08);
+    border-color: rgba(201,169,110,0.3);
+    transform: translateY(-5px);
+  }
+  .card-icon {
+    width: 52px; height: 52px;
+    background: rgba(201,169,110,0.12);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 26px;
+  }
+  .card-icon svg { width: 24px; height: 24px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .card-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 14px;
+  }
+  .card-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  /* ── VALUES MARQUEE ── */
+  #values-strip {
+    background: var(--gray-100);
+    padding: 70px 60px;
+  }
+  .values-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .value-pill {
+    display: inline-block;
+    padding: 12px 28px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--gray-600);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .value-pill:hover {
+    background: var(--primary);
+    color: var(--secondary);
+    border-color: var(--primary);
+  }
+  .value-pill.highlight {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience {
+    background: var(--secondary);
+  }
+  .experience-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 100px;
+    align-items: start;
+    margin-top: 60px;
+  }
+  .exp-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .exp-step {
+    display: flex;
+    gap: 28px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-200);
+    cursor: pointer;
+    transition: padding-left 0.3s;
+  }
+  .exp-step:first-child { padding-top: 0; }
+  .exp-step:hover { padding-left: 10px; }
+  .exp-step-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 36px;
+    padding-top: 4px;
+    letter-spacing: 0.1em;
+  }
+  .exp-step-content h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .exp-step-content p {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.65;
+  }
+  .exp-feature-box {
+    background: var(--gray-100);
+    border-radius: var(--radius);
+    padding: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .exp-feature-box::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(201,169,110,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .exp-feature-quote {
+    font-size: 60px;
+    line-height: 1;
+    color: var(--accent);
+    font-family: Georgia, serif;
+    margin-bottom: 10px;
+  }
+  .exp-feature-text {
+    font-size: 22px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+  .exp-feature-attr {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+  }
+  .exp-visual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .exp-mini-card {
+    background: var(--secondary);
+    padding: 24px 20px;
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .exp-mini-num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -1px;
+  }
+  .exp-mini-label {
+    font-size: 12px;
+    color: var(--gray-400);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── CTA SECTION ── */
+  #cta-main {
+    background: var(--primary);
+    padding: 120px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #cta-main::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    border: 1px solid rgba(201,169,110,0.3);
+    padding: 8px 18px;
+    border-radius: var(--radius);
+  }
+  .cta-headline {
+    font-size: clamp(38px, 5vw, 62px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.08;
+    color: var(--secondary);
+    margin-bottom: 22px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-headline em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+  .cta-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.52);
+    max-width: 480px;
+    margin: 0 auto 48px;
+    line-height: 1.75;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--gray-800);
+    padding: 70px 60px 40px;
+    color: rgba(255,255,255,0.5);
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 52px;
+    padding-bottom: 52px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  .footer-brand .footer-logo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .footer-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    max-width: 260px;
+    line-height: 1.6;
+  }
+  .footer-links-group h5 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 20px;
+  }
+  .footer-links-group ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links-group a {
+    color: rgba(255,255,255,0.52);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  .footer-links-group a:hover { color: var(--accent); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.28);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s; }
+  .footer-bottom a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 22px 28px; }
+    nav.scrolled { padding: 16px 28px; }
+    .nav-links { display: none; }
+    section { padding: 80px 28px; }
+    .philosophy-grid { grid-template-columns: 1fr; gap: 50px; }
+    .philosophy-visual { grid-template-columns: 1fr 1fr; }
+    .community-grid { grid-template-columns: 1fr; }
+    .experience-layout { grid-template-columns: 1fr; gap: 50px; }
+    #cta-main { padding: 90px 28px; }
+    footer { padding: 60px 28px 34px; }
+    .footer-top { flex-direction: column; }
+    .exp-visual-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .philosophy-visual { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .cta-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="http://lesamis.cc/" class="nav-logo">Les Amis</a>
+  <ul class="nav-links"></ul>
+  <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="nav-cta">Visit Us</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow animate">Est. with Love</div>
+    <h1 class="hero-headline animate animate-delay-1">
+      Your Family of<br><em>Girlfriends</em>
+    </h1>
+    <p class="hero-sub animate animate-delay-2">
+      A community built on authenticity, connection, and the kind of friendships that feel like coming home.
+    </p>
+    <div class="hero-actions animate animate-delay-3">
+      <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="btn-primary">Join the Circle</a>
+      <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="btn-ghost">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div id="manifesto">
+  <div class="ticker-track" aria-hidden="true">
+    <span>Your Family of Girlfriends</span>
+    <span class="ticker-dot">✦</span>
+    <span>Authentic Connection</span>
+    <span class="ticker-dot">✦</span>
+    <span>Built on Trust</span>
+    <span class="ticker-dot">✦</span>
+    <span>Community First</span>
+    <span class="ticker-dot">✦</span>
+    <span>Les Amis</span>
+    <span class="ticker-dot">✦</span>
+    <span>Real Friendships</span>
+    <span class="ticker-dot">✦</span>
+    <span>Your Family of Girlfriends</span>
+    <span class="ticker-dot">✦</span>
+    <span>Authentic Connection</span>
+    <span class="ticker-dot">✦</span>
+    <span>Built on Trust</span>
+    <span class="ticker-dot">✦</span>
+    <span>Community First</span>
+    <span class="ticker-dot">✦</span>
+    <span>Les Amis</span>
+    <span class="ticker-dot">✦</span>
+    <span>Real Friendships</span>
+    <span class="ticker-dot">✦</span>
+  </div>
+</div>
+
+<!-- ── PHILOSOPHY ── -->
+<section id="philosophy">
+  <div class="section-inner">
+    <span class="section-label animate">Who We Are</span>
+    <h2 class="section-heading animate animate-delay-1">More than a community,<br><em>a sisterhood</em></h2>
+    <div class="philosophy-grid">
+      <div class="philosophy-text animate animate-delay-1">
+        <p>Les Amis — French for "the friends" — was born from a simple but powerful idea: every woman deserves a circle of genuine, uplifting friendships that feel like family.</p>
+        <p>We are a space where women gather, share, support, and celebrate each other unapologetically. No performance, no pretense — just real human connection at its warmest.</p>
+        <p>Whether you're seeking deep conversations, shared experiences, or simply the comfort of knowing someone has your back, you'll find it here.</p>
+      </div>
+      <div class="philosophy-visual">
+        <div class="phil-card animate animate-delay-1">
+          <div class="phil-number">01</div>
+          <div class="phil-title">Authentic</div>
+          <div class="phil-desc">Showing up as your real self — messy, beautiful, and everything in between.</div>
+        </div>
+        <div class="phil-card animate animate-delay-2">
+          <div class="phil-number">02</div>
+          <div class="phil-title">Supportive</div>
+          <div class="phil-desc">Lifting each other up, celebrating wins, and holding space through challenges.</div>
+        </div>
+        <div class="phil-card animate animate-delay-3">
+          <div class="phil-number">03</div>
+          <div class="phil-title">Inclusive</div>
+          <div class="phil-desc">Every woman is welcome here. Our circle grows stronger with every seat filled.</div>
+        </div>
+        <div class="phil-card animate animate-delay-4">
+          <div class="phil-number">04</div>
+          <div class="phil-title">Joyful</div>
+          <div class="phil-desc">Because friendship should feel good — full of laughter, lightness, and warmth.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMMUNITY ── -->
+<section id="community">
+  <div class="section-inner">
+    <span class="section-label animate">What We Offer</span>
+    <h2 class="section-heading animate animate-delay-1">Everything you need<br>to <em>feel at home</em></h2>
+    <p class="section-sub animate animate-delay-2">Les Amis is designed around the moments that matter most — the ones shared between friends.</p>
+    <div class="community-grid">
+      <div class="community-card animate animate-delay-1">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="card-title">Sisterhood Circles</div>
+        <div class="card-desc">Intimate gatherings and events designed to forge deep, meaningful friendships with women who get it.</div>
+      </div>
+      <div class="community-card animate animate-delay-2">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="card-title">Real Conversations</div>
+        <div class="card-desc">A safe space to talk openly about what matters — life, love, growth, and all the in-betweens.</div>
+      </div>
+      <div class="community-card animate animate-delay-3">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="card-title">Shared Experiences</div>
+        <div class="card-desc">Curated experiences that create memories, spark joy, and strengthen the bonds between women.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUES STRIP ── -->
+<section id="values-strip">
+  <div class="section-inner">
+    <div style="text-align:center; margin-bottom: 44px;">
+      <span class="section-label animate" style="display:inline-block;">Our Values</span>
+      <h2 class="section-heading animate animate-delay-1" style="text-align:center;">What we stand for</h2>
+    </div>
+    <div class="values-row animate animate-delay-2">
+      <span class="value-pill highlight">Friendship</span>
+      <span class="value-pill">Authenticity</span>
+      <span class="value-pill">Empowerment</span>
+      <span class="value-pill highlight">Belonging</span>
+      <span class="value-pill">Joy</span>
+      <span class="value-pill">Sisterhood</span>
+      <span class="value-pill">Kindness</span>
+      <span class="value-pill highlight">Love</span>
+      <span class="value-pill">Growth</span>
+      <span class="value-pill">Community</span>
+      <span class="value-pill">Trust</span>
+      <span class="value-pill highlight">Connection</span>
+      <span class="value-pill">Laughter</span>
+      <span class="value-pill">Support</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section id="experience">
+  <div class="section-inner">
+    <span class="section-label animate">The Experience</span>
+    <h2 class="section-heading animate animate-delay-1">How it feels to be<br><em>part of something</em></h2>
+    <div class="experience-layout">
+      <div class="exp-steps animate animate-delay-2">
+        <div class="exp-step">
+          <div class="exp-step-num">01</div>
+          <div class="exp-step-content">
+            <h4>You arrive as yourself</h4>
+            <p>No filters, no pressure. Les Amis welcomes you exactly as you are, right now, in this season of life.</p>
+          </div>
+        </div>
+        <div class="exp-step">
+          <div class="exp-step-num">02</div>
+          <div class="exp-step-content">
+            <h4>You find your people</h4>
+            <p>Through shared moments and honest conversations, the connections that form here feel effortless and real.</p>
+          </div>
+        </div>
+        <div class="exp-step">
+          <div class="exp-step-num">03</div>
+          <div class="exp-step-content">
+            <h4>You grow together</h4>
+            <p>The women in your circle cheer for your growth and challenge you to become your fullest self.</p>
+          </div>
+        </div>
+        <div class="exp-step">
+          <div class="exp-step-num">04</div>
+          <div class="exp-step-content">
+            <h4>You become family</h4>
+            <p>Les Amis isn't just a community you join — it's a family you belong to, for keeps.</p>
+          </div>
+        </div>
+      </div>
+      <div class="animate animate-delay-3">
+        <div class="exp-feature-box">
+          <div class="exp-feature-quote">&ldquo;</div>
+          <p class="exp-feature-text">The kind of friendships that make you feel seen, heard, and completely at home.</p>
+          <div class="exp-feature-attr">— The Les Amis Promise</div>
+          <div class="exp-visual-grid">
+            <div class="exp-mini-card">
+              <div class="exp-mini-num">∞</div>
+              <div class="exp-mini-label">Connections</div>
+            </div>
+            <div class="exp-mini-card">
+              <div class="exp-mini-num">1</div>
+              <div class="exp-mini-label">Family</div>
+            </div>
+            <div class="exp-mini-card">
+              <div class="exp-mini-num">100%</div>
+              <div class="exp-mini-label">Authentic</div>
+            </div>
+            <div class="exp-mini-card">
+              <div class="exp-mini-num">You</div>
+              <div class="exp-mini-label">Belong Here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section id="cta-main">
+  <div class="section-inner" style="position:relative; z-index:1;">
+    <div class="cta-label animate">Ready to belong?</div>
+    <h2 class="cta-headline animate animate-delay-1">
+      Your circle is<br><em>waiting for you</em>
+    </h2>
+    <p class="cta-sub animate animate-delay-2">
+      Step into a space where friendship is celebrated, authenticity is the norm, and you are always enough.
+    </p>
+    <div class="cta-actions animate animate-delay-3">
+      <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="btn-primary">Join Les Amis</a>
+      <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="btn-ghost" style="color:rgba(255,255,255,0.65); border-color:rgba(255,255,255,0.22);">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer" class="footer-logo">Les Amis</a>
+        <p class="footer-tagline">Your Family of Girlfriends — a sisterhood built on love, laughter, and real connection.</p>
+      </div>
+      <div class="footer-links-group">
+        <h5>Explore</h5>
+        <ul>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Home</a></li>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">About</a></li>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Community</a></li>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Events</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-group">
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Join Us</a></li>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Contact</a></li>
+          <li><a href="http://lesamis.cc/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Les Amis. All rights reserved.</span>
+      <span>Made with love, for the sisterhood.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── YEAR ──
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── NAV SCROLL ──
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // ── INTERSECTION OBSERVER ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // ── SMOOTH HERO ENTRANCE ──
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      document.querySelectorAll('#hero .animate').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 200);
+  });
+
+  // ── HOVER VALUE PILLS ──
+  document.querySelectorAll('.value-pill').forEach(pill => {
+    pill.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.05)';
+    });
+    pill.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+</script>
+</body>
+</html>
