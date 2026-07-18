@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odyssey Logistics – Complex Supply Chains Made Simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #e8a020;
+    --accent-dark: #c4841a;
+    --gray-100: #f7f7f7;
+    --gray-200: #eeeeee;
+    --gray-400: #999999;
+    --gray-600: #555555;
+    --gray-800: #222222;
+    --nav-height: 72px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--secondary);
+    color: var(--primary);
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    background: transparent;
+  }
+
+  nav.scrolled {
+    background: rgba(0,0,0,0.96);
+    box-shadow: 0 2px 32px rgba(0,0,0,0.25);
+  }
+
+  .nav-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    flex-shrink: 0;
+    margin-right: auto;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: color 0.25s, background 0.25s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+  }
+
+  .nav-cta {
+    margin-left: 16px;
+    background: var(--accent);
+    color: #fff !important;
+    padding: 9px 22px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    transition: background 0.25s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--accent-dark) !important;
+    color: #fff !important;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 24px 80px;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.18;
+    animation: floatOrb 12s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: var(--accent);
+    top: -120px; left: -80px;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 500px; height: 500px;
+    background: #3a6bff;
+    bottom: -100px; right: -60px;
+    animation-delay: -4s;
+  }
+
+  .orb-3 {
+    width: 350px; height: 350px;
+    background: var(--accent);
+    top: 40%; left: 55%;
+    animation-delay: -8s;
+  }
+
+  @keyframes floatOrb {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    33% { transform: translateY(-40px) scale(1.05); }
+    66% { transform: translateY(20px) scale(0.96); }
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeSlideUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero h1 {
+    font-size: clamp(46px, 7vw, 76px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.08;
+    color: #fff;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeSlideUp 0.9s ease 0.5s forwards;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 44px;
+    font-weight: 400;
+    opacity: 0;
+    animation: fadeSlideUp 0.9s ease 0.7s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeSlideUp 0.9s ease 0.9s forwards;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    box-shadow: 0 4px 24px rgba(232,160,32,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(232,160,32,0.4);
+  }
+
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    transition: border-color 0.25s, background 0.25s, transform 0.2s;
+  }
+
+  .btn-outline:hover {
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+  }
+
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.35);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: pulse 2.5s ease infinite;
+  }
+
+  .scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid rgba(255,255,255,0.35);
+    border-bottom: 2px solid rgba(255,255,255,0.35);
+    transform: rotate(45deg);
+    animation: bounce 1.8s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50% { transform: rotate(45deg) translateY(6px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 100px 24px;
+  }
+
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    font-size: clamp(34px, 4.5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.12;
+    color: var(--primary);
+    margin-bottom: 24px;
+  }
+
+  .section-heading.light {
+    color: #fff;
+  }
+
+  .section-sub {
+    font-size: 18px;
+    color: var(--gray-600);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  .section-sub.light {
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ── ANIMATE ── */
+  .animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+
+  .animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-delay-1 { transition-delay: 0.1s; }
+  .animate-delay-2 { transition-delay: 0.2s; }
+  .animate-delay-3 { transition-delay: 0.3s; }
+  .animate-delay-4 { transition-delay: 0.4s; }
+  .animate-delay-5 { transition-delay: 0.5s; }
+  .animate-delay-6 { transition-delay: 0.6s; }
+  .animate-delay-7 { transition-delay: 0.7s; }
+  .animate-delay-8 { transition-delay: 0.8s; }
+
+  /* ── SERVICES ── */
+  .services {
+    background: var(--gray-100);
+  }
+
+  .services-header {
+    max-width: 680px;
+    margin-bottom: 64px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 32px;
+    border: 1px solid var(--gray-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    border-color: rgba(232,160,32,0.2);
+  }
+
+  .card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(232,160,32,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+
+  .card h3 {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--primary);
+    margin-bottom: 12px;
+  }
+
+  .card p {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.7;
+  }
+
+  /* ── FEATURES (INDUSTRIES) ── */
+  .features {
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .features-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .features-header {
+    max-width: 640px;
+    margin-bottom: 64px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 36px 32px;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(232,160,32,0.3);
+    transform: translateY(-4px);
+  }
+
+  .feature-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+    padding: 5px 12px;
+    background: rgba(232,160,32,0.12);
+    border-radius: 20px;
+  }
+
+  .feature-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+
+  .feature-card p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+  }
+
+  /* ── STRIPE DIVIDER ── */
+  .stripe-divider {
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent) 0%, #f0c040 50%, var(--accent) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .cta-orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: var(--accent);
+    filter: blur(120px);
+    opacity: 0.08;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-section .section-heading {
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .cta-section .section-sub {
+    color: rgba(255,255,255,0.6);
+    margin: 0 auto 44px;
+    max-width: 580px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050505;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 60px 24px 36px;
+  }
+
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 48px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .footer-brand {
+    max-width: 320px;
+  }
+
+  .footer-logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+
+  .footer-logo span {
+    color: var(--accent);
+  }
+
+  .footer-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.65;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-nav-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 4px;
+  }
+
+  .footer-nav a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .footer-nav a:hover {
+    color: var(--accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-copyright {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .footer-accent-line {
+    font-size: 13px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .footer-accent-line span {
+    color: var(--accent);
+  }
+
+  /* ── RIBBON SECTION ── */
+  .ribbon {
+    background: var(--accent);
+    padding: 22px 24px;
+    overflow: hidden;
+  }
+
+  .ribbon-track {
+    display: flex;
+    gap: 60px;
+    animation: scrollRibbon 22s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ribbon-item {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .ribbon-item::before {
+    content: '●';
+    margin-right: 20px;
+    opacity: 0.5;
+  }
+
+  @keyframes scrollRibbon {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── VALUE PROPS ── */
+  .value-props {
+    background: #fff;
+    padding: 80px 24px;
+  }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--gray-200);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .value-item {
+    background: #fff;
+    padding: 48px 40px;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .value-item:hover {
+    background: var(--gray-100);
+  }
+
+  .value-number {
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .value-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+    letter-spacing: 0.3px;
+    margin-bottom: 10px;
+  }
+
+  .value-desc {
+    font-size: 14px;
+    color: var(--gray-400);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    section { padding: 72px 20px; }
+    .value-grid { grid-template-columns: 1fr; }
+    .footer-top { flex-direction: column; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="http://www.odysseylogistics.com/" class="nav-logo" target="_blank" rel="noopener noreferrer">Odyssey <span>Logistics</span></a>
+  <ul class="nav-links">
+    <li><a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Why Odyssey</a></li>
+    <li><a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Multimodal Services</a></li>
+    <li><a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Managed Transportation</a></li>
+    <li><a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Industries</a></li>
+    <li><a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Careers</a></li>
+    <li><a href="http://www.odysseylogistics.com/service-updates/" target="_blank" rel="noopener noreferrer">Resources</a></li>
+    <li><a href="http://www.odysseylogistics.com/customer-login/" target="_blank" rel="noopener noreferrer">Login</a></li>
+    <li><a href="http://www.odysseylogistics.com/get-a-quote/" target="_blank" rel="noopener noreferrer" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Global Logistics &amp; Supply Chain</div>
+    <h1>Complex supply chains<br><em>made simple</em></h1>
+    <p class="hero-sub">Let's get there together</p>
+    <div class="hero-actions">
+      <a href="http://www.odysseylogistics.com/get-a-quote/" target="_blank" rel="noopener noreferrer" class="btn-primary">Get a Quote</a>
+      <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">Explore Services</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- RIBBON -->
+<div class="ribbon">
+  <div class="ribbon-track">
+    <span class="ribbon-item">Intermodal</span>
+    <span class="ribbon-item">Warehousing</span>
+    <span class="ribbon-item">Truck Brokerage</span>
+    <span class="ribbon-item">3PL &amp; 4PL</span>
+    <span class="ribbon-item">International Services</span>
+    <span class="ribbon-item">Sample Fulfillment</span>
+    <span class="ribbon-item">AI-Powered Technology</span>
+    <span class="ribbon-item">Chemicals</span>
+    <span class="ribbon-item">Metals</span>
+    <span class="ribbon-item">Food &amp; Beverage</span>
+    <span class="ribbon-item">Intermodal</span>
+    <span class="ribbon-item">Warehousing</span>
+    <span class="ribbon-item">Truck Brokerage</span>
+    <span class="ribbon-item">3PL &amp; 4PL</span>
+    <span class="ribbon-item">International Services</span>
+    <span class="ribbon-item">Sample Fulfillment</span>
+    <span class="ribbon-item">AI-Powered Technology</span>
+    <span class="ribbon-item">Chemicals</span>
+    <span class="ribbon-item">Metals</span>
+    <span class="ribbon-item">Food &amp; Beverage</span>
+  </div>
+</div>
+
+<!-- VALUE PROPS -->
+<div class="value-props">
+  <div class="container">
+    <div class="value-grid">
+      <div class="value-item animate">
+        <div class="value-number">30+</div>
+        <div class="value-label">Years of Experience</div>
+        <div class="value-desc">Deep-rooted expertise across every mode of transportation</div>
+      </div>
+      <div class="value-item animate animate-delay-2">
+        <div class="value-number">4</div>
+        <div class="value-label">Core Industries Served</div>
+        <div class="value-desc">Chemicals, Metals, Food &amp; Beverage, and Packaged Freight</div>
+      </div>
+      <div class="value-item animate animate-delay-4">
+        <div class="value-number">8</div>
+        <div class="value-label">Service Lines</div>
+        <div class="value-desc">End-to-end multimodal solutions under one partner</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="services-header">
+      <div class="section-label animate">What We Do</div>
+      <h2 class="section-heading animate animate-delay-1">Multimodal services aligned to your needs</h2>
+      <p class="section-sub animate animate-delay-2">From a single shipment to full supply chain orchestration, Odyssey delivers the depth and flexibility your business demands.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card animate animate-delay-1">
+        <div class="card-icon">🚂</div>
+        <h3>Intermodal</h3>
+        <p>Gain an edge with our direct contracts with major North American rail class 1 carriers. This means more control and enhanced efficiency for your supply chain.</p>
+      </div>
+      <div class="card animate animate-delay-2">
+        <div class="card-icon">🏭</div>
+        <h3>Warehousing</h3>
+        <p>Leverage our global network for efficient, integrated multimodal supply chain solutions that can be tailored to meet your unique distribution requirements.</p>
+      </div>
+      <div class="card animate animate-delay-3">
+        <div class="card-icon">🚚</div>
+        <h3>Truck Brokerage</h3>
+        <p>Access our expansive network for competitive rates and reliable service. We handle everything from LTL and TL to bulk tank and flatbed, ensuring your cargo is transported safely.</p>
+      </div>
+      <div class="card animate animate-delay-4">
+        <div class="card-icon">📦</div>
+        <h3>Sample Fulfillment</h3>
+        <p>Benefit from working with a solution provider with expertise in highly specialized small package chemical sample fulfillment and logistics services built to deliver.</p>
+      </div>
+      <div class="card animate animate-delay-5">
+        <div class="card-icon">🔗</div>
+        <h3>3PL Logistics</h3>
+        <p>Discover the advantage of our third-party logistics services. Odyssey streamlines your operations with expert management and operational support.</p>
+      </div>
+      <div class="card animate animate-delay-6">
+        <div class="card-icon">🌐</div>
+        <h3>4PL Logistics</h3>
+        <p>See how Odyssey can provide end-to-end supply chain orchestration so you can focus on your core business.</p>
+      </div>
+      <div class="card animate animate-delay-7">
+        <div class="card-icon">✈️</div>
+        <h3>International Services</h3>
+        <p>Navigate the complexities of customs with ease. Our in-depth knowledge of import and export regulations ensures your goods move smoothly, avoiding costly penalties and delays.</p>
+      </div>
+      <div class="card animate animate-delay-8">
+        <div class="card-icon">🤖</div>
+        <h3>Technology</h3>
+        <p>AI-powered logistics that sharpens decisions and optimizes costs across every mode.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stripe-divider"></div>
+
+<!-- FEATURES / INDUSTRIES -->
+<section class="features" id="industries">
+  <div class="features-bg"></div>
+  <div class="container">
+    <div class="features-header">
+      <div class="section-label animate">Industries</div>
+      <h2 class="section-heading light animate animate-delay-1">Deep expertise in complex markets</h2>
+      <p class="section-sub light animate animate-delay-2">We don't just move freight — we understand the regulatory, environmental, and operational nuances of the industries we serve.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card animate animate-delay-1">
+        <div class="feature-tag">Chemicals</div>
+        <h3>Chemicals</h3>
+        <p>Our expertise in chemical logistics is both deep-rooted and accredited. As a Responsible Care® certified partner, we assure meticulous attention to safety and environmental standards.</p>
+      </div>
+      <div class="feature-card animate animate-delay-2">
+        <div class="feature-tag">Metals</div>
+        <h3>Metals</h3>
+        <p>We offer unmatched experience and infrastructure for customized door-to-door metals transportation solutions – from patented load and roll pallets to integrated warehousing solutions.</p>
+      </div>
+      <div class="feature-card animate animate-delay-3">
+        <div class="feature-tag">Food &amp; Beverage</div>
+        <h3>Food &amp; Beverage</h3>
+        <p>As a leader in food-grade logistics, we offer full temperature-controlled services, ISO tank transportation, beverage warehousing and streamlined shipping for US offshore routes.</p>
+      </div>
+      <div class="feature-card animate animate-delay-4">
+        <div class="feature-tag">Packaged Freight</div>
+        <h3>Packaged Freight</h3>
+        <p>Our multimodal approach brings speed and efficiency to a variety of packaged freight, serving many industries including manufacturing, industrial, retail and consumer goods.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-orb"></div>
+  <div class="container">
+    <div class="cta-content">
+      <div class="section-label animate" style="color:var(--accent);display:block;text-align:center;margin-bottom:16px;">Partner With Us</div>
+      <h2 class="section-heading animate animate-delay-1">Keep your cargo moving and your business growing</h2>
+      <p class="section-sub animate animate-delay-2">We offer more than supply chain logistics and transportation services — we provide a partnership based on deep industry expertise and a relentless commitment to your success.</p>
+      <div class="animate animate-delay-3" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:44px;">
+        <a href="http://www.odysseylogistics.com/get-a-quote/" target="_blank" rel="noopener noreferrer" class="btn-primary">Get a Quote</a>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Odyssey <span>Logistics</span></div>
+        <p class="footer-tagline">Complex supply chains made simple. Odyssey delivers multimodal logistics solutions built on deep industry expertise and a commitment to your success.</p>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">Company</div>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Why Odyssey</a>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Careers</a>
+        <a href="http://www.odysseylogistics.com/service-updates/" target="_blank" rel="noopener noreferrer">Resources</a>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">Services</div>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Multimodal Services</a>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Managed Transportation</a>
+        <a href="http://www.odysseylogistics.com/" target="_blank" rel="noopener noreferrer">Industries</a>
+      </div>
+      <div class="footer-nav">
+        <div class="footer-nav-title">Account</div>
+        <a href="http://www.odysseylogistics.com/customer-login/" target="_blank" rel="noopener noreferrer">Customer Login</a>
+        <a href="http://www.odysseylogistics.com/get-a-quote/" target="_blank" rel="noopener noreferrer">Get a Quote</a>
+        <a href="http://www.odysseylogistics.com/service-updates/" target="_blank" rel="noopener noreferrer">Service Updates</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copyright">© <span id="footer-year"></span> Odyssey Logistics &amp; Technology. All rights reserved.</div>
+      <div class="footer-accent-line">Built for <span>complex supply chains</span> — delivered simply.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  // Nav scroll behavior
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('main-nav');
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+
+  // Intersection Observer for animate class
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+  // Stat counter animation (for value props)
+  function animateCounter(el, target, suffix) {
+    let start = 0;
+    const duration = 1500;
+    const startTime = performance.now();
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.floor(eased * target);
+      el.textContent = value.toLocaleString() + (suffix || '');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  // Observe value numbers
+  const valueNumbers = document.querySelectorAll('.value-number');
+  const valueTargets = [30, 4, 8];
+  const valueSuffixes = ['+', '', ''];
+
+  const valueObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting && !entry.target.dataset.counted) {
+        entry.target.dataset.counted = '1';
+        const idx = Array.from(valueNumbers).indexOf(entry.target);
+        if (idx !== -1) {
+          animateCounter(entry.target, valueTargets[idx], valueSuffixes[idx]);
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+
+  valueNumbers.forEach(el => valueObserver.observe(el));
+</script>
+</body>
+</html>
