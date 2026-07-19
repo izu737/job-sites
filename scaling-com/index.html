@@ -3,24 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scaling.com – Scale Your Business 10x in Three Years or Less</title>
+<title>Scaling.com</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --primary: #000000;
     --secondary: #ffffff;
-    --accent: #0a0a0a;
-    --accent2: #1a1a1a;
-    --highlight: #e8ff00;
-    --highlight2: #00e5ff;
-    --text-muted: #888888;
+    --accent: #1a1a1a;
+    --accent2: #333333;
+    --muted: #888888;
     --border: rgba(255,255,255,0.08);
-    --card-bg: rgba(255,255,255,0.03);
-    --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --card-bg: #0d0d0d;
+    --gradient1: rgba(255,255,255,0.03);
+    --gradient2: rgba(180,180,180,0.06);
   }
 
   html { scroll-behavior: smooth; }
@@ -34,14 +33,12 @@
     font-size: 17px;
   }
 
-  ::selection { background: var(--highlight); color: #000; }
-
-  /* ─── SCROLLBAR ─── */
+  /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: #000; }
-  ::-webkit-scrollbar-thumb { background: var(--highlight); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
 
-  /* ─── NAV ─── */
+  /* ── NAV ── */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -50,7 +47,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: background 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease;
+    transition: background 0.4s ease, padding 0.4s ease, backdrop-filter 0.4s ease, border-bottom 0.4s ease;
+    border-bottom: 1px solid transparent;
   }
 
   nav.scrolled {
@@ -58,36 +56,20 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 18px 60px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
   .nav-logo {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: #fff;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   .nav-logo span {
-    display: inline-block;
-    width: 28px; height: 28px;
-    background: var(--highlight);
-    border-radius: 6px;
-    position: relative;
-  }
-
-  .nav-logo span::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 10px; height: 10px;
-    border: 2px solid #000;
-    border-radius: 2px;
+    color: #fff;
+    opacity: 0.5;
   }
 
   .nav-links {
@@ -98,48 +80,267 @@
   }
 
   .nav-links a {
-    color: rgba(255,255,255,0.75);
+    color: rgba(255,255,255,0.7);
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.5px;
     transition: color 0.3s ease;
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; left: 0;
-    width: 0; height: 1px;
-    background: var(--highlight);
-    transition: width 0.3s ease;
+    text-transform: uppercase;
   }
 
   .nav-links a:hover { color: #fff; }
-  .nav-links a:hover::after { width: 100%; }
 
   .nav-cta {
-    background: var(--highlight);
+    background: #fff;
     color: #000 !important;
     padding: 10px 22px;
-    border-radius: 6px;
+    border-radius: 4px;
     font-weight: 700 !important;
-    font-size: 13px !important;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    font-size: 12px !important;
+    letter-spacing: 1px !important;
     transition: background 0.3s ease, transform 0.2s ease !important;
   }
 
-  .nav-cta::after { display: none !important; }
-
   .nav-cta:hover {
-    background: #fff !important;
-    color: #000 !important;
+    background: rgba(255,255,255,0.85) !important;
     transform: translateY(-1px);
   }
 
-  /* ─── ANIMATIONS ─── */
+  /* ── HERO ── */
+  #home {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 140px 60px 100px;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    top: -100px; left: -100px;
+    animation-delay: 0s;
+  }
+
+  .orb-2 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(200,200,200,0.03) 0%, transparent 70%);
+    bottom: -200px; right: -150px;
+    animation-delay: -3s;
+  }
+
+  .orb-3 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.025) 0%, transparent 70%);
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -6s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    33% { transform: translateY(-30px) scale(1.05); }
+    66% { transform: translateY(20px) scale(0.97); }
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 36px;
+    padding: 8px 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  .hero-headline {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+
+  .hero-headline .highlight {
+    position: relative;
+    display: inline;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtext {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 52px;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: #000;
+    padding: 16px 36px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
+
+  .btn-primary svg { transition: transform 0.3s ease; }
+  .btn-primary:hover svg { transform: translateX(4px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.25);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+    animation: scrollDown 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── SECTIONS SHARED ── */
+  section {
+    padding: 120px 60px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .section-heading {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    max-width: 580px;
+    line-height: 1.7;
+  }
+
+  /* ── ANIMATE ── */
   .animate {
     opacity: 0;
     transform: translateY(30px);
@@ -157,310 +358,119 @@
   .animate-delay-4 { transition-delay: 0.4s; }
   .animate-delay-5 { transition-delay: 0.5s; }
 
-  /* ─── HERO ─── */
-  #home {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-    padding: 140px 60px 100px;
-    text-align: center;
+  /* ── FEATURES ── */
+  #features {
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
 
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
+  .features-header {
+    margin-bottom: 70px;
+    max-width: 700px;
   }
 
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.18;
-    animation: float 12s ease-in-out infinite;
-  }
-
-  .orb-1 {
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, var(--highlight) 0%, transparent 70%);
-    top: -200px; left: -200px;
-    animation-delay: 0s;
-  }
-
-  .orb-2 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, var(--highlight2) 0%, transparent 70%);
-    bottom: -100px; right: -150px;
-    animation-delay: -4s;
-  }
-
-  .orb-3 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
-    top: 50%; left: 55%;
-    animation-delay: -8s;
-    opacity: 0.12;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
-  }
-
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%);
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 950px;
-    margin: 0 auto;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    padding: 8px 18px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 36px;
-    backdrop-filter: blur(10px);
-  }
-
-  .hero-badge-dot {
-    width: 6px; height: 6px;
-    background: var(--highlight);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.5); }
-  }
-
-  .hero-headline {
-    font-size: clamp(48px, 6vw, 72px);
-    font-weight: 700;
-    letter-spacing: -2px;
-    line-height: 1.08;
-    margin-bottom: 28px;
-    color: #fff;
-  }
-
-  .hero-headline .highlight-word {
-    position: relative;
-    display: inline-block;
-    color: var(--highlight);
-  }
-
-  .hero-subtext {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 48px;
-  }
-
-  .hero-cta-group {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--highlight);
-    color: #000;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 16px 32px;
-    border-radius: 8px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 50px rgba(232,255,0,0.3);
-  }
-
-  .btn-primary:hover::before { opacity: 1; }
-
-  .btn-arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px; height: 20px;
-    transition: transform 0.3s ease;
-  }
-
-  .btn-primary:hover .btn-arrow { transform: translateX(4px); }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: transparent;
-    color: rgba(255,255,255,0.7);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 16px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.12);
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .btn-secondary:hover {
-    color: #fff;
-    border-color: rgba(255,255,255,0.3);
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
     background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
-  .hero-scroll-indicator {
+  .feature-card {
+    background: #000;
+    padding: 48px 40px;
+    position: relative;
+    transition: background 0.3s ease;
+    cursor: default;
+  }
+
+  .feature-card:hover {
+    background: #0a0a0a;
+  }
+
+  .feature-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+    margin-bottom: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .feature-card:hover .feature-icon {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .feature-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
+  }
+
+  .feature-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+  }
+
+  .feature-arrow {
     position: absolute;
     bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.3);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    animation: bounce 2s ease-in-out infinite;
+    right: 40px;
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: all 0.3s ease;
+    color: rgba(255,255,255,0.4);
   }
 
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
+  .feature-card:hover .feature-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
   }
 
-  .scroll-line {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.3));
-  }
-
-  /* ─── SECTION BASE ─── */
-  section {
-    padding: 120px 60px;
-  }
-
-  .section-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--highlight);
-    margin-bottom: 20px;
-  }
-
-  .section-headline {
-    font-size: clamp(38px, 4vw, 52px);
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    color: #fff;
-  }
-
-  .section-sub {
-    font-size: 18px;
-    color: rgba(255,255,255,0.55);
-    max-width: 600px;
-    line-height: 1.7;
-    margin-bottom: 70px;
-  }
-
-  /* ─── DIVIDER ─── */
-  .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-    margin: 0 60px;
-    width: calc(100% - 120px);
-  }
-
-  /* ─── CLIENTS ─── */
-  #clients-section {
+  /* ── CLIENTS ── */
+  #clients {
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.05);
     padding: 80px 60px;
-    background: rgba(255,255,255,0.02);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
   }
 
   .clients-label {
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
-    margin-bottom: 48px;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 50px;
   }
 
-  .clients-track-wrapper {
+  .clients-marquee-wrapper {
     overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent);
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
   }
 
   .clients-track {
     display: flex;
     gap: 80px;
-    align-items: center;
     animation: marquee 20s linear infinite;
     width: max-content;
   }
@@ -472,345 +482,217 @@
     100% { transform: translateX(-50%); }
   }
 
-  .client-item {
+  .client-name {
     font-size: 15px;
     font-weight: 600;
+    color: rgba(255,255,255,0.2);
     letter-spacing: 1px;
-    color: rgba(255,255,255,0.25);
     text-transform: uppercase;
     white-space: nowrap;
     transition: color 0.3s ease;
-    cursor: default;
   }
 
-  .client-item:hover { color: rgba(255,255,255,0.6); }
+  .client-name:hover { color: rgba(255,255,255,0.6); }
 
-  .client-dot {
-    width: 4px; height: 4px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: -40px;
-  }
-
-  /* ─── CTA SECTION ─── */
+  /* ── CTA SECTION ── */
   #cta-section {
-    background: linear-gradient(135deg, #050505 0%, #0d0d0d 50%, #050505 100%);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 160px 60px;
+    text-align: center;
     position: relative;
     overflow: hidden;
-    text-align: center;
   }
 
-  .cta-bg-glow {
+  .cta-bg {
     position: absolute;
-    width: 800px; height: 400px;
-    background: radial-gradient(ellipse, rgba(232,255,0,0.08) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 100%);
     pointer-events: none;
   }
 
   .cta-inner {
     position: relative;
-    z-index: 2;
-    max-width: 800px;
+    z-index: 1;
+    max-width: 700px;
     margin: 0 auto;
   }
 
   .cta-headline {
-    font-size: clamp(36px, 4.5vw, 58px);
+    font-size: clamp(36px, 4vw, 56px);
     font-weight: 700;
     letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 24px;
     line-height: 1.1;
-    margin-bottom: 24px;
-    color: #fff;
   }
 
-  .cta-headline .accent { color: var(--highlight); }
-
-  .cta-subtext {
-    font-size: 18px;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.7;
-    margin-bottom: 52px;
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-stats-row {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 70px;
-    padding-top: 50px;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
-  }
-
-  .cta-stat {
-    text-align: center;
-  }
-
-  .cta-stat-value {
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    color: #fff;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .cta-stat-value span { color: var(--highlight); }
-
-  .cta-stat-label {
-    font-size: 13px;
+  .cta-sub {
+    font-size: 17px;
     color: rgba(255,255,255,0.4);
-    letter-spacing: 0.5px;
-  }
-
-  /* ─── FEATURE CARDS (value props derived from hero content) ─── */
-  #why-section {
-    background: #000;
-  }
-
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 40px 36px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--highlight), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,255,0,0.1);
-    border-color: rgba(232,255,0,0.15);
-    background: rgba(255,255,255,0.05);
-  }
-
-  .card:hover::before { opacity: 1; }
-
-  .card-icon {
-    width: 52px; height: 52px;
-    border-radius: 12px;
-    background: rgba(232,255,0,0.08);
-    border: 1px solid rgba(232,255,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-    font-size: 22px;
-  }
-
-  .card-title {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: #fff;
-    margin-bottom: 12px;
-  }
-
-  .card-body {
-    font-size: 16px;
-    color: rgba(255,255,255,0.5);
+    margin-bottom: 48px;
     line-height: 1.7;
   }
 
-  /* ─── MANIFESTO / ABOUT SECTION ─── */
-  #manifesto-section {
-    background: linear-gradient(180deg, #000 0%, #050505 100%);
+  /* ── MANIFESTO SECTION ── */
+  #manifesto {
+    background: #050505;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 120px 60px;
   }
 
-  .manifesto-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
+  .manifesto-inner {
+    max-width: 900px;
+    margin: 0 auto;
   }
 
-  .manifesto-visual {
-    position: relative;
-    height: 480px;
-    border-radius: 20px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #0a0a0a 0%, #111 100%);
-    border: 1px solid var(--border);
+  .manifesto-quote {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    border-left: 2px solid rgba(255,255,255,0.15);
+    padding-left: 40px;
+    font-style: italic;
   }
 
-  .manifesto-visual-inner {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 24px;
-    padding: 40px;
+  .manifesto-quote strong {
+    color: #fff;
+    font-weight: 700;
+    font-style: normal;
   }
 
-  .bell-curve-wrapper {
-    width: 100%;
-    max-width: 340px;
-    position: relative;
-  }
-
-  .bell-label {
-    font-size: 11px;
+  .manifesto-attr {
+    margin-top: 40px;
+    padding-left: 40px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: rgba(255,255,255,0.3);
-    text-align: center;
-    margin-top: 16px;
   }
 
-  .manifesto-text h2 {
-    font-size: clamp(32px, 3vw, 44px);
+  /* ── WHY SECTION ── */
+  #why {
+    background: #000;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 70px;
+  }
+
+  .why-left { }
+
+  .why-stat-block {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .why-stat-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .why-stat-number {
+    font-size: 60px;
     font-weight: 700;
-    letter-spacing: -1.5px;
-    line-height: 1.15;
-    margin-bottom: 24px;
+    letter-spacing: -3px;
     color: #fff;
+    line-height: 1;
+    margin-bottom: 12px;
   }
 
-  .manifesto-text p {
-    font-size: 17px;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.75;
-    margin-bottom: 20px;
-  }
-
-  .manifesto-list {
-    list-style: none;
-    margin-top: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .manifesto-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    font-size: 16px;
-    color: rgba(255,255,255,0.65);
+  .why-stat-label {
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
     line-height: 1.6;
   }
 
-  .manifesto-list li::before {
-    content: '';
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    border-radius: 50%;
-    background: rgba(232,255,0,0.1);
-    border: 1px solid rgba(232,255,0,0.3);
-    position: relative;
-    top: 2px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' viewBox='0 0 10 8'%3E%3Cpath d='M1 4l2.5 2.5L9 1' stroke='%23e8ff00' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
+  .why-right {
+    padding-top: 10px;
   }
 
-  /* ─── NUMBERS SECTION ─── */
-  #numbers-section {
-    background: #000;
-    border-top: 1px solid var(--border);
+  .why-item {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 36px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    align-items: flex-start;
   }
 
-  .numbers-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
+  .why-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
   }
 
-  .number-item {
-    padding: 48px 36px;
-    background: rgba(255,255,255,0.02);
-    border-right: 1px solid var(--border);
-    text-align: center;
-    transition: background 0.3s ease;
-  }
-
-  .number-item:last-child { border-right: none; }
-  .number-item:hover { background: rgba(255,255,255,0.04); }
-
-  .number-value {
-    font-size: 52px;
+  .why-item-num {
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: -2px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    padding-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .why-item-content {}
+
+  .why-item-title {
+    font-size: 17px;
+    font-weight: 700;
     color: #fff;
-    line-height: 1;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
   }
 
-  .number-value .suffix { color: var(--highlight); font-size: 36px; }
-
-  .number-label {
-    font-size: 13px;
+  .why-item-desc {
+    font-size: 15px;
     color: rgba(255,255,255,0.4);
-    letter-spacing: 0.5px;
-    line-height: 1.4;
+    line-height: 1.7;
   }
 
-  /* ─── FOOTER ─── */
+  /* ── FOOTER ── */
   footer {
     background: #000;
-    border-top: 1px solid var(--border);
-    padding: 70px 60px 40px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 60px 60px 40px;
   }
 
   .footer-inner {
     max-width: 1200px;
     margin: 0 auto;
-  }
-
-  .footer-top {
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 60px;
+    justify-content: space-between;
+    gap: 60px;
     flex-wrap: wrap;
-    gap: 40px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 32px;
   }
 
-  .footer-brand .logo-text {
-    font-size: 24px;
+  .footer-brand {}
+
+  .footer-logo {
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: -0.5px;
     color: #fff;
-    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
     display: block;
   }
 
   .footer-tagline {
-    font-size: 15px;
-    color: rgba(255,255,255,0.35);
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
     max-width: 280px;
     line-height: 1.6;
   }
@@ -821,390 +703,396 @@
     flex-wrap: wrap;
   }
 
-  .footer-nav-col h4 {
-    font-size: 12px;
+  .footer-nav-col {}
+
+  .footer-nav-title {
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.25);
     margin-bottom: 20px;
   }
 
+  .footer-nav-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
   .footer-nav-col a {
-    display: block;
-    font-size: 15px;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.45);
     text-decoration: none;
-    margin-bottom: 12px;
+    font-size: 14px;
     transition: color 0.3s ease;
   }
 
   .footer-nav-col a:hover { color: #fff; }
 
   .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 30px;
-    border-top: 1px solid var(--border);
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 16px;
   }
 
-  .footer-copyright {
+  .footer-copy {
     font-size: 13px;
-    color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.2);
   }
 
-  .footer-highlight {
+  .footer-made {
     font-size: 13px;
-    color: rgba(255,255,255,0.25);
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    color: rgba(255,255,255,0.15);
   }
 
-  .footer-highlight span {
-    color: var(--highlight);
-    font-weight: 600;
+  /* ── DIVIDER ── */
+  .divider-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+    margin: 0 auto;
   }
 
-  /* ─── RESPONSIVE ─── */
+  /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    nav { padding: 20px 30px; }
-    nav.scrolled { padding: 14px 30px; }
-    section { padding: 90px 30px; }
-    #home { padding: 120px 30px 80px; }
-    .manifesto-grid { grid-template-columns: 1fr; gap: 48px; }
-    .manifesto-visual { height: 300px; }
-    .numbers-grid { grid-template-columns: repeat(2, 1fr); }
-    footer { padding: 60px 30px 30px; }
-    #clients-section { padding: 60px 30px; }
-    .nav-links { display: none; }
-    .footer-top { flex-direction: column; }
-    .cta-stats-row { gap: 40px; }
+    nav { padding: 22px 24px; }
+    nav.scrolled { padding: 16px 24px; }
+    .nav-links { gap: 20px; }
+    section { padding: 80px 24px; }
+    #home { padding: 120px 24px 80px; }
+    #clients { padding: 60px 24px; }
+    #cta-section { padding: 100px 24px; }
+    footer { padding: 50px 24px 30px; }
+    .why-grid { grid-template-columns: 1fr; gap: 40px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .hero-headline { font-size: 36px; letter-spacing: -1.5px; }
+    .footer-inner { flex-direction: column; gap: 40px; }
   }
 
   @media (max-width: 600px) {
-    .hero-headline { font-size: 38px; letter-spacing: -1.5px; }
-    .cards-grid { grid-template-columns: 1fr; }
-    .numbers-grid { grid-template-columns: 1fr 1fr; }
-    .hero-cta-group { flex-direction: column; align-items: stretch; text-align: center; }
-    .btn-primary, .btn-secondary { justify-content: center; }
-  }
-
-  /* ─── SVG BELL CURVE ─── */
-  .bell-path-fill {
-    animation: fillReveal 2s ease forwards;
-    stroke-dasharray: 600;
-    stroke-dashoffset: 600;
-  }
-
-  @keyframes fillReveal {
-    to { stroke-dashoffset: 0; }
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; align-items: center; justify-content: center; gap: 32px; z-index: 999; }
+    .hero-cta-group { flex-direction: column; }
   }
 </style>
 </head>
 <body>
 
-<!-- ─── NAVIGATION ─── -->
+<!-- NAV -->
 <nav id="main-nav">
-  <a href="http://scaling.com/#home" class="nav-logo" target="_blank" rel="noopener noreferrer">
-    <span></span>
-    Scaling.com
-  </a>
+  <a href="http://scaling.com/#home" class="nav-logo">Scaling<span>.com</span></a>
   <ul class="nav-links">
     <li><a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer">Home</a></li>
     <li><a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer">Team</a></li>
     <li><a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer">Contact</a></li>
+    <li><a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer" class="nav-cta">Become a Scaler</a></li>
   </ul>
-  <a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer" class="nav-links" style="list-style:none;">
-    <a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer" class="nav-cta nav-links" style="text-decoration:none;font-size:13px;">Become a Scaler</a>
-  </a>
 </nav>
 
-<!-- ─── HERO ─── -->
-<section id="home" style="padding-top:140px;">
+<!-- HERO -->
+<section id="home">
   <div class="hero-bg">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
     <div class="hero-grid"></div>
   </div>
-
   <div class="hero-content">
-    <div class="hero-badge animate">
-      <div class="hero-badge-dot"></div>
-      Dr. Benjamin Hardy &amp; Blake Erickson
-    </div>
-
+    <div class="hero-eyebrow animate">The Scaling Framework</div>
     <h1 class="hero-headline animate animate-delay-1">
       Discover why scaling from<br>
-      <span class="highlight-word">$2M to $20M</span> is easier<br>
-      than $2M to $3M
+      <span class="highlight">$2M to $20M</span> is easier than<br>
+      $2M to $3M
     </h1>
-
-    <p class="hero-subtext animate animate-delay-2">
-      DR. BENJAMIN HARDY AND BLAKE ERICKSON
-    </p>
-
+    <p class="hero-subtext animate animate-delay-2">Dr. Benjamin Hardy &amp; Blake Erickson</p>
     <div class="hero-cta-group animate animate-delay-3">
-      <a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer" class="btn-primary">
+      <a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer" class="btn-primary">
         Become a Scaler Today
-        <svg class="btn-arrow" viewBox="0 0 20 20" fill="none">
-          <path d="M4 10h12M11 6l5 4-5 4" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </a>
-      <a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-        Meet the Team
       </a>
     </div>
   </div>
-
-  <div class="hero-scroll-indicator">
+  <div class="hero-scroll">
     <div class="scroll-line"></div>
     <span>Scroll</span>
   </div>
 </section>
 
-<!-- ─── CLIENTS MARQUEE ─── -->
-<div id="clients-section">
-  <p class="clients-label animate">Trusted by Founders Across Industries</p>
-  <div class="clients-track-wrapper animate animate-delay-1">
-    <div class="clients-track">
-      <span class="client-item">SaaS Founders</span>
-      <span class="client-item">E-Commerce</span>
-      <span class="client-item">Professional Services</span>
-      <span class="client-item">Agency Owners</span>
-      <span class="client-item">Health &amp; Wellness</span>
-      <span class="client-item">Tech Startups</span>
-      <span class="client-item">Consulting Firms</span>
-      <span class="client-item">Real Estate</span>
-      <span class="client-item">Media &amp; Content</span>
-      <span class="client-item">Manufacturing</span>
-      <!-- Duplicate for seamless loop -->
-      <span class="client-item">SaaS Founders</span>
-      <span class="client-item">E-Commerce</span>
-      <span class="client-item">Professional Services</span>
-      <span class="client-item">Agency Owners</span>
-      <span class="client-item">Health &amp; Wellness</span>
-      <span class="client-item">Tech Startups</span>
-      <span class="client-item">Consulting Firms</span>
-      <span class="client-item">Real Estate</span>
-      <span class="client-item">Media &amp; Content</span>
-      <span class="client-item">Manufacturing</span>
-    </div>
-  </div>
-</div>
-
-<!-- ─── WHY SECTION (Value Props) ─── -->
-<section id="why-section">
-  <div class="section-inner">
-    <div class="animate">
-      <span class="section-label">The Framework</span>
-      <h2 class="section-headline">The counterintuitive truth<br>about business growth</h2>
-      <p class="section-sub">Most founders think smaller jumps are safer. The Scaling Framework flips this — and the math proves it.</p>
-    </div>
-
-    <div class="cards-grid">
-      <div class="card animate animate-delay-1">
-        <div class="card-icon">🚀</div>
-        <h3 class="card-title">The 10x Principle</h3>
-        <p class="card-body">Going 10x forces you to think differently, build systems, and delegate. Going 3x lets you grind harder — and that's a trap that keeps most founders stuck.</p>
-      </div>
-      <div class="card animate animate-delay-2">
-        <div class="card-icon">⚙️</div>
-        <h3 class="card-title">Systems Over Hustle</h3>
-        <p class="card-body">The Scaling Framework replaces founder dependency with repeatable systems. When you are the bottleneck, growth stalls. Systems break that ceiling permanently.</p>
-      </div>
-      <div class="card animate animate-delay-3">
-        <div class="card-icon">📈</div>
-        <h3 class="card-title">Three-Year Horizon</h3>
-        <p class="card-body">Most companies overestimate one year and underestimate three. The Scaler method uses a 36-month runway to build sustainable, compounding momentum.</p>
-      </div>
-      <div class="card animate animate-delay-1">
-        <div class="card-icon">🧠</div>
-        <h3 class="card-title">Identity-Driven Growth</h3>
-        <p class="card-body">Dr. Benjamin Hardy's research proves that your future self drives present decisions. Scalers build the identity of a $20M founder before the revenue appears.</p>
-      </div>
-      <div class="card animate animate-delay-2">
-        <div class="card-icon">🎯</div>
-        <h3 class="card-title">Constraint Removal</h3>
-        <p class="card-body">The bottleneck between $2M and $3M is friction and complexity. The jump to $20M requires removing constraints, not adding more effort.</p>
-      </div>
-      <div class="card animate animate-delay-3">
-        <div class="card-icon">🤝</div>
-        <h3 class="card-title">Proven Community</h3>
-        <p class="card-body">Join a curated network of founders actively applying the framework. Peer accountability and shared intelligence accelerate results faster than solo execution.</p>
-      </div>
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="container">
+    <div class="manifesto-inner">
+      <p class="manifesto-quote animate">
+        Most founders are stuck in the <strong>complexity trap</strong> — believing that growth requires more effort, more systems, more people. The truth is the opposite. <strong>True scale is a function of simplicity, clarity, and the right framework</strong> applied at the right moment.
+      </p>
+      <p class="manifesto-attr animate animate-delay-2">— The Scaling Philosophy</p>
     </div>
   </div>
 </section>
 
-<!-- ─── NUMBERS ─── -->
-<section id="numbers-section">
-  <div class="section-inner">
-    <div class="animate" style="text-align:center;margin-bottom:60px;">
-      <span class="section-label">By The Numbers</span>
-      <h2 class="section-headline" style="margin-bottom:0;">Results that speak for themselves</h2>
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="features-header">
+      <span class="section-label animate">The Framework</span>
+      <h2 class="section-heading animate animate-delay-1">The exact system that Top Founders Use to 10X in Three Years</h2>
+      <p class="section-sub animate animate-delay-2">A proven methodology for founders ready to break through the ceiling that keeps most businesses trapped between $2M and $5M forever.</p>
     </div>
-    <div class="numbers-grid">
-      <div class="number-item animate animate-delay-1">
-        <div class="number-value"><span class="count" data-target="10" data-suffix="x">0x</span></div>
-        <div class="number-label">Average revenue multiple<br>in three years</div>
-      </div>
-      <div class="number-item animate animate-delay-2">
-        <div class="number-value"><span class="count" data-target="3" data-suffix=" yrs">0 yrs</span></div>
-        <div class="number-label">Target timeline for<br>10x transformation</div>
-      </div>
-      <div class="number-item animate animate-delay-3">
-        <div class="number-value">$<span class="count" data-target="2" data-suffix="M">0M</span></div>
-        <div class="number-label">Minimum revenue to<br>apply the framework</div>
-      </div>
-      <div class="number-item animate animate-delay-4">
-        <div class="number-value">$<span class="count" data-target="20" data-suffix="M">0M</span></div>
-        <div class="number-label">Target milestone<br>for Scalers</div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="features-grid animate animate-delay-3">
 
-<!-- ─── MANIFESTO ─── -->
-<section id="manifesto-section">
-  <div class="section-inner">
-    <div class="manifesto-grid">
-      <div class="manifesto-visual animate">
-        <div class="manifesto-visual-inner">
-          <div class="bell-curve-wrapper">
-            <svg viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
-              <defs>
-                <linearGradient id="bellGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#e8ff00" stop-opacity="0.05"/>
-                  <stop offset="50%" stop-color="#e8ff00" stop-opacity="0.12"/>
-                  <stop offset="100%" stop-color="#e8ff00" stop-opacity="0.05"/>
-                </linearGradient>
-                <linearGradient id="rightGrad" x1="0.6" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#e8ff00" stop-opacity="0"/>
-                  <stop offset="100%" stop-color="#e8ff00" stop-opacity="0.25"/>
-                </linearGradient>
-              </defs>
-              <!-- Bell curve fill -->
-              <path d="M20 180 Q60 180 100 120 Q140 60 180 40 Q220 60 260 120 Q300 180 340 180 Z" fill="url(#bellGrad)"/>
-              <!-- Bell curve line -->
-              <path d="M20 180 Q60 180 100 120 Q140 60 180 40 Q220 60 260 120 Q300 180 340 180" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" fill="none"/>
-              <!-- Right tail highlight -->
-              <path d="M240 102 Q280 158 340 180 L340 180 Q300 180 260 120 Z" fill="url(#rightGrad)"/>
-              <!-- Vertical lines -->
-              <line x1="180" y1="40" x2="180" y2="180" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="4 4"/>
-              <line x1="300" y1="100" x2="300" y2="180" stroke="rgba(232,255,0,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
-              <!-- Labels -->
-              <text x="160" y="30" font-family="DM Sans, sans-serif" font-size="10" fill="rgba(255,255,255,0.4)" text-anchor="middle">Most Companies</text>
-              <text x="330" y="95" font-family="DM Sans, sans-serif" font-size="10" fill="#e8ff00" text-anchor="middle">Scalers</text>
-              <!-- X axis -->
-              <line x1="20" y1="182" x2="340" y2="182" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-              <!-- Arrow pointing right tail -->
-              <path d="M290 75 L310 75 L305 70 M310 75 L305 80" stroke="#e8ff00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <p class="bell-label">The Scaling Bell Curve</p>
-          </div>
-          <div style="text-align:center;padding:0 20px;">
-            <p style="font-size:13px;color:rgba(255,255,255,0.3);line-height:1.6;max-width:260px;margin:0 auto;">The tail of the curve is where the biggest companies live — and it's less crowded than the middle.</p>
-          </div>
+      <div class="feature-card">
+        <div class="feature-number">01</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The Ceiling Breaker</h3>
+        <p class="feature-desc">Understand why the strategies that got you to $2M are the exact same ones keeping you from $20M — and how to systematically replace them.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
       </div>
 
-      <div class="manifesto-text animate animate-delay-2">
-        <span class="section-label">Why Most Founders Get Stuck</span>
-        <h2>Stop fighting for inches.<br>Start thinking in multiples.</h2>
-        <p>The $2M to $3M journey is brutal because you're competing on effort. You're trying to do more of the same thing — just harder. It's exhausting, demoralizing, and ultimately a ceiling.</p>
-        <p>The leap from $2M to $20M is counterintuitively easier because it forces a completely different game. You stop being an operator and become an architect.</p>
-        <ul class="manifesto-list">
-          <li>You build systems that don't require your presence</li>
-          <li>You hire people better than you in key roles</li>
-          <li>You define the $20M company identity before you reach it</li>
-          <li>You escape the bell curve that traps average companies</li>
-          <li>You follow a proven framework, not a hope-based plan</li>
-        </ul>
+      <div class="feature-card">
+        <div class="feature-number">02</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <path d="M10 6V10L13 13" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The 10X Mindset Protocol</h3>
+        <p class="feature-desc">Dr. Benjamin Hardy's psychological framework for thinking at 10X scale. The gap between a $2M and $20M founder is primarily cognitive, not operational.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-number">03</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="6" height="6" rx="1" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <rect x="11" y="3" width="6" height="6" rx="1" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <rect x="3" y="11" width="6" height="6" rx="1" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <rect x="11" y="11" width="6" height="6" rx="1" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The Leverage Stack</h3>
+        <p class="feature-desc">Identify your highest-leverage activities and ruthlessly eliminate everything else. Scale by doing less of the wrong things, more of the right ones.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-number">04</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 16L8 10L12 13L16 5" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The Velocity Engine</h3>
+        <p class="feature-desc">A growth operating system built for speed. Decision-making frameworks, hiring playbooks, and revenue architecture designed for 3X annual growth.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-number">05</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3C10 3 6 7 6 11C6 13.2 7.8 15 10 15C12.2 15 14 13.2 14 11C14 7 10 3 10 3Z" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The Future Self Architecture</h3>
+        <p class="feature-desc">Reverse-engineer your $20M company today. Build systems, culture, and infrastructure for the company you're becoming — not the one you are.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-number">06</div>
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="7" cy="8" r="3" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <circle cx="13" cy="8" r="3" stroke="rgba(255,255,255,0.6)" stroke-width="1.3"/>
+            <path d="M1 17C1 17 3 13 7 13C11 13 13 17 13 17" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M13 13C17 13 19 17 19 17" stroke="rgba(255,255,255,0.6)" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">The Scaler Community</h3>
+        <p class="feature-desc">Join a curated network of founders operating at the same altitude. Peer accountability, shared insights, and direct access to Dr. Hardy and Blake Erickson.</p>
+        <div class="feature-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 13L13 3M13 3H6M13 3V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="container">
+    <span class="section-label animate">The Paradox</span>
+    <h2 class="section-heading animate animate-delay-1">Why bigger goals<br>create easier paths</h2>
+    <div class="why-grid">
+      <div class="why-left">
+        <div class="why-stat-block animate animate-delay-2">
+          <div class="why-stat-number">10X</div>
+          <div class="why-stat-label">When you set a 10X goal, you're forced to think completely differently. The path from $2M to $20M requires new systems — not more effort.</div>
+        </div>
+        <div class="why-stat-block animate animate-delay-3">
+          <div class="why-stat-number">3 Yrs</div>
+          <div class="why-stat-label">The average time for a committed Scaler to achieve a 10X growth milestone when applying the framework with full commitment.</div>
+        </div>
+        <div class="why-stat-block animate animate-delay-4">
+          <div class="why-stat-number">2→20</div>
+          <div class="why-stat-label">The core journey. From $2M ARR to $20M ARR — a journey that feels impossible with old thinking but inevitable with the right framework.</div>
+        </div>
+      </div>
+      <div class="why-right animate animate-delay-2">
+        <div class="why-item">
+          <div class="why-item-num">01</div>
+          <div class="why-item-content">
+            <div class="why-item-title">Small goals require incremental thinking</div>
+            <div class="why-item-desc">Going from $2M to $3M means doing more of what you're already doing. More calls, more hires, more hustle. That's why it's so exhausting.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">02</div>
+          <div class="why-item-content">
+            <div class="why-item-title">10X goals demand exponential systems</div>
+            <div class="why-item-desc">When the target is $20M, you can't brute-force it. You're forced to build leverage, systems, and a team that works without you.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">03</div>
+          <div class="why-item-content">
+            <div class="why-item-title">The framework changes everything</div>
+            <div class="why-item-desc">Dr. Benjamin Hardy and Blake Erickson have distilled the exact cognitive and operational shifts that separate $2M founders from $20M founders.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">04</div>
+          <div class="why-item-content">
+            <div class="why-item-title">You don't need more time — you need clarity</div>
+            <div class="why-item-desc">Most founders are busy with the wrong things. The Scaling framework shows you exactly where to focus to generate momentum that compounds.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── CTA SECTION ─── -->
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="container">
+    <p class="clients-label animate">Trusted by ambitious founders worldwide</p>
+    <div class="clients-marquee-wrapper animate animate-delay-1">
+      <div class="clients-track">
+        <span class="client-name">DTC Founders</span>
+        <span class="client-name">SaaS Operators</span>
+        <span class="client-name">Agency Owners</span>
+        <span class="client-name">E-Commerce Leaders</span>
+        <span class="client-name">Service Businesses</span>
+        <span class="client-name">Tech Startups</span>
+        <span class="client-name">B2B Companies</span>
+        <span class="client-name">Coaching Brands</span>
+        <span class="client-name">Media Companies</span>
+        <span class="client-name">DTC Founders</span>
+        <span class="client-name">SaaS Operators</span>
+        <span class="client-name">Agency Owners</span>
+        <span class="client-name">E-Commerce Leaders</span>
+        <span class="client-name">Service Businesses</span>
+        <span class="client-name">Tech Startups</span>
+        <span class="client-name">B2B Companies</span>
+        <span class="client-name">Coaching Brands</span>
+        <span class="client-name">Media Companies</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
 <section id="cta-section">
-  <div class="cta-bg-glow"></div>
-  <div class="cta-inner">
-    <span class="section-label animate">Join The Movement</span>
-    <h2 class="cta-headline animate animate-delay-1">
-      The exact system that<br>
-      <span class="accent">Top Founders Use</span><br>
-      to 10X in Three Years
-    </h2>
-    <p class="cta-subtext animate animate-delay-2">
-      Most companies stay trapped in the middle of the bell curve. The Scaling Framework is your way out — and the founders using it aren't looking back.
-    </p>
-    <div class="animate animate-delay-3">
-      <a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:15px;padding:18px 38px;">
-        Become a Scaler Today
-        <svg class="btn-arrow" viewBox="0 0 20 20" fill="none">
-          <path d="M4 10h12M11 6l5 4-5 4" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="cta-stats-row">
-      <div class="cta-stat animate animate-delay-1">
-        <div class="cta-stat-value"><span>10</span>x</div>
-        <div class="cta-stat-label">Revenue Growth Target</div>
-      </div>
-      <div class="cta-stat animate animate-delay-2">
-        <div class="cta-stat-value"><span>3</span> yrs</div>
-        <div class="cta-stat-label">Or Less Timeline</div>
-      </div>
-      <div class="cta-stat animate animate-delay-3">
-        <div class="cta-stat-value"><span>1</span> framework</div>
-        <div class="cta-stat-label">Proven System</div>
+  <div class="cta-bg"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <span class="section-label animate" style="justify-content: center; display: block; text-align: center;">Ready to Scale</span>
+      <h2 class="cta-headline animate animate-delay-1">Stop grinding for 50%.<br>Start building for 10X.</h2>
+      <p class="cta-sub animate animate-delay-2">Join the founders who've discovered that the path to $20M is clearer, simpler, and more achievable than the incremental grind most businesses are trapped in.</p>
+      <div class="animate animate-delay-3">
+        <a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer" class="btn-primary">
+          Become a Scaler Today
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand animate">
-        <span class="logo-text">Scaling.com</span>
-        <p class="footer-tagline">Scale Your Business 10x in Three Years or Less</p>
-      </div>
-      <div class="footer-nav animate animate-delay-1">
-        <div class="footer-nav-col">
-          <h4>Navigation</h4>
-          <a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer">Home</a>
-          <a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer">Team</a>
-          <a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer">Contact</a>
-        </div>
-        <div class="footer-nav-col">
-          <h4>Get Started</h4>
-          <a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer">Become a Scaler</a>
-          <a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer">Meet Dr. Hardy</a>
-          <a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer">Get In Touch</a>
-        </div>
-      </div>
+    <div class="footer-brand">
+      <span class="footer-logo">Scaling.com</span>
+      <p class="footer-tagline">The framework that helps founders go from $2M to $20M — faster than they thought possible.</p>
     </div>
-
-    <div class="footer-bottom animate">
-      <p class="footer-copyright">© <span id="year"></span> Scaling.com. All rights reserved.</p>
-      <p class="footer-highlight">Built on the <span>10x Framework</span> by Dr. Benjamin Hardy &amp; Blake Erickson</p>
-    </div>
+    <nav class="footer-nav">
+      <div class="footer-nav-col">
+        <div class="footer-nav-title">Navigation</div>
+        <ul>
+          <li><a href="http://scaling.com/#home" target="_blank" rel="noopener noreferrer">Home</a></li>
+          <li><a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer">Team</a></li>
+          <li><a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-nav-col">
+        <div class="footer-nav-title">Get Started</div>
+        <ul>
+          <li><a href="http://scaling.com/#contact" target="_blank" rel="noopener noreferrer">Become a Scaler</a></li>
+          <li><a href="http://scaling.com/#team" target="_blank" rel="noopener noreferrer">Meet the Team</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; <span id="year"></span> Scaling.com. All rights reserved.</p>
+    <p class="footer-made">Dr. Benjamin Hardy &amp; Blake Erickson</p>
   </div>
 </footer>
 
 <script>
-  // ─── YEAR ───
+  // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ─── NAV SCROLL ───
+  // Nav scroll
   window.addEventListener('scroll', () => {
     const nav = document.querySelector('nav');
     if (window.scrollY > 50) {
@@ -1214,7 +1102,7 @@
     }
   });
 
-  // ─── INTERSECTION OBSERVER (scroll animations) ───
+  // Intersection Observer for animate
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1225,55 +1113,13 @@
 
   document.querySelectorAll('.animate').forEach(el => observer.observe(el));
 
-  // ─── COUNTER ANIMATION ───
-  function animateCounter(el, target) {
-    let start = 0;
-    const duration = 1800;
-    const startTime = performance.now();
-    const suffix = el.dataset.suffix || '';
-    const prefix = el.dataset.prefix || '';
-
-    function update(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const value = Math.floor(eased * target);
-      el.textContent = prefix + value.toLocaleString() + suffix;
-      if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
-  }
-
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseFloat(el.dataset.target);
-        if (!isNaN(target)) {
-          animateCounter(el, target);
-          counterObserver.unobserve(el);
-        }
-      }
-    });
-  }, { threshold: 0.3 });
-
-  document.querySelectorAll('.count').forEach(el => counterObserver.observe(el));
-
-  // ─── HERO HEADLINE ENTRANCE ───
-  window.addEventListener('load', () => {
-    document.querySelectorAll('.hero-content .animate').forEach((el, i) => {
-      setTimeout(() => {
-        el.classList.add('visible');
-      }, 200 + i * 150);
-    });
-  });
-
-  // ─── PARALLAX ORBS ───
-  window.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
-    document.querySelectorAll('.orb').forEach((orb, i) => {
-      const factor = (i + 1) * 0.4;
+  // Parallax orbs on mouse move
+  document.addEventListener('mousemove', (e) => {
+    const orbs = document.querySelectorAll('.orb');
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    orbs.forEach((orb, i) => {
+      const factor = (i + 1) * 8;
       orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
     });
   });
