@@ -1,0 +1,123 @@
+{
+  "name": "Phone chat",
+  "format": "square",
+  "bg": {
+    "seed": 42,
+    "complexity": 55,
+    "spread": 1,
+    "intensity": 1,
+    "accents": 0.6,
+    "shadow": 1,
+    "rotate": 0,
+    "zoom": 1,
+    "offsetX": 0,
+    "offsetY": 0,
+    "flipX": false,
+    "flipY": false,
+    "softness": 0,
+    "flutes": 6,
+    "fluteStrength": 0.45,
+    "hue": 0,
+    "saturation": 1,
+    "brightness": 1,
+    "contrast": 1,
+    "grain": 0.06,
+    "vignette": 0,
+    "region": "full",
+    "artHeight": 510,
+    "panel": "#FFFFFF",
+    "style": "mesh",
+    "colors": [
+      "#0B3B34",
+      "#1E8C74",
+      "#5EE6A8",
+      "#B8F5D8",
+      "#F6FFF9"
+    ]
+  },
+  "overlay": {
+    "vOn": false,
+    "vX": 136,
+    "vDashed": true,
+    "hOn": true,
+    "hY": 68,
+    "h2On": true,
+    "h2Y": 1012,
+    "guideOpacity": 0.3,
+    "colOn": true,
+    "colX": 216,
+    "colW": 648,
+    "colBlur": 34,
+    "colTint": 0.16,
+    "colBorder": 0.45
+  },
+  "els": {
+    "logo": {
+      "visible": true,
+      "x": 432,
+      "y": 150,
+      "size": 54,
+      "color": "#FFFFFF"
+    },
+    "headline": {
+      "visible": true,
+      "slot": "headline_short",
+      "x": 90,
+      "y": 248,
+      "w": 900,
+      "font": "inter",
+      "weight": 500,
+      "size": 80,
+      "lineHeight": 1.1,
+      "tracking": -0.03,
+      "align": "center",
+      "color": "#FFFFFF",
+      "opacity": 1
+    },
+    "sub": {
+      "visible": false,
+      "slot": "cta",
+      "x": 80,
+      "y": 160,
+      "w": 900,
+      "font": "inter",
+      "weight": 500,
+      "size": 80,
+      "lineHeight": 1.08,
+      "tracking": -0.03,
+      "align": "left",
+      "color": "#FFFFFF",
+      "opacity": 1
+    },
+    "card": {
+      "visible": false,
+      "x": 208,
+      "y": 578,
+      "scale": 1,
+      "theme": "light",
+      "font": "inter_text",
+      "accent": "#18A374",
+      "radius": 28,
+      "shadow": 1
+    },
+    "toast": {
+      "visible": false,
+      "x": 430,
+      "y": 930,
+      "scale": 1,
+      "font": "inter_text",
+      "bg": "#0B1F1A",
+      "color": "#FFFFFF"
+    },
+    "phone": {
+      "visible": true,
+      "x": 355,
+      "y": 540,
+      "scale": 0.93,
+      "font": "inter_text",
+      "accent": "#D7F75B",
+      "accent2": "#18A374"
+    }
+  },
+  "template": "phone_chat"
+}

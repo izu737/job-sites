@@ -1,61 +1,65 @@
-// Renders every angle x template combination to PNG, plus a contact sheet.
-//   node render.mjs                  all combinations
-//   node render.mjs speed            one angle
-//   node render.mjs speed phone_chat one angle, one template
+// Bulk renderer. Runs the same engine as the studio (studio/engine.js) in
+// headless Chromium and writes one PNG per preset x angle x seed.
+//
+//   node render.mjs                         every preset x every angle
+//   node render.mjs --preset proof_card     one preset (file name in presets/)
+//   node render.mjs --angle speed           one angle
+//   node render.mjs --seeds 5               5 background variations each
+//   node render.mjs --flips                 also render mirrored versions
 
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { brand } from './brand.mjs';
 
 const require = createRequire(import.meta.url);
 let playwright;
 try { playwright = require('playwright'); } catch { playwright = require('/opt/node-tools/node_modules/playwright'); }
 
-const templates = {
-  proof_card: await import('./templates/proof_card.mjs'),
-  split_editorial: await import('./templates/split_editorial.mjs'),
-  phone_chat: await import('./templates/phone_chat.mjs'),
-};
+const here = new URL('.', import.meta.url).pathname;
+const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i < 0 ? d : process.argv[i + 1] ?? true; };
+const seeds = Number(arg('seeds', 1));
+const flips = process.argv.includes('--flips');
+const onlyPreset = arg('preset'), onlyAngle = arg('angle');
 
-const [onlyAngle, onlyTemplate] = process.argv.slice(2);
-const { angles } = JSON.parse(readFileSync(new URL('./angles.json', import.meta.url)));
-const outDir = new URL('./out/', import.meta.url).pathname;
+const presets = readdirSync(here + 'presets').filter((f) => f.endsWith('.json'))
+  .map((f) => ({ id: f.replace('.json', ''), data: JSON.parse(readFileSync(here + 'presets/' + f, 'utf8')) }))
+  .filter((p) => !onlyPreset || p.id === onlyPreset);
+const { angles } = JSON.parse(readFileSync(here + 'angles.json', 'utf8'));
+const outDir = here + 'out/';
 mkdirSync(outDir, { recursive: true });
 
-const page = (body, w, h) => `<!doctype html><html><head><meta charset="utf-8">
-<style>html,body{margin:0;width:${w}px;height:${h}px;background:${brand.colors.ink}}*{-webkit-font-smoothing:antialiased}</style>
-</head><body>${body}</body></html>`;
-
-const browser = await playwright.chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 1080, height: 1080 }, deviceScaleFactor: 1 });
+const browser = await playwright.chromium.launch(process.env.HTTPS_PROXY ? { proxy: { server: process.env.HTTPS_PROXY } } : {});
+const ctx = await browser.newContext({ ignoreHTTPSErrors: true, viewport: { width: 1200, height: 1920 } });
 const tab = await ctx.newPage();
-const made = [];
+await tab.goto('file://' + here + 'studio/render_page.html');
+await tab.evaluate(() => document.fonts.ready);
 
-for (const angle of angles) {
-  if (onlyAngle && angle.id !== onlyAngle) continue;
-  for (const [name, tpl] of Object.entries(templates)) {
-    if (onlyTemplate && name !== onlyTemplate) continue;
-    const vars = { art: angle.art, ...angle[name] };
-    const { w, h } = tpl.size;
-    await tab.setViewportSize({ width: w, height: h });
-    await tab.setContent(page(tpl.render(vars), w, h));
-    await tab.evaluate(() => document.fonts.ready);
-    const file = `${angle.id}__${name}.png`;
-    await tab.screenshot({ path: outDir + file });
-    made.push(file);
-    console.log('rendered', file);
+const made = [];
+for (const p of presets) {
+  for (const a of angles.filter((a) => !onlyAngle || a.id === onlyAngle)) {
+    for (let s = 0; s < seeds; s++) {
+      for (const flip of flips ? [false, true] : [false]) {
+        const file = `${p.id}__${a.id}__s${s}${flip ? 'f' : ''}.png`;
+        const box = await tab.evaluate(async ({ preset, copy, s, flip }) => {
+          const pr = TM.normalize(preset);
+          pr.bg.seed += s * 17;
+          if (flip) pr.bg.flipX = !pr.bg.flipX;
+          const ad = TM.renderAd(document.getElementById('root'), pr, copy);
+          await document.fonts.ready;
+          const r = ad.getBoundingClientRect();
+          return { x: r.x, y: r.y, width: r.width, height: r.height };
+        }, { preset: p.data, copy: a, s, flip });
+        await tab.screenshot({ path: outDir + file, clip: box });
+        made.push(file);
+      }
+    }
   }
+  console.log('rendered', p.id);
 }
 
-// Contact sheet: one row per angle, one column per template.
 const cells = made.map((f) => `<figure><img src="${f}"><figcaption>${f.replace('.png', '')}</figcaption></figure>`).join('');
-writeFileSync(outDir + 'sheet.html', `<!doctype html><html><head><meta charset="utf-8"><title>Tenthmark ads</title>
-<style>body{margin:0;padding:24px;background:#111;font:14px Inter,sans-serif;color:#aaa}
-.g{display:grid;grid-template-columns:repeat(3,360px);gap:20px}img{width:360px;display:block;border-radius:6px}
-figure{margin:0}figcaption{margin-top:6px}</style></head><body><div class="g">${cells}</div></body></html>`);
-await tab.goto('file://' + outDir + 'sheet.html');
+writeFileSync(outDir + 'sheet.html', `<!doctype html><meta charset="utf-8"><title>Tenthmark ads</title><style>body{margin:0;padding:24px;background:#111;font:14px Inter,sans-serif;color:#aaa}.g{display:grid;grid-template-columns:repeat(3,360px);gap:20px}img{width:360px;display:block;border-radius:6px}figure{margin:0}figcaption{margin-top:6px}</style><div class="g">${cells}</div>`);
 await tab.setViewportSize({ width: 1180, height: 400 });
+await tab.goto('file://' + outDir + 'sheet.html');
 await tab.screenshot({ path: outDir + 'sheet.png', fullPage: true });
-
 await browser.close();
 console.log(`done: ${made.length} ads`);

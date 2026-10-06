@@ -1,20 +1,21 @@
 # Tenthmark ad engine
 
-Step 1 of the creative pipeline: saved ad formats as templates, fed with variables, rendered as every combination.
+Creative pipeline: saved ad formats (presets) x copy variables (angles) x background seeds, rendered in bulk.
 
-| File | Role |
+| Path | Role |
 | --- | --- |
-| `brand.mjs` | Colors, fonts, proof points, wordmark |
-| `art.mjs` | Seeded hero artwork (replaces the Stripe gradient) |
-| `templates/proof_card.mjs` | Headline plus product proof card (Stripe "minutes, not days") |
-| `templates/split_editorial.mjs` | Art on top, white panel below (Stripe "Créez votre société") |
-| `templates/phone_chat.mjs` | Phone mockup with chat card (Stripe "Create a link. Sell anywhere.") |
-| `angles.json` | The variables. One entry per angle, filling every template |
-| `out/` | Rendered 1080x1080 PNGs and `sheet.png` contact sheet |
+| `studio/engine.js` | The one engine. Gradient styles, layouts, widgets, logo. Used by the studio and the renderer |
+| `studio/index.html` | Ad Studio: sliders, drag to place, save presets (published as an Artifact) |
+| `studio/render_page.html` | Blank page the bulk renderer loads the engine into |
+| `presets/*.json` | Concrete presets to render. Paste studio exports here |
+| `angles.json` | Copy variables. One entry per angle, every slot filled |
+| `render.mjs` | Bulk renderer: every preset x every angle x N seeds |
+| `out/` | Rendered PNGs and `sheet.png` contact sheet |
 
-Render:
+Background styles: silk, fold, mesh, ribbon, aurora, conic, linear. Every style takes the same controls (seed, palette, detail, spread, light, rotate, zoom, shift, flips, softness, fluted glass, grading, grain, vignette).
 
 ```
-NODE_PATH=/opt/node-tools/node_modules node render.mjs            # everything
-NODE_PATH=/opt/node-tools/node_modules node render.mjs speed      # one angle
+NODE_PATH=/opt/node-tools/node_modules node render.mjs                    # all presets x all angles
+NODE_PATH=/opt/node-tools/node_modules node render.mjs --seeds 6 --flips  # 12 background variations each
+NODE_PATH=/opt/node-tools/node_modules node render.mjs --preset proof_card --angle speed
 ```

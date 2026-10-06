@@ -1,0 +1,483 @@
+<title>Tenthmark Ad Studio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=Inter+Tight:wght@300..800&family=Hanken+Grotesk:wght@300..800&family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Manrope:wght@300..800&family=DM+Sans:opsz,wght@9..40,300..800&family=Plus+Jakarta+Sans:wght@300..800&family=Instrument+Sans:wght@400..700&family=Figtree:wght@300..800&family=Onest:wght@300..800&family=Sora:wght@300..800&family=Space+Grotesk:wght@300..700&family=Fraunces:opsz,wght@9..144,300..800&family=Instrument+Serif&family=Newsreader:opsz,wght@6..72,300..800&display=swap">
+<style>
+/* Layout: a work surface (the ad, fitted to the space) beside a tall control rail. */
+:root {
+  --bg: #F1F3F1; --surface: #FFFFFF; --sunk: #E6EAE7; --fg: #14201C; --muted: #5E6B66; --line: #D9DFDB;
+  --accent: #11694F; --accent-fg: #FFFFFF; --sel: #2F7BFF; --warn: #B4361E;
+  --ui: 'Geist', 'Inter', system-ui, sans-serif; --mono: 'Geist Mono', ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1412; --surface: #151C19; --sunk: #090D0C; --fg: #E6EDEA; --muted: #92A39C; --line: #25302C;
+  --accent: #5EE6A8; --accent-fg: #0B1F1A; --sel: #6EA8FF; --warn: #FF8A70; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0E1412; --surface: #151C19; --sunk: #090D0C; --fg: #E6EDEA; --muted: #92A39C; --line: #25302C;
+  --accent: #5EE6A8; --accent-fg: #0B1F1A; --sel: #6EA8FF; --warn: #FF8A70; color-scheme: dark }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font: 13px/1.4 var(--ui); }
+* { box-sizing: border-box; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+
+.app { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+.top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.top h1 { font-size: 14px; font-weight: 650; margin: 0 8px 0 0; letter-spacing: -0.01em; }
+.top .grow { flex: 1; }
+.field-inline { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+select, input[type=text], input[type=number], textarea { background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; min-width: 0; }
+textarea { width: 100%; resize: vertical; font-family: var(--ui); }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 7px; padding: 6px 11px; font-weight: 550; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn.small { padding: 3px 8px; font-size: 12px; }
+.btn.danger { color: var(--warn); }
+.status { color: var(--muted); min-width: 120px; text-align: right; }
+
+.work { display: grid; grid-template-columns: minmax(0, 1fr) 380px; min-height: 0; }
+.canvas-col { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; min-width: 0; min-height: 0; background: var(--sunk); }
+.stage-wrap { position: relative; overflow: hidden; min-height: 320px; }
+.stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.stage [data-el] { cursor: grab; }
+.stage [data-el]:hover { outline: 2px dashed color-mix(in srgb, var(--sel) 60%, transparent); outline-offset: 6px; }
+.stage [data-el].is-sel { outline: 3px solid var(--sel); outline-offset: 6px; }
+.stage.dragging [data-el] { cursor: grabbing; }
+.snapline { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px solid #FF3D7F; pointer-events: none; display: none; z-index: 5; }
+.snapline.h { left: 0; right: 0; width: auto; height: 0; top: 0; bottom: auto; border-left: 0; border-top: 2px solid #FF3D7F; }
+.hint { padding: 6px 16px 8px; color: var(--muted); font-size: 12px; }
+
+.vars { border-top: 1px solid var(--line); padding: 10px 16px 12px; background: var(--surface); min-width: 0; }
+.vars-head { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-bottom: 8px; }
+.vars-head b { font-weight: 600; }
+.vars-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+.thumb { flex: none; width: 112px; border-radius: 6px; overflow: hidden; border: 2px solid transparent; padding: 0; background: none; position: relative; }
+.thumb:hover { border-color: var(--sel); }
+.thumb .t-in { position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none; }
+.thumb small { position: absolute; left: 4px; bottom: 3px; font: 10px var(--mono); color: #fff; text-shadow: 0 1px 2px #000; }
+
+.rail { display: grid; grid-template-rows: auto minmax(0, 1fr); border-left: 1px solid var(--line); background: var(--surface); min-height: 0; min-width: 0; }
+.tabs { display: flex; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs button { flex: 1; background: none; border: 0; border-bottom: 2px solid transparent; padding: 11px 6px; color: var(--muted); font-weight: 550; white-space: nowrap; }
+.tabs button[aria-selected=true] { color: var(--fg); border-bottom-color: var(--accent); }
+.pane { overflow-y: auto; padding: 14px 16px 40px; }
+.group { margin-bottom: 18px; }
+.group > h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
+.row { display: grid; grid-template-columns: 112px minmax(0, 1fr) 62px; align-items: center; gap: 8px; margin-bottom: 6px; }
+.row label { color: var(--muted); }
+.row input[type=range] { width: 100%; accent-color: var(--accent); }
+.row .num { width: 62px; padding: 3px 5px; font: 12px var(--mono); text-align: right; }
+.row.wide { grid-template-columns: 112px minmax(0, 1fr); }
+.row.color { grid-template-columns: 112px 36px minmax(0, 1fr); }
+.row input[type=color] { width: 36px; height: 26px; border: 1px solid var(--line); border-radius: 6px; padding: 0; background: none; }
+.row .hex { font: 12px var(--mono); }
+.switch { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; color: var(--fg); }
+.switch input { accent-color: var(--accent); width: 15px; height: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 4px 10px; font-weight: 550; }
+.chip[aria-pressed=true] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.chip.off { opacity: .5; }
+.pal { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px 6px; }
+.pal button { width: 100%; border: 2px solid transparent; border-radius: 8px; padding: 0; background: none; color: var(--muted); font-size: 10px; }
+.pal button .sw { display: flex; height: 28px; border-radius: 6px; overflow: hidden; }
+.pal button .sw span { flex: 1; }
+.pal button.on { border-color: var(--sel); color: var(--fg); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.preset { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.preset b { font-weight: 600; overflow-wrap: anywhere; }
+.preset small { color: var(--muted); grid-column: 1; }
+.preset .pa { grid-row: 1 / span 2; grid-column: 2; display: flex; gap: 6px; align-items: center; }
+.empty { color: var(--muted); padding: 8px 0; }
+.note { color: var(--muted); font-size: 12px; margin: 4px 0 10px; }
+pre.json { font: 11px/1.4 var(--mono); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 8px; max-height: 220px; overflow: auto; white-space: pre-wrap; word-break: break-all; }
+
+@media (max-width: 900px) {
+  .work { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
+  .app { height: auto; }
+  .canvas-col { grid-template-rows: auto auto; }
+  .stage-wrap { height: 92vw; max-height: 70vh; }
+  .rail { border-left: 0; border-top: 1px solid var(--line); }
+  .pane { overflow: visible; }
+  .row { grid-template-columns: 96px minmax(0, 1fr) 58px; }
+  .status { min-width: 0; text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <header class="top">
+    <h1>Tenthmark Ad Studio</h1>
+    <label class="field-inline">Layout <select id="tpl"></select></label>
+    <label class="field-inline">Size <select id="fmt"></select></label>
+    <label class="field-inline">Copy <select id="angle"></select></label>
+    <span class="grow"></span>
+    <button class="btn" id="undo" title="Undo (Ctrl+Z)">Undo</button>
+    <button class="btn" id="redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+    <button class="btn primary" id="saveQuick">Save preset</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </header>
+
+  <div class="work">
+    <section class="canvas-col">
+      <div class="stage-wrap" id="wrap">
+        <div class="stage" id="stage"></div>
+      </div>
+      <div class="hint">Drag anything on the ad to place it. Arrow keys nudge it (hold Shift for 10px). Hold Alt while dragging to turn off snapping.</div>
+      <div class="vars">
+        <div class="vars-head"><b>Background variations</b><span class="note" style="margin:0">Same settings, new seeds and flips. Click one to use it.</span><span class="grow"></span><button class="btn small" id="moreVars">New batch</button></div>
+        <div class="vars-row" id="vars"></div>
+      </div>
+    </section>
+
+    <aside class="rail">
+      <nav class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="bg" aria-selected="true">Background</button>
+        <button role="tab" data-tab="layout" aria-selected="false">Elements</button>
+        <button role="tab" data-tab="overlay" aria-selected="false">Guides</button>
+        <button role="tab" data-tab="copy" aria-selected="false">Copy</button>
+        <button role="tab" data-tab="presets" aria-selected="false">Presets</button>
+      </nav>
+      <div class="pane" id="pane"></div>
+    </aside>
+  </div>
+</div>
+
+<script src="engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  const TM = window.TM;
+  const $ = (s, r = document) => r.querySelector(s);
+  const h = (tag, attrs = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') el.className = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else if (v !== undefined && v !== null && v !== false) el.setAttribute(k, v === true ? '' : v);
+    }
+    kids.flat().forEach((c) => c != null && el.append(c));
+    return el;
+  };
+
+  const FALLBACK_ANGLES = [{
+    id: 'speed', headline: 'Get your first 20 users in 60 days, not 6 months.', headline_short: 'Find the bottleneck.\nFix it this week.',
+    headline_split: 'Your first 20 users\nin 60 days, with no\nmarketing hire', cta: 'Book a call', toast: 'Sent to founder!',
+    card: { title: 'Week 3 report is', status: 'ready', bars: [22, 34, 30, 52], item: 'Bottleneck: bookings', meta: 'Fixed with an automated follow up', metricLabel: 'Demo calls booked', metric: '4 → 11' },
+    phone: { label: 'Week 4 report', current: 14, target: 20, title: 'Bookings fixed', sub: '3 new signups this week' },
+  }];
+
+  const S = { preset: null, angles: FALLBACK_ANGLES, angle: 0, sel: 'headline', tab: 'bg', scale: 1, varBase: 0 };
+  const store = { db: null, presets: [] };
+  let hist = [], fut = [], last = '';
+  const bound = [];
+
+  /* ---------- persistence of the working draft (per browser) ---------- */
+  const DRAFT = 'tm-studio-draft-v1';
+  function saveDraft() { try { localStorage.setItem(DRAFT, JSON.stringify({ preset: S.preset, angle: S.angle, tab: S.tab, sel: S.sel })); } catch (e) {} }
+  function loadDraft() { try { return JSON.parse(localStorage.getItem(DRAFT) || 'null'); } catch (e) { return null; } }
+
+  /* ---------- status line ---------- */
+  let stTimer;
+  function status(msg) { const el = $('#status'); el.textContent = msg; clearTimeout(stTimer); stTimer = setTimeout(() => (el.textContent = ''), 3500); }
+
+  /* ---------- history ---------- */
+  const snap = () => JSON.stringify(S.preset);
+  function commit() { const now = snap(); if (now === last) return; hist.push(last); if (hist.length > 100) hist.shift(); fut = []; last = now; saveDraft(); }
+  function setPreset(p, record = true) { if (record) { hist.push(last); fut = []; } S.preset = p; last = snap(); saveDraft(); fullRefresh(); }
+  function undo() { if (!hist.length) return status('Nothing to undo'); fut.push(last); S.preset = JSON.parse(hist.pop()); last = snap(); saveDraft(); fullRefresh(); }
+  function redo() { if (!fut.length) return status('Nothing to redo'); hist.push(last); S.preset = JSON.parse(fut.pop()); last = snap(); saveDraft(); fullRefresh(); }
+
+  /* ---------- stage ---------- */
+  const stage = $('#stage'), wrap = $('#wrap');
+  const vLine = h('div', { class: 'snapline' }), hLine = h('div', { class: 'snapline h' });
+  let raf = 0, adEl = null;
+  function render() { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }
+  function draw() {
+    adEl = TM.renderAd(stage, S.preset, S.angles[S.angle]);
+    stage.append(vLine, hLine);
+    markSel();
+    fit();
+  }
+  function markSel() { stage.querySelectorAll('[data-el]').forEach((n) => n.classList.toggle('is-sel', n.dataset.el === S.sel)); }
+  function fit() {
+    const [W, H] = TM.size(S.preset);
+    const r = wrap.getBoundingClientRect();
+    const s = Math.min((r.width - 40) / W, (r.height - 40) / H);
+    S.scale = Math.max(0.05, s);
+    stage.style.width = W + 'px'; stage.style.height = H + 'px';
+    stage.style.transform = `translate(${(r.width - W * S.scale) / 2}px, ${(r.height - H * S.scale) / 2}px) scale(${S.scale})`;
+  }
+  new ResizeObserver(fit).observe(wrap);
+
+  /* drag to place */
+  let drag = null;
+  stage.addEventListener('pointerdown', (ev) => {
+    const node = ev.target.closest('[data-el]');
+    if (!node) return;
+    ev.preventDefault();
+    const key = node.dataset.el;
+    if (S.sel !== key) { S.sel = key; markSel(); if (S.tab === 'layout') buildPane(); }
+    const p = S.preset.els[key];
+    drag = { key, node, sx: ev.clientX, sy: ev.clientY, x0: p.x, y0: p.y, w: node.offsetWidth * (p.scale || 1), hgt: node.offsetHeight * (p.scale || 1) };
+    stage.classList.add('dragging');
+    stage.setPointerCapture(ev.pointerId);
+  });
+  stage.addEventListener('pointermove', (ev) => {
+    if (!drag) return;
+    const [W, H] = TM.size(S.preset);
+    let x = Math.round(drag.x0 + (ev.clientX - drag.sx) / S.scale);
+    let y = Math.round(drag.y0 + (ev.clientY - drag.sy) / S.scale);
+    vLine.style.display = 'none'; hLine.style.display = 'none';
+    if (!ev.altKey) {
+      const tol = 8 / S.scale;
+      if (Math.abs(x + drag.w / 2 - W / 2) < tol) { x = Math.round(W / 2 - drag.w / 2); vLine.style.left = W / 2 + 'px'; vLine.style.display = 'block'; }
+      else {
+        // snap left edges to other elements' left edges
+        for (const [k, o] of Object.entries(S.preset.els)) {
+          if (k !== drag.key && o.visible && Math.abs(x - o.x) < tol) { x = o.x; vLine.style.left = x + 'px'; vLine.style.display = 'block'; break; }
+        }
+      }
+      if (Math.abs(y + drag.hgt / 2 - H / 2) < tol) { y = Math.round(H / 2 - drag.hgt / 2); hLine.style.top = H / 2 + 'px'; hLine.style.display = 'block'; }
+    }
+    const p = S.preset.els[drag.key];
+    p.x = x; p.y = y;
+    drag.node.style.left = x + 'px'; drag.node.style.top = y + 'px';
+    syncPane();
+  });
+  const endDrag = () => { if (!drag) return; drag = null; stage.classList.remove('dragging'); vLine.style.display = 'none'; hLine.style.display = 'none'; commit(); };
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+
+  document.addEventListener('keydown', (ev) => {
+    const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '') && document.activeElement.type !== 'range' && document.activeElement.type !== 'checkbox';
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'z') { if (typing) return; ev.preventDefault(); ev.shiftKey ? redo() : undo(); return; }
+    if (typing || !S.sel || !/^Arrow/.test(ev.key) || document.activeElement?.type === 'range') return;
+    ev.preventDefault();
+    const d = ev.shiftKey ? 10 : 1, p = S.preset.els[S.sel];
+    if (ev.key === 'ArrowLeft') p.x -= d; if (ev.key === 'ArrowRight') p.x += d;
+    if (ev.key === 'ArrowUp') p.y -= d; if (ev.key === 'ArrowDown') p.y += d;
+    render(); syncPane(); clearTimeout(keyT); keyT = setTimeout(commit, 400);
+  });
+  let keyT;
+
+  /* ---------- controls built from TM.SCHEMA ---------- */
+  let uid = 0;
+  function controls(obj, schema, after) {
+    const out = [];
+    for (const [key, type, label, a, b, c] of schema) {
+      const id = 'c' + (++uid);
+      const changed = (val, done) => { obj[key] = val; render(); after && after(key); if (done) commit(); };
+      if (type === 'range') {
+        const r = h('input', { type: 'range', id, min: a, max: b, step: c });
+        const n = h('input', { type: 'number', class: 'num', min: a, max: b, step: c, 'aria-label': label + ' value' });
+        r.value = n.value = obj[key];
+        r.addEventListener('input', () => { n.value = r.value; changed(+r.value); });
+        r.addEventListener('change', () => commit());
+        n.addEventListener('change', () => { r.value = n.value; changed(+n.value, true); });
+        bound.push(() => { if (document.activeElement !== n) n.value = obj[key]; r.value = obj[key]; });
+        out.push(h('div', { class: 'row' }, h('label', { for: id }, label), r, n));
+      } else if (type === 'color') {
+        const ci = h('input', { type: 'color', id }), tx = h('input', { type: 'text', class: 'hex', 'aria-label': label + ' hex', spellcheck: 'false' });
+        ci.value = tx.value = obj[key];
+        ci.addEventListener('input', () => { tx.value = ci.value.toUpperCase(); changed(ci.value.toUpperCase()); });
+        ci.addEventListener('change', () => commit());
+        tx.addEventListener('change', () => { if (/^#[0-9a-f]{6}$/i.test(tx.value)) { ci.value = tx.value; changed(tx.value.toUpperCase(), true); } else { tx.value = obj[key]; status('Use a 6 digit hex colour like #18A374'); } });
+        bound.push(() => { ci.value = obj[key]; if (document.activeElement !== tx) tx.value = obj[key]; });
+        out.push(h('div', { class: 'row color' }, h('label', { for: id }, label), ci, tx));
+      } else if (type === 'select') {
+        const s = h('select', { id }, a.map(([v, l]) => h('option', { value: v }, l)));
+        s.value = obj[key];
+        s.addEventListener('change', () => changed(s.value, true));
+        bound.push(() => (s.value = obj[key]));
+        out.push(h('div', { class: 'row wide' }, h('label', { for: id }, label), s));
+      } else if (type === 'toggle') {
+        const t = h('input', { type: 'checkbox', id });
+        t.checked = !!obj[key];
+        t.addEventListener('change', () => changed(t.checked, true));
+        bound.push(() => (t.checked = !!obj[key]));
+        out.push(h('label', { class: 'switch', for: id }, t, label));
+      }
+    }
+    return out;
+  }
+  const group = (title, ...kids) => h('div', { class: 'group' }, h('h2', {}, title), ...kids);
+  function syncPane() { bound.forEach((f) => f()); }
+
+  /* ---------- panes ---------- */
+  const pane = $('#pane');
+  const pick = (keys) => TM.SCHEMA.bg.filter((r) => keys.includes(r[0]));
+  function buildPane() {
+    bound.length = 0;
+    pane.replaceChildren();
+    const P = S.preset;
+    if (S.tab === 'bg') {
+      const b = P.bg;
+      const palBtns = Object.entries(TM.PALETTES).map(([name, cols]) => h('button', { title: name, class: JSON.stringify(cols) === JSON.stringify(b.colors) ? 'on' : '', 'aria-label': 'Palette ' + name, onclick: () => { b.colors = cols.slice(); commit(); render(); buildPane(); renderVars(); } }, h('span', { class: 'sw' }, cols.map((c) => h('span', { style: `background:${c}` }))), name));
+      const colorRows = b.colors.map((c, i) => controls(b.colors, [[i, 'color', ['Deep', 'Mid', 'Bright', 'Accent', 'Light'][i]]], () => renderVarsSoon())).flat();
+      pane.append(
+        group('Style', ...controls(b, pick(['style']), () => renderVarsSoon()), h('div', { class: 'actions' },
+          h('button', { class: 'btn small', onclick: () => { b.seed = 1 + Math.floor(Math.random() * 999); commit(); render(); syncPane(); renderVars(); } }, 'Random seed'),
+          h('button', { class: 'btn small', onclick: () => { b.seed = 1 + Math.floor(Math.random() * 999); b.flipX = Math.random() < 0.5; b.flipY = Math.random() < 0.3; b.rotate = Math.round((Math.random() - 0.5) * 60); b.zoom = +(1 + Math.random() * 0.6).toFixed(2); commit(); render(); syncPane(); renderVars(); } }, 'Shuffle composition'),
+          h('button', { class: 'btn small', onclick: () => { b.style = TM.STYLES[(TM.STYLES.indexOf(b.style) + 1) % TM.STYLES.length]; commit(); render(); syncPane(); renderVars(); } }, 'Next style'))),
+        group('Palette', h('div', { class: 'pal' }, palBtns), h('div', { style: 'height:12px' }), ...colorRows),
+        group('Shape', ...controls(b, pick(['seed', 'complexity', 'spread', 'intensity', 'accents', 'shadow']), () => renderVarsSoon())),
+        group('Placement and flips', ...controls(b, pick(['rotate', 'zoom', 'offsetX', 'offsetY', 'flipX', 'flipY']), () => renderVarsSoon())),
+        group('Glass and texture', ...controls(b, pick(['softness', 'flutes', 'fluteStrength', 'grain', 'vignette']), () => renderVarsSoon())),
+        group('Colour grading', ...controls(b, pick(['hue', 'saturation', 'brightness', 'contrast'])), h('div', { class: 'actions' }, h('button', { class: 'btn small', onclick: () => { Object.assign(b, { hue: 0, saturation: 1, brightness: 1, contrast: 1 }); commit(); render(); syncPane(); } }, 'Reset grading'))),
+        group('Artwork area', ...controls(b, pick(['region', 'artHeight', 'panel']))),
+      );
+    } else if (S.tab === 'layout') {
+      const names = { logo: 'Logo', headline: 'Headline', sub: 'Subline / CTA', card: 'Proof card', toast: 'Toast', phone: 'Phone' };
+      const chips = Object.keys(names).map((k) => h('button', { class: 'chip' + (P.els[k].visible ? '' : ' off'), 'aria-pressed': String(S.sel === k), onclick: () => { S.sel = k; markSel(); buildPane(); } }, names[k]));
+      pane.append(group('Pick an element (or click it on the ad)', h('div', { class: 'chips' }, chips)));
+      if (S.sel && P.els[S.sel]) {
+        const el = P.els[S.sel], [W] = TM.size(P);
+        pane.append(group(names[S.sel], ...controls(el, TM.SCHEMA[S.sel], (k) => { if (k === 'visible') { buildPane(); } })),
+          h('div', { class: 'actions' },
+            h('button', { class: 'btn small', onclick: () => { const n = stage.querySelector(`[data-el="${S.sel}"]`); const w = el.w || (n ? n.offsetWidth * (el.scale || 1) : 0); el.x = Math.round((W - w) / 2); commit(); render(); syncPane(); } }, 'Centre horizontally'),
+            el.w !== undefined ? h('button', { class: 'btn small', onclick: () => { el.x = Math.round((W - el.w) / 2); el.align = 'center'; commit(); render(); syncPane(); } }, 'Centre box and text') : null,
+            h('button', { class: 'btn small', onclick: () => { Object.assign(el, TM.fromTemplate(P.template).els[S.sel]); commit(); render(); buildPane(); } }, 'Reset element')));
+      }
+    } else if (S.tab === 'overlay') {
+      const sc = TM.SCHEMA.overlay;
+      pane.append(
+        group('Guide lines', ...controls(P.overlay, sc.filter((r) => /^(v|h|guide)/.test(r[0])))),
+        group('Frosted glass column', ...controls(P.overlay, sc.filter((r) => /^col/.test(r[0])))),
+      );
+    } else if (S.tab === 'copy') {
+      const a = S.angles[S.angle];
+      const ta = (obj, key, label, rows = 2) => {
+        const id = 'c' + (++uid), t = h('textarea', { id, rows });
+        t.value = obj[key] ?? '';
+        t.addEventListener('input', () => { obj[key] = typeof obj[key] === 'number' ? Number(t.value) || 0 : t.value; render(); });
+        return h('div', { class: 'group', style: 'margin-bottom:10px' }, h('label', { for: id, style: 'display:block;color:var(--muted);margin-bottom:4px' }, label), t);
+      };
+      pane.append(h('p', { class: 'note' }, 'Edits here change the preview only. Copy the JSON below into angles.json (or send it to Claude) to keep them. Press Enter for a line break.'),
+        ta(a, 'headline', 'Headline (long)'), ta(a, 'headline_short', 'Headline (two short lines)'), ta(a, 'headline_split', 'Headline (editorial)', 3),
+        ta(a, 'cta', 'Call to action', 1), ta(a, 'toast', 'Toast', 1),
+        group('Proof card', ta(a.card, 'title', 'Title', 1), ta(a.card, 'status', 'Highlighted word', 1), ta(a.card, 'item', 'Row title', 1), ta(a.card, 'meta', 'Row detail', 1), ta(a.card, 'metricLabel', 'Metric label', 1), ta(a.card, 'metric', 'Metric value', 1)),
+        group('Phone card', ta(a.phone, 'label', 'Label', 1), ta(a.phone, 'current', 'Current users', 1), ta(a.phone, 'target', 'Target users', 1), ta(a.phone, 'title', 'Title', 1), ta(a.phone, 'sub', 'Detail', 1)),
+        h('div', { class: 'actions' }, h('button', { class: 'btn small', onclick: () => copyText(JSON.stringify(a, null, 2), 'Angle JSON copied') }, 'Copy this angle as JSON')));
+    } else if (S.tab === 'presets') {
+      const name = h('input', { type: 'text', id: 'pname', placeholder: 'e.g. Proof card, lagoon fold', value: P.name || '' });
+      const list = h('div', { id: 'plist' });
+      const io = h('textarea', { id: 'pjson', rows: 5, placeholder: 'Paste preset JSON here to load it' });
+      pane.append(
+        group('Save this setup', h('div', { class: 'row wide' }, h('label', { for: 'pname' }, 'Preset name'), name),
+          h('div', { class: 'actions' }, h('button', { class: 'btn primary', onclick: () => savePreset(name.value) }, 'Save preset')),
+          h('p', { class: 'note' }, store.db ? 'Presets are stored with this page, so Claude can read them back and turn them into templates for bulk rendering.' : 'Shared storage is not available in this view, so presets are kept in this browser only. Use Copy JSON to hand one over.')),
+        group('Saved presets', list),
+        group('Move a preset by hand', h('div', { class: 'actions' },
+          h('button', { class: 'btn small', onclick: () => copyText(JSON.stringify(S.preset, null, 2), 'Preset JSON copied') }, 'Copy current preset JSON'),
+          h('button', { class: 'btn small', onclick: () => { try { setPreset(TM.normalize(JSON.parse(io.value))); status('Preset loaded'); } catch (e) { status('That text is not valid preset JSON'); } } }, 'Load pasted JSON')), io),
+      );
+      renderPresetList();
+    }
+  }
+
+  /* ---------- presets: shared db when available, browser storage otherwise ---------- */
+  const LOCAL = 'tm-studio-presets-v1';
+  const slug = (s) => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 60);
+  function localList() { try { return JSON.parse(localStorage.getItem(LOCAL) || '[]'); } catch (e) { return []; } }
+  async function savePreset(raw) {
+    const name = (raw || '').trim();
+    if (!name) return status('Give the preset a name first');
+    S.preset.name = name; commit();
+    const doc = { name, template: S.preset.template, format: S.preset.format, savedAt: Date.now(), preset: JSON.parse(JSON.stringify(S.preset)) };
+    if (store.db) {
+      try { await store.db.collection('presets').doc(slug(name)).set(doc); status('Saved "' + name + '"'); }
+      catch (e) { status('Could not save: ' + (e && e.message ? e.message : 'unknown error')); }
+    } else {
+      const all = localList().filter((d) => slug(d.name) !== slug(name));
+      all.unshift(doc);
+      try { localStorage.setItem(LOCAL, JSON.stringify(all)); status('Saved in this browser'); } catch (e) { status('Browser storage is blocked here. Use Copy JSON instead.'); }
+      store.presets = all; renderPresetList();
+    }
+  }
+  async function deletePreset(d) {
+    if (store.db) { try { await store.db.collection('presets').doc(slug(d.name)).delete(); status('Deleted "' + d.name + '"'); } catch (e) { status('Could not delete it'); } }
+    else { const all = localList().filter((x) => slug(x.name) !== slug(d.name)); try { localStorage.setItem(LOCAL, JSON.stringify(all)); } catch (e) {} store.presets = all; renderPresetList(); }
+  }
+  function renderPresetList() {
+    const list = $('#plist');
+    if (!list) return;
+    list.replaceChildren();
+    if (!store.presets.length) { list.append(h('div', { class: 'empty' }, 'No presets yet. Dial in a look, name it above and press Save preset.')); return; }
+    for (const d of store.presets) {
+      const del = h('button', { class: 'btn small danger' }, 'Delete');
+      let armed = false;
+      del.addEventListener('click', () => { if (!armed) { armed = true; del.textContent = 'Confirm'; setTimeout(() => { armed = false; del.textContent = 'Delete'; }, 3000); return; } deletePreset(d); });
+      list.append(h('div', { class: 'preset' }, h('b', {}, d.name), h('small', {}, `${d.template || ''} · ${d.format || 'square'} · ${new Date(d.savedAt).toLocaleString()}`),
+        h('div', { class: 'pa' }, h('button', { class: 'btn small', onclick: () => { setPreset(TM.normalize(d.preset)); status('Loaded "' + d.name + '"'); } }, 'Load'), del)));
+    }
+  }
+  async function copyText(text, msg) {
+    try { await navigator.clipboard.writeText(text); status(msg); }
+    catch (e) { const io = $('#pjson'); if (io) { io.value = text; io.select(); } status('Copy blocked here. The JSON is selected in the box below.'); }
+  }
+
+  /* ---------- background variations strip ---------- */
+  let varT;
+  function renderVarsSoon() { clearTimeout(varT); varT = setTimeout(renderVars, 450); }
+  function renderVars() {
+    const row = $('#vars');
+    row.replaceChildren();
+    const [W, H] = TM.size(S.preset), tw = 112, sc = tw / W;
+    for (let i = 1; i <= 8; i++) {
+      const v = TM.clone(S.preset);
+      v.bg.seed = ((S.preset.bg.seed + (S.varBase + i) * 37) % 999) + 1;
+      v.bg.flipX = i % 2 ? !S.preset.bg.flipX : S.preset.bg.flipX;
+      v.bg.flipY = i % 4 === 3 ? !S.preset.bg.flipY : S.preset.bg.flipY;
+      const inner = h('div', { class: 't-in', style: `width:${W}px;height:${H}px;transform:scale(${sc})` });
+      const btn = h('button', { class: 'thumb', style: `height:${Math.round(H * sc)}px`, 'aria-label': `Use variation with seed ${v.bg.seed}`, onclick: () => { Object.assign(S.preset.bg, { seed: v.bg.seed, flipX: v.bg.flipX, flipY: v.bg.flipY }); commit(); render(); syncPane(); } }, inner, h('small', {}, `seed ${v.bg.seed}${v.bg.flipX ? ' ⇋' : ''}${v.bg.flipY ? ' ⇵' : ''}`));
+      row.append(btn);
+      setTimeout(() => TM.renderAd(inner, v, S.angles[S.angle], { bgScale: 0.22 }), i * 30);
+    }
+  }
+  $('#moreVars').addEventListener('click', () => { S.varBase += 8; renderVars(); });
+
+  /* ---------- header controls ---------- */
+  const tplSel = $('#tpl'), fmtSel = $('#fmt'), angSel = $('#angle');
+  Object.entries(TM.TEMPLATES).forEach(([k, t]) => tplSel.append(h('option', { value: k }, t.name)));
+  Object.entries(TM.FORMATS).forEach(([k, [w, hh]]) => fmtSel.append(h('option', { value: k }, `${k[0].toUpperCase() + k.slice(1)} ${w}×${hh}`)));
+  tplSel.addEventListener('change', () => { setPreset(TM.fromTemplate(tplSel.value)); status('Switched layout. Undo brings the old one back.'); });
+  fmtSel.addEventListener('change', () => { S.preset.format = fmtSel.value; commit(); render(); renderVars(); });
+  angSel.addEventListener('change', () => { S.angle = +angSel.value; saveDraft(); render(); buildPane(); renderVars(); });
+  function fillAngles() { angSel.replaceChildren(...S.angles.map((a, i) => h('option', { value: i }, a.id))); angSel.value = S.angle; }
+  $('#undo').addEventListener('click', undo);
+  $('#redo').addEventListener('click', redo);
+  $('#saveQuick').addEventListener('click', () => { S.tab = 'presets'; setTab(); const n = $('#pname'); if (n) { n.focus(); n.select(); } });
+
+  const tabs = $('#tabs');
+  function setTab() { tabs.querySelectorAll('button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === S.tab))); saveDraft(); buildPane(); }
+  tabs.addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b) return; S.tab = b.dataset.tab; setTab(); });
+
+  function fullRefresh() { tplSel.value = S.preset.template; fmtSel.value = S.preset.format; render(); buildPane(); renderVars(); }
+
+  /* ---------- boot ---------- */
+  const draft = loadDraft();
+  S.preset = draft && draft.preset ? TM.normalize(draft.preset) : TM.fromTemplate('proof_card');
+  if (draft) { S.angle = draft.angle || 0; S.tab = draft.tab || 'bg'; S.sel = draft.sel || 'headline'; }
+  last = snap();
+  store.presets = localList();
+  fillAngles();
+  setTab();
+  fullRefresh();
+  if (document.fonts) document.fonts.ready.then(render);
+
+  fetch('angles.json').then((r) => (r.ok ? r.json() : null)).then((j) => {
+    if (j && Array.isArray(j.angles) && j.angles.length) { S.angles = j.angles; if (S.angle >= S.angles.length) S.angle = 0; fillAngles(); render(); renderVars(); if (S.tab === 'copy') buildPane(); }
+  }).catch(() => {});
+
+  if (window.claude && window.claude.use) {
+    window.claude.use('db').then((db) => {
+      if (!db) return;
+      store.db = db;
+      db.collection('presets').orderBy('savedAt', 'desc').onSnapshot((snapq) => {
+        store.presets = snapq.docs.map((d) => d.data());
+        renderPresetList();
+      }, () => status('Could not load saved presets'));
+      if (S.tab === 'presets') buildPane();
+    }).catch(() => {});
+  }
+})();
+</script>
