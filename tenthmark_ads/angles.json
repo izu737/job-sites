@@ -1,0 +1,122 @@
+{
+  "_note": "One entry per angle. Each angle fills every template slot, so render.mjs can produce angle x template combinations.",
+  "angles": [
+    {
+      "id": "speed",
+      "art": {
+        "seed": 7,
+        "palette": "forest"
+      },
+      "proof_card": {
+        "headline": "Get your first 20 users in 60 days, not 6 months.",
+        "card": {
+          "title": "Week 3 report is",
+          "status": "ready",
+          "bars": [
+            22,
+            34,
+            30,
+            52
+          ],
+          "item": "Bottleneck: bookings",
+          "meta": "Fixed with an automated follow up",
+          "metricLabel": "Demo calls booked",
+          "metric": "4 → 11",
+          "toast": "Sent to founder!"
+        }
+      },
+      "split_editorial": {
+        "headline": "Your first 20 users<br>in 60 days, with no<br>marketing hire",
+        "cta": "Book a call"
+      },
+      "phone_chat": {
+        "headline": "Find the bottleneck.<br>Fix it this week.",
+        "phone": {
+          "label": "Week 4 report",
+          "current": 14,
+          "target": 20,
+          "title": "Bookings fixed",
+          "sub": "3 new signups this week"
+        }
+      }
+    },
+    {
+      "id": "no_hire",
+      "art": {
+        "seed": 21,
+        "palette": "dawn"
+      },
+      "proof_card": {
+        "headline": "A marketing team's output, without the marketing team.",
+        "card": {
+          "title": "Follow up system is",
+          "status": "live",
+          "bars": [
+            18,
+            26,
+            40,
+            56
+          ],
+          "item": "Bottleneck: follow ups",
+          "meta": "Built and automated in week 2",
+          "metricLabel": "Replies this week",
+          "metric": "2 → 9",
+          "toast": "Running on autopilot"
+        }
+      },
+      "split_editorial": {
+        "headline": "Grow to 20 users<br>without building<br>a marketing team",
+        "cta": "See how it works"
+      },
+      "phone_chat": {
+        "headline": "Skip the hire.<br>Keep the growth.",
+        "phone": {
+          "label": "Users this month",
+          "current": 9,
+          "target": 20,
+          "title": "Halfway to 20",
+          "sub": "No marketers hired"
+        }
+      }
+    },
+    {
+      "id": "proof",
+      "art": {
+        "seed": 42,
+        "palette": "night"
+      },
+      "proof_card": {
+        "headline": "$56,000 in new revenue.<br>Zero marketing hires.",
+        "card": {
+          "title": "Weekly report is",
+          "status": "in",
+          "bars": [
+            20,
+            30,
+            44,
+            58
+          ],
+          "item": "Bottleneck: creative",
+          "meta": "12 new ad variants shipped",
+          "metricLabel": "Revenue added",
+          "metric": "$56,000",
+          "toast": "Trusted by YC and Sequoia backed teams"
+        }
+      },
+      "split_editorial": {
+        "headline": "The growth system<br>YC and Sequoia backed<br>founders use",
+        "cta": "Book a call"
+      },
+      "phone_chat": {
+        "headline": "Fix one bottleneck.<br>Ship every week.",
+        "phone": {
+          "label": "Founder update",
+          "current": 20,
+          "target": 20,
+          "title": "20 users reached",
+          "sub": "Day 58 of 60"
+        }
+      }
+    }
+  ]
+}
