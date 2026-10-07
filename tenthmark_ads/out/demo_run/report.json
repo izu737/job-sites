@@ -1,0 +1,566 @@
+[
+  {
+    "file": "proof_card__speed__s0.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__speed__s0f.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__speed__s1.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__speed__s1f.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__speed__s2.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__speed__s2f.png",
+    "preset": "proof_card",
+    "angle": "speed",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__no_hire__s0.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__no_hire__s0f.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__no_hire__s1.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__no_hire__s1f.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__no_hire__s2.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__no_hire__s2f.png",
+    "preset": "proof_card",
+    "angle": "no_hire",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__proof__s0.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__proof__s0f.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__proof__s1.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__proof__s1f.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__proof__s2.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__proof__s2f.png",
+    "preset": "proof_card",
+    "angle": "proof",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__devtools_leads__s0.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__devtools_leads__s0f.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__devtools_leads__s1.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__devtools_leads__s1f.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__devtools_leads__s2.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__devtools_leads__s2f.png",
+    "preset": "proof_card",
+    "angle": "devtools_leads",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__fintech_bookings__s0.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__fintech_bookings__s0f.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__fintech_bookings__s1.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__fintech_bookings__s1f.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__fintech_bookings__s2.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__fintech_bookings__s2f.png",
+    "preset": "proof_card",
+    "angle": "fintech_bookings",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__ai_creative__s0.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__ai_creative__s0f.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 123,
+    "bg": {
+      "rotate": 0,
+      "zoom": 1,
+      "offsetX": 0,
+      "offsetY": 0,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.2:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__ai_creative__s1.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__ai_creative__s1f.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 140,
+    "bg": {
+      "rotate": -7,
+      "zoom": 1.138,
+      "offsetX": 0.088,
+      "offsetY": 0.014,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": [
+      "logo is hard to read (contrast 1.3:1 behind part of it)"
+    ]
+  },
+  {
+    "file": "proof_card__ai_creative__s2.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": true,
+      "flipY": true
+    },
+    "warnings": []
+  },
+  {
+    "file": "proof_card__ai_creative__s2f.png",
+    "preset": "proof_card",
+    "angle": "ai_creative",
+    "seed": 157,
+    "bg": {
+      "rotate": 6,
+      "zoom": 1.047,
+      "offsetX": -0.061,
+      "offsetY": 0.019,
+      "flipX": false,
+      "flipY": true
+    },
+    "warnings": []
+  }
+]
