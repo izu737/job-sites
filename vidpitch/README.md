@@ -1,66 +1,59 @@
 # Vidpitch
 
-Record your screen, get a share link, and drop a moving GIF preview of the first 3 seconds straight into Gmail. The video page ends with a booking button that sends viewers to your calendar.
+Record your screen (with your face in a bubble), get a share link, and drop a moving GIF preview of the first 3 seconds straight into Gmail. The video page ends with a booking button that sends viewers to your calendar.
 
 Vidpitch is a working name. Rename it whenever you like.
 
-## What is built (phase 1: the core)
+## How it is built
 
 | Piece | Where | What it does |
 |---|---|---|
-| Recorder | `extension/` (Chrome, Manifest V3) | Records a tab, window or whole screen with your microphone, with pause, resume and discard. |
-| Upload | `extension/recorder.js` and `POST /api/videos` | Sends the recording to your server with a progress bar. If the upload fails you can retry or save the file locally. |
-| GIF preview | `server/src/media.js` | ffmpeg turns the first 3 seconds into a looping GIF with a play button, kept under 1 MB. Usually done in under a second. |
-| Video for every browser | `server/src/media.js` | Converts Chrome's WebM to H.264 MP4 in the background, so seeking works and Safari and iPhone can play it. |
-| Gmail insert | `extension/gmail.js` | One click puts the title, the GIF and a "Watch video" link into your open draft, at your cursor. It is also copied to your clipboard as a backup. |
-| Copy for email | `extension/recorder.js` | Copies the same block as rich HTML for Outlook, Apple Mail or anything else. |
-| Share page | `server/src/views.js`, `server/public/` | Custom player with speed, fullscreen, keyboard shortcuts and a mobile layout. Light and dark mode. |
-| Booking button | `server/public/player.js` | Slides onto the video for the last 6 seconds, then a full end card asks them to book when the video finishes. A booking bar also sits under the video the whole time. |
+| Recorder | `extension/` (Chrome, Manifest V3) | Records a tab, window or whole screen with your microphone, optional face bubble, pause, resume and discard. Records MP4 directly so Safari and iPhone can play it. |
+| Face bubble | `extension/camera.js` | Your camera in a round bubble (corner and size selectable), drawn from the camera track itself so it keeps moving while you work in other tabs. |
+| GIF preview | `extension/preview.js` | Built in the browser from the first 3 seconds while you record (face bubble included), with a play button, kept under 1 MB. Also makes the poster and link preview image. |
+| Upload | `extension/recorder.js` | Uploads the images, then the video in 20 MB parts with a progress bar. Retry or save locally if it fails. |
+| Gmail | `extension/gmail.js` | "Insert into Gmail" puts the video block at your cursor. Pasting or typing one of your video links into a draft turns it into the GIF preview automatically. |
+| Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Free plan. |
+| Share page | `worker/src/views.js`, `worker/public/static/` | Custom player, booking button that slides in for the last 6 seconds, end card with your booking link, light and dark mode. |
 
 ## How the Gmail preview works
 
-Gmail strips `<video>` and `<iframe>`, so the email holds an `<img>` of the GIF wrapped in a link to the video page. Gmail loads the GIF through its own image proxy, which means the GIF must be on a public HTTPS address with no login. That is why the server has to be deployed somewhere public (see below) before real emails will show the preview.
+Gmail strips `<video>` and `<iframe>`, so the email holds an `<img>` of the GIF wrapped in a link to the video page. Gmail loads the GIF through its own image proxy, so the GIF must be on a public HTTPS address. Older desktop Outlook on Windows shows only the first frame; the play button is on every frame so it still reads as a video.
 
-Older desktop Outlook on Windows shows only the first frame of a GIF. The play button is on every frame, so it still reads as a video there.
+## Deploy (Cloudflare)
 
-## Run it on your computer
-
-You need Node 22.13 or newer and ffmpeg (`brew install ffmpeg` on a Mac).
+One time, in the Cloudflare dashboard: enable R2, and open Workers & Pages once so you get a `workers.dev` address.
 
 ```bash
-cd vidpitch/server
+cd vidpitch/worker
 npm install
-OWNER_NAME="Your Name" BOOKING_URL="https://cal.com/you/intro" npm start
+npx wrangler r2 bucket create vidpitch-media
+npx wrangler d1 migrations apply vidpitch --remote
+npx wrangler secret put API_TOKEN
+npx wrangler deploy
 ```
 
-The first start prints an API token. Keep it for the extension.
+Your name, booking link and button text are in `worker/wrangler.toml` under `[vars]`. Change them and run `npx wrangler deploy` again.
 
 ## Load the extension
 
 1. Open `chrome://extensions` and switch on **Developer mode**.
 2. Click **Load unpacked** and pick the `vidpitch/extension` folder.
-3. The recorder opens. Enter your server address (`http://localhost:8787` locally) and the token.
+3. The recorder opens. Enter your Worker address and the API token.
 4. Click the Vidpitch icon in the toolbar any time to record.
 
-Note: while the server runs on `localhost`, the GIF will not show inside real Gmail, because Gmail cannot reach your laptop. Everything else works.
-
-## Deploy the server
-
-Any host that runs Docker and gives you a **persistent disk** works, for example Railway, Fly.io, Render or a small VPS. The disk matters because videos and the database live in `/data`.
-
-1. Deploy the `vidpitch/server` folder with its `Dockerfile`.
-2. Mount a volume at `/data`.
-3. Set the variables from `server/.env.example`. At minimum: `PUBLIC_URL` (your HTTPS address), `API_TOKEN` (a long random string), `OWNER_NAME`, `BOOKING_URL`.
-4. Put the same `PUBLIC_URL` and `API_TOKEN` into the extension settings.
-
-## Tests
+## Local development
 
 ```bash
-cd vidpitch/server && npm test
+cd vidpitch/worker
+printf 'API_TOKEN=devtoken\n' > .dev.vars
+npx wrangler d1 migrations apply vidpitch --local
+npx wrangler dev
+npm test
 ```
 
 ## Roadmap
 
-* **Phase 2:** view counts and completion rates per video, plus an email to you when someone watches, and a count of booking button clicks. The player already knows when a viewer starts, how far they get and when they click to book, so this phase sends those moments to the server and stores them.
+* **Phase 2:** view counts and completion rates per video, booking click counts, and an email to you when someone watches.
 * **Phase 3:** full design pass across the share page, recorder and a dashboard of your videos.
-* **Later ideas:** webcam bubble over the screen recording, trim the start and end, custom thumbnail, Cloudflare R2 storage for large libraries.
+* **Later ideas:** trim the start and end, custom thumbnail, custom domain.

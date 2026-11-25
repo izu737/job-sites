@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { playButtonPng } from '../server/src/png.js';
+import { playButtonPng } from './png.js';
 
 const out = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'extension', 'icons');
 fs.mkdirSync(out, { recursive: true });

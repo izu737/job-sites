@@ -163,12 +163,16 @@
 
   // ---------- recording ----------
   function pickMimeType() {
+    // MP4 first: Safari and iPhones play it and nothing needs converting.
+    // AAC audio (Chrome on Mac and Windows) is the most compatible.
     const options = [
+      'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+      'video/mp4;codecs=avc1,mp4a',
+      'video/mp4;codecs=avc1,opus',
+      'video/mp4',
       'video/webm;codecs=vp9,opus',
       'video/webm;codecs=vp8,opus',
       'video/webm',
-      'video/mp4;codecs=avc1,mp4a',
-      'video/mp4',
     ];
     return options.find((t) => MediaRecorder.isTypeSupported(t)) || '';
   }
@@ -249,6 +253,11 @@
     display.getVideoTracks()[0].addEventListener('ended', stopRecording);
 
     recorder.start(1000);
+    // Build the email GIF and preview images from the same video, live.
+    state.preview = window.VidpitchPreview
+      ? window.VidpitchPreview.startPreviewCapture(tracks[0])
+      : Promise.reject(new Error('Preview builder did not load.'));
+    state.preview.catch(() => {}); // handled after recording stops
     state.startedAt = performance.now();
     state.pausedTotal = 0;
     state.pausedAt = 0;
@@ -335,44 +344,89 @@
   });
 
   // ---------- upload ----------
-  function upload() {
+  const PART_SIZE = 20 * 1024 * 1024; // the free Worker plan accepts up to 100 MB per request
+
+  function putWithProgress(url, body, contentType, onProgress) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', url);
+      xhr.setRequestHeader('Authorization', `Bearer ${state.token}`);
+      if (contentType) xhr.setRequestHeader('Content-Type', contentType);
+      xhr.upload.onprogress = (e) => { if (e.lengthComputable && onProgress) onProgress(e.loaded); };
+      xhr.onload = () => {
+        let res = null;
+        try { res = JSON.parse(xhr.responseText); } catch { /* ignore */ }
+        if (xhr.status >= 200 && xhr.status < 300) resolve(res);
+        else reject(new Error(res?.error || `Server answered ${xhr.status}.`));
+      };
+      xhr.onerror = () => reject(new Error('Network error. Check your connection.'));
+      xhr.send(body);
+    });
+  }
+
+  async function upload() {
     show('uploading');
-    $('#upload-title').textContent = 'Uploading';
+    $('#upload-title').textContent = 'Preparing your email preview';
     $('#upload-sub').textContent = 'Keep this tab open.';
     $('#upload-bar').style.width = '0%';
     setError('#upload-error', '');
     $('#upload-actions').hidden = true;
 
-    const params = new URLSearchParams({ duration: state.duration.toFixed(2) });
-    if (state.meta.title) params.set('title', state.meta.title);
-    if (state.meta.ctaUrl) params.set('ctaUrl', state.meta.ctaUrl);
-    if (state.meta.ctaLabel) params.set('ctaLabel', state.meta.ctaLabel);
+    let created = null;
+    try {
+      const previews = await state.preview;
+      created = await api('/api/videos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: state.meta.title,
+          duration: Number(state.duration.toFixed(2)),
+          ctaUrl: state.meta.ctaUrl,
+          ctaLabel: state.meta.ctaLabel,
+          videoType: state.blob.type,
+          gifWidth: previews.gifWidth,
+        }),
+      });
+      const base = `${state.serverUrl}/api/videos/${created.id}`;
+      await Promise.all([
+        putWithProgress(`${base}/files/preview.gif`, previews.gif, 'image/gif'),
+        putWithProgress(`${base}/files/poster.jpg`, previews.poster, 'image/jpeg'),
+        putWithProgress(`${base}/files/og.jpg`, previews.og, 'image/jpeg'),
+      ]);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${state.serverUrl}/api/videos?${params}`);
-    xhr.setRequestHeader('Authorization', `Bearer ${state.token}`);
-    xhr.setRequestHeader('Content-Type', state.blob.type);
-    xhr.upload.onprogress = (e) => {
-      if (!e.lengthComputable) return;
-      const pct = Math.round((e.loaded / e.total) * 100);
-      $('#upload-bar').style.width = pct + '%';
-      if (pct >= 100) {
-        $('#upload-title').textContent = 'Making your email preview';
-        $('#upload-sub').textContent = 'Turning the first 3 seconds into a GIF.';
+      $('#upload-title').textContent = 'Uploading';
+      const total = state.blob.size;
+      const parts = [];
+      let sent = 0;
+      for (let n = 1, offset = 0; offset < total; n++, offset += PART_SIZE) {
+        const chunk = state.blob.slice(offset, Math.min(offset + PART_SIZE, total));
+        const part = await putWithProgress(
+          `${base}/parts/${n}?uploadId=${encodeURIComponent(created.uploadId)}`, chunk, 'application/octet-stream',
+          (loaded) => { $('#upload-bar').style.width = Math.round(((sent + loaded) / total) * 100) + '%'; },
+        );
+        parts.push({ partNumber: part.partNumber, etag: part.etag });
+        sent += chunk.size;
       }
-    };
-    xhr.onload = () => {
-      let body = null;
-      try { body = JSON.parse(xhr.responseText); } catch { /* ignore */ }
-      if (xhr.status === 201 && body) {
-        state.blob = null;
-        showDone(body);
-      } else {
-        uploadFailed(body?.error || `Server answered ${xhr.status}.`);
+      $('#upload-title').textContent = 'Finishing';
+      const video = await api(`/api/videos/${created.id}/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uploadId: created.uploadId, parts }),
+      });
+      state.blob = null;
+      state.preview = null;
+      showDone(video);
+    } catch (err) {
+      if (created) {
+        // Clean up the half finished video so it does not sit in storage.
+        api(`/api/videos/${created.id}/abort`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uploadId: created.uploadId }),
+        }).catch(() => {});
       }
-    };
-    xhr.onerror = () => uploadFailed('Network error. Check your connection.');
-    xhr.send(state.blob);
+      uploadFailed(err.message);
+    }
   }
 
   function uploadFailed(message) {

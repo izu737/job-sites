@@ -1,4 +1,4 @@
-import { config } from './config.js';
+// Every function takes `cfg`, built per request from the Worker's settings.
 
 export function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -13,24 +13,24 @@ export function formatDuration(seconds) {
   return h ? `${h}:${String(m).padStart(2, '0')}:${r}` : `${m}:${r}`;
 }
 
-export function urlsFor(video) {
-  const media = `${config.publicUrl}/media/${video.id}`;
+export function urlsFor(cfg, video) {
+  const media = `${cfg.publicUrl}/media/${video.id}`;
   return {
-    shareUrl: `${config.publicUrl}/v/${video.id}`,
+    shareUrl: `${cfg.publicUrl}/v/${video.id}`,
     gifUrl: `${media}/preview.gif`,
     posterUrl: `${media}/poster.jpg`,
     ogUrl: `${media}/og.jpg`,
-    videoUrl: video.has_mp4 ? `${media}/video.mp4` : `${media}/source.${video.source_ext}`,
-    videoType: video.has_mp4 ? 'video/mp4' : `video/${video.source_ext}`,
+    videoUrl: `${media}/video.${video.video_ext}`,
+    videoType: `video/${video.video_ext}`,
   };
 }
 
-export function ctaFor(video) {
+export function ctaFor(cfg, video) {
   return {
-    url: video.cta_url || config.bookingUrl,
-    label: video.cta_label || config.ctaLabel,
-    headline: config.ctaHeadline,
-    subtext: config.ctaSubtext,
+    url: video.cta_url || cfg.bookingUrl,
+    label: video.cta_label || cfg.ctaLabel,
+    headline: cfg.ctaHeadline,
+    subtext: cfg.ctaSubtext,
   };
 }
 
@@ -39,8 +39,8 @@ export function ctaFor(video) {
  * email clients strip everything else. The GIF is wrapped in the link, so a
  * click anywhere on it opens the video page.
  */
-export function emailHtml(video) {
-  const { shareUrl, gifUrl } = urlsFor(video);
+export function emailHtml(cfg, video) {
+  const { shareUrl, gifUrl } = urlsFor(cfg, video);
   const width = Math.min(400, video.gif_width || 400);
   const dur = formatDuration(video.duration);
   const label = `Watch video${dur ? ` (${dur})` : ''}`;
@@ -58,26 +58,25 @@ export function emailHtml(video) {
   ].join('');
 }
 
-export function emailText(video) {
+export function emailText(cfg, video) {
   const dur = formatDuration(video.duration);
-  return `${video.title}${dur ? ` (${dur})` : ''}: ${urlsFor(video).shareUrl}`;
+  return `${video.title}${dur ? ` (${dur})` : ''}: ${urlsFor(cfg, video).shareUrl}`;
 }
 
-export function serialize(video) {
-  const urls = urlsFor(video);
+export function serialize(cfg, video) {
+  const urls = urlsFor(cfg, video);
   return {
     id: video.id,
     title: video.title,
     createdAt: video.created_at,
     duration: video.duration,
     status: video.status,
-    error: video.error || undefined,
     shareUrl: urls.shareUrl,
     gifUrl: urls.gifUrl,
     posterUrl: urls.posterUrl,
-    cta: ctaFor(video),
-    emailHtml: emailHtml(video),
-    emailText: emailText(video),
+    cta: ctaFor(cfg, video),
+    emailHtml: emailHtml(cfg, video),
+    emailText: emailText(cfg, video),
   };
 }
 
@@ -108,10 +107,10 @@ ${body}
 </html>`;
 }
 
-export function sharePage(video) {
-  const urls = urlsFor(video);
-  const cta = ctaFor(video);
-  const owner = config.ownerName;
+export function sharePage(cfg, video) {
+  const urls = urlsFor(cfg, video);
+  const cta = ctaFor(cfg, video);
+  const owner = cfg.ownerName;
   const date = new Date(video.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const dur = formatDuration(video.duration);
   const ctaLink = (cls, inner) => `<a class="${cls}" href="${esc(cta.url)}" target="_blank" rel="noopener" data-cta>${inner}</a>`;
@@ -137,7 +136,7 @@ export function sharePage(video) {
 <main class="wrap">
   <div class="player" id="player" tabindex="-1"
        data-duration="${esc(video.duration ?? '')}"
-       data-cta-lead="${esc(config.ctaLeadSeconds)}">
+       data-cta-lead="${esc(cfg.ctaLeadSeconds)}">
     <video id="video" playsinline preload="metadata" poster="${esc(urls.posterUrl)}">
       <source src="${esc(urls.videoUrl)}" type="${esc(urls.videoType)}">
     </video>

@@ -1,0 +1,16 @@
+{
+  "name": "vidpitch-worker",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Vidpitch backend on Cloudflare: Worker + R2 (videos) + D1 (records).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 migrations apply vidpitch --remote",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "4.155.0"
+  }
+}

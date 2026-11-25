@@ -1,0 +1,30 @@
+name = "vidpitch"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Share page CSS and player script.
+[assets]
+directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "vidpitch"
+database_id = "1fa4beb8-688f-42bd-9bf1-74370787e72f"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "vidpitch-media"
+
+[vars]
+OWNER_NAME = "Izuu"
+BOOKING_URL = "https://calendly.com/izuchukwugodswill/quick-chat-with-izuu"
+CTA_LABEL = "Book a call"
+CTA_HEADLINE = "Want to talk this through?"
+CTA_SUBTEXT = "Pick a time that works for you. It takes 10 seconds."
+CTA_LEAD_SECONDS = "6"
+# Optional: set if you later put the Worker on your own domain.
+PUBLIC_URL = ""
+
+# API_TOKEN is a secret: npx wrangler secret put API_TOKEN
