@@ -248,7 +248,7 @@
     state.discard = false;
     const recorder = new MediaRecorder(new MediaStream(tracks), {
       mimeType: state.mimeType || undefined,
-      videoBitsPerSecond: 3_000_000,
+      videoBitsPerSecond: 2_500_000, // sharp for screens, keeps long videos small
     });
     recorder.ondataavailable = (e) => { if (e.data && e.data.size) state.chunks.push(e.data); };
     recorder.onstop = onRecorderStop;
@@ -386,20 +386,15 @@
       if (!state.finalBlob) {
         $('#upload-title').textContent = 'Preparing video for every device';
         $('#upload-sub').textContent = 'Making sure it plays on iPhone and Safari too.';
-        try {
-          state.finalBlob = await window.VidpitchConvert.toUniversalMp4(state.blob, state.recordedMime, {
-            duration: state.duration,
-            onProgress: (f) => { $('#upload-bar').style.width = Math.round(f * 100) + '%'; },
-            onStage: (stage) => {
-              if (stage === 'full') $('#upload-sub').textContent = 'Re-encoding so it plays everywhere. Longer videos take a few minutes.';
-            },
-          });
-        } catch (err) {
-          // Never upload a file that would not play on iPhone or Safari.
-          console.error('MP4 conversion failed', err);
-          uploadFailed('This recording could not be made iPhone and Safari compatible, so it was not uploaded. Save it to your computer, or try again.');
-          return;
-        }
+        const result = await window.VidpitchConvert.toUniversalMp4(state.blob, state.recordedMime, {
+          duration: state.duration,
+          onProgress: (f) => { $('#upload-bar').style.width = Math.round(f * 100) + '%'; },
+          onStage: (stage) => {
+            if (stage === 'full') $('#upload-sub').textContent = 'Re-encoding so it plays everywhere. This takes about as long as the video.';
+          },
+        });
+        state.finalBlob = result.blob;
+        if (result.notes.length) console.warn('Vidpitch conversion notes:', result.notes);
         $('#upload-bar').style.width = '0%';
         $('#upload-sub').textContent = 'Keep this tab open.';
       }

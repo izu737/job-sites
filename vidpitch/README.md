@@ -13,8 +13,8 @@ Vidpitch is a working name. Rename it whenever you like.
 | GIF preview | `extension/preview.js` | Built in the browser from the first 3 seconds while you record (face bubble included), with a play button, kept under 1 MB. Also makes the poster and link preview image. |
 | Upload | `extension/recorder.js` | Uploads the images, then the video in 20 MB parts with a progress bar. Retry or save locally if it fails. |
 | Gmail | `extension/gmail.js` | "Insert into Gmail" puts the video block at your cursor. Pasting or typing one of your video links into a draft turns it into the GIF preview automatically. |
-| Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Rejects any video that would not play in Safari or on iPhone. Free plan. |
-| Safari guarantee | `extension/convert.js`, `mp4check.js` | Every recording is rewritten to a standard MP4 (H.264 + AAC, index at the front) and checked before upload; the Worker checks again before publishing. |
+| Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Notes whether each video passes the Safari check (never rejects one). Free plan. |
+| Safari guarantee | `extension/convert.js`, `mp4check.js` | Every recording is rewritten to a standard MP4 (H.264 + AAC, index at the front) and checked. If the fast conversion (seconds) does not pass, the video is fully re-encoded. A recording is never refused or lost. Recordings over 300 MB are read from disk so long videos do not run out of memory. |
 | Share page | `worker/src/views.js`, `worker/public/static/` | Custom player, booking button that slides in for the last 6 seconds, end card with your booking link, light and dark mode. |
 
 ## How the Gmail preview works

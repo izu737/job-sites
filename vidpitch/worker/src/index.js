@@ -21,8 +21,9 @@ const FILES = {
   'poster.jpg': 'image/jpeg',
   'og.jpg': 'image/jpeg',
 };
-// MP4 only: every video must play in Safari and on iPhone.
-const VIDEO_TYPES = { 'video/mp4': 'mp4' };
+// The extension always sends MP4 (H.264 + AAC). WebM is still accepted so a
+// recording is never lost, even in the rare case the conversion could not run.
+const VIDEO_TYPES = { 'video/mp4': 'mp4', 'video/webm': 'webm' };
 
 function newId() {
   const bytes = crypto.getRandomValues(new Uint8Array(12));
@@ -152,7 +153,7 @@ async function api(request, env, cfg, parts) {
   if (!id && method === 'POST') {
     const body = await request.json().catch(() => ({}));
     const ext = VIDEO_TYPES[String(body.videoType || '').split(';')[0].trim().toLowerCase()];
-    if (!ext) return fail(415, 'Only MP4 (H.264 + AAC) is accepted, so every video plays in Safari and on iPhone.');
+    if (!ext) return fail(415, 'Send videoType video/mp4.');
     const vid = newId();
     const duration = Number(body.duration);
     const title = (typeof body.title === 'string' && body.title.trim()) ||
@@ -218,16 +219,15 @@ async function api(request, env, cfg, parts) {
     const body = await request.json().catch(() => ({}));
     if (!body.uploadId || !Array.isArray(body.parts) || !body.parts.length) return fail(400, 'Missing parts');
     await env.MEDIA.resumeMultipartUpload(key, body.uploadId).complete(body.parts);
-    // Last line of defence: nothing goes live unless Safari can play it.
-    const check = await checkStoredVideo(env, key);
-    if (!check.ok) {
-      await env.MEDIA.delete(key);
-      return fail(422, `Video rejected because it would not play on iPhone or Safari: ${check.problems.join(', ')}.`);
-    }
+    // Record whether Safari can play it. Never reject: a video is never lost.
+    let check = { ok: false, problems: ['not an MP4'] };
+    if (video.video_ext === 'mp4') check = await checkStoredVideo(env, key).catch((e) => ({ ok: false, problems: [String(e)] }));
+    if (!check.ok) console.warn(`video ${id} may not play in Safari: ${check.problems.join(', ')}`);
     const missing = [];
     for (const f of Object.keys(FILES)) if (!(await env.MEDIA.head(`${id}/${f}`))) missing.push(f);
     if (missing.length) return fail(400, `Missing ${missing.join(', ')}`);
-    await env.DB.prepare("UPDATE videos SET status = 'ready' WHERE id = ?").bind(id).run();
+    await env.DB.prepare("UPDATE videos SET status = 'ready', safari_ready = ?, safari_notes = ? WHERE id = ?")
+      .bind(check.ok ? 1 : 0, check.ok ? null : check.problems.join(', ').slice(0, 500), id).run();
     return json(serialize(cfg, await getVideo(env, id)));
   }
 
@@ -254,7 +254,7 @@ export default {
 
       if (parts[0] === 'media' && parts.length === 3 && (request.method === 'GET' || request.method === 'HEAD')) {
         const [, id, file] = parts;
-        if (!FILES[file] && file !== 'video.mp4') return new Response('Not found', { status: 404 });
+        if (!FILES[file] && !/^video\.(mp4|webm)$/.test(file)) return new Response('Not found', { status: 404 });
         return await serveMedia(request, env, id, file);
       }
 
