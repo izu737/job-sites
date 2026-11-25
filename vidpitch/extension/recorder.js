@@ -298,6 +298,7 @@
     const r = state.recorder;
     if (!r || r.state === 'inactive') return;
     state.duration = elapsed();
+    state.recordedMime = r.mimeType || state.mimeType; // what Chrome actually used
     r.stop();
   }
 
@@ -321,6 +322,8 @@
     }
     const type = (state.mimeType || 'video/webm').split(';')[0];
     state.blob = new Blob(state.chunks, { type });
+    state.recordedMime = state.recordedMime || state.mimeType || type;
+    state.finalBlob = null;
     state.chunks = [];
     if (state.blob.size === 0 || state.duration < 0.5) {
       setError('#ready-error', 'That recording was empty. Try again.');
@@ -374,6 +377,24 @@
 
     let created = null;
     try {
+      // Standard MP4 with AAC audio so Safari and iPhones can play it.
+      if (!state.finalBlob) {
+        $('#upload-title').textContent = 'Preparing video for every device';
+        $('#upload-sub').textContent = 'Making sure it plays on iPhone and Safari too.';
+        try {
+          state.finalBlob = await window.VidpitchConvert.toUniversalMp4(state.blob, state.recordedMime, {
+            duration: state.duration,
+            onProgress: (f) => { $('#upload-bar').style.width = Math.round(f * 100) + '%'; },
+          });
+        } catch (err) {
+          console.error('MP4 conversion failed', err);
+          state.finalBlob = state.blob;
+          toast('Could not convert for Safari, so uploading the original. It plays in Chrome, Edge and Firefox.');
+        }
+        $('#upload-bar').style.width = '0%';
+        $('#upload-sub').textContent = 'Keep this tab open.';
+      }
+      const file = state.finalBlob;
       const previews = await state.preview;
       created = await api('/api/videos', {
         method: 'POST',
@@ -383,7 +404,7 @@
           duration: Number(state.duration.toFixed(2)),
           ctaUrl: state.meta.ctaUrl,
           ctaLabel: state.meta.ctaLabel,
-          videoType: state.blob.type,
+          videoType: file.type,
           gifWidth: previews.gifWidth,
         }),
       });
@@ -395,11 +416,11 @@
       ]);
 
       $('#upload-title').textContent = 'Uploading';
-      const total = state.blob.size;
+      const total = file.size;
       const parts = [];
       let sent = 0;
       for (let n = 1, offset = 0; offset < total; n++, offset += PART_SIZE) {
-        const chunk = state.blob.slice(offset, Math.min(offset + PART_SIZE, total));
+        const chunk = file.slice(offset, Math.min(offset + PART_SIZE, total));
         const part = await putWithProgress(
           `${base}/parts/${n}?uploadId=${encodeURIComponent(created.uploadId)}`, chunk, 'application/octet-stream',
           (loaded) => { $('#upload-bar').style.width = Math.round(((sent + loaded) / total) * 100) + '%'; },
@@ -414,6 +435,7 @@
         body: JSON.stringify({ uploadId: created.uploadId, parts }),
       });
       state.blob = null;
+      state.finalBlob = null;
       state.preview = null;
       showDone(video);
     } catch (err) {
@@ -439,8 +461,9 @@
   $('#retry').addEventListener('click', upload);
   $('#save-local').addEventListener('click', () => {
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(state.blob);
-    a.download = `${state.meta.title || 'recording'}.${state.blob.type.includes('mp4') ? 'mp4' : 'webm'}`;
+    const blob = state.finalBlob || state.blob;
+    a.href = URL.createObjectURL(blob);
+    a.download = `${state.meta.title || 'recording'}.${blob.type.includes('mp4') ? 'mp4' : 'webm'}`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 10000);
   });
