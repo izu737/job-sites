@@ -18,3 +18,24 @@ chrome.action.onClicked.addListener(openRecorder);
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === 'install') openRecorder();
 });
+
+// Gmail asks for a video's email block when you paste its link. The token
+// stays here in the extension and is never handed to the Gmail page.
+chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
+  if (msg?.type !== 'vidpitch:lookup') return;
+  (async () => {
+    const { serverUrl, token } = await chrome.storage.local.get(['serverUrl', 'token']);
+    if (!serverUrl || !token) return reply({ ok: false, error: 'not-connected' });
+    try {
+      const res = await fetch(`${serverUrl}/api/videos/${encodeURIComponent(msg.id)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return reply({ ok: false, error: `status-${res.status}` });
+      const video = await res.json();
+      reply({ ok: true, emailHtml: video.emailHtml });
+    } catch (err) {
+      reply({ ok: false, error: String(err) });
+    }
+  })();
+  return true; // keep the channel open for the async reply
+});

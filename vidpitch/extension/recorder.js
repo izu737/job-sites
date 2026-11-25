@@ -19,6 +19,10 @@
     duration: 0,
     meta: null,
     video: null,
+    camStream: null,
+    compositor: null,
+    camPosition: 'left',
+    camSize: 'medium',
   };
 
   // ---------- small helpers ----------
@@ -82,7 +86,7 @@
       setError('#setup-error', /fetch/i.test(err.message) ? `Could not reach ${serverUrl}. Check the address and that the server is running.` : err.message);
       return;
     }
-    await chrome.storage.local.set({ serverUrl, token });
+    await chrome.storage.local.set({ serverUrl, token, publicUrl: state.me.publicUrl || serverUrl });
     toast(`Connected as ${state.me.ownerName}`);
     goReady();
   });
@@ -102,7 +106,60 @@
     setError('#ready-error', '');
     show('ready');
     loadRecent();
+    syncCamera();
   }
+
+  // ---------- face bubble ----------
+  async function loadCamPrefs() {
+    const p = await chrome.storage.local.get(['camOn', 'camPosition', 'camSize']);
+    if (p.camOn === false) $('#cam').checked = false;
+    if (p.camPosition) state.camPosition = p.camPosition;
+    if (p.camSize) state.camSize = p.camSize;
+    document.querySelectorAll('[data-pos]').forEach((b) => b.classList.toggle('on', b.dataset.pos === state.camPosition));
+    document.querySelectorAll('[data-size]').forEach((b) => b.classList.toggle('on', b.dataset.size === state.camSize));
+  }
+
+  async function syncCamera() {
+    const want = $('#cam').checked && window.VidpitchCamera?.supported;
+    $('.cam-controls').classList.toggle('off', !want);
+    if (want && !state.camStream) {
+      try {
+        state.camStream = await navigator.mediaDevices.getUserMedia({
+          video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 }, facingMode: 'user' },
+        });
+        $('#cam-video').srcObject = state.camStream;
+        $('#cam-preview').dataset.on = 'true';
+      } catch {
+        $('#cam').checked = false;
+        $('.cam-controls').classList.add('off');
+        toast('Camera is blocked or missing. Allow it in the address bar to show your face.');
+      }
+    } else if (!want && state.camStream) {
+      stopCamera();
+    }
+  }
+
+  function stopCamera() {
+    if (state.camStream) state.camStream.getTracks().forEach((t) => t.stop());
+    state.camStream = null;
+    $('#cam-video').srcObject = null;
+    $('#cam-preview').dataset.on = 'false';
+  }
+
+  $('#cam').addEventListener('change', () => {
+    chrome.storage.local.set({ camOn: $('#cam').checked });
+    syncCamera();
+  });
+  document.querySelectorAll('[data-pos]').forEach((b) => b.addEventListener('click', () => {
+    state.camPosition = b.dataset.pos;
+    chrome.storage.local.set({ camPosition: state.camPosition });
+    document.querySelectorAll('[data-pos]').forEach((x) => x.classList.toggle('on', x === b));
+  }));
+  document.querySelectorAll('[data-size]').forEach((b) => b.addEventListener('click', () => {
+    state.camSize = b.dataset.size;
+    chrome.storage.local.set({ camSize: state.camSize });
+    document.querySelectorAll('[data-size]').forEach((x) => x.classList.toggle('on', x === b));
+  }));
 
   // ---------- recording ----------
   function pickMimeType() {
@@ -117,6 +174,9 @@
   }
 
   function cleanupStreams() {
+    if (state.compositor) state.compositor.stop();
+    state.compositor = null;
+    stopCamera(); // turn the camera light off until the next recording
     state.streams.forEach((s) => s.getTracks().forEach((t) => t.stop()));
     state.streams = [];
     if (state.audioCtx) state.audioCtx.close().catch(() => {});
@@ -158,7 +218,14 @@
 
     // Mix screen sound and microphone into one audio track.
     const audioSources = [display, mic].filter((s) => s && s.getAudioTracks().length);
-    const tracks = [...display.getVideoTracks()];
+    let tracks = [...display.getVideoTracks()];
+    if ($('#cam').checked && state.camStream && window.VidpitchCamera?.supported) {
+      state.compositor = window.VidpitchCamera.composite(display, state.camStream, {
+        position: state.camPosition,
+        size: state.camSize,
+      });
+      tracks = [state.compositor.track];
+    }
     if (audioSources.length) {
       const ctx = new AudioContext();
       const dest = ctx.createMediaStreamDestination();
@@ -435,9 +502,11 @@
   // ---------- boot ----------
   (async () => {
     await loadSettings();
+    await loadCamPrefs();
     if (!state.serverUrl || !state.token) return show('setup');
     try {
       state.me = await api('/api/me');
+      await chrome.storage.local.set({ publicUrl: state.me.publicUrl || state.serverUrl });
       goReady();
     } catch (err) {
       setError('#setup-error', `Could not connect: ${err.message}`);

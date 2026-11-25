@@ -42,6 +42,28 @@
         <label>Title
           <input id="title" type="text" maxlength="200" placeholder="Quick idea for Acme" autocomplete="off">
         </label>
+        <div class="cam-row">
+          <div class="cam-preview" id="cam-preview" data-on="false">
+            <video id="cam-video" autoplay muted playsinline></video>
+            <svg class="cam-off" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M4 7.5h10.5v9H4zM14.5 10.5 20 7.5v9l-5.5-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="cam-controls">
+            <label class="switch">
+              <input id="cam" type="checkbox" checked>
+              <span class="switch-ui"></span>
+              <span>Show my face in a bubble</span>
+            </label>
+            <div class="seg" role="group" aria-label="Bubble corner">
+              <button type="button" data-pos="left" class="on">Bottom left</button>
+              <button type="button" data-pos="right">Bottom right</button>
+            </div>
+            <div class="seg" role="group" aria-label="Bubble size">
+              <button type="button" data-size="small">S</button>
+              <button type="button" data-size="medium" class="on">M</button>
+              <button type="button" data-size="large">L</button>
+            </div>
+          </div>
+        </div>
         <label class="switch">
           <input id="mic" type="checkbox" checked>
           <span class="switch-ui"></span>
@@ -119,6 +141,7 @@
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="camera.js"></script>
 <script src="recorder.js"></script>
 </body>
 </html>
