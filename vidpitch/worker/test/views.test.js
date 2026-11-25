@@ -39,3 +39,32 @@ test('per video booking link overrides the default', () => {
   assert.equal(v.cta.url, 'https://calendly.com/other');
   assert.equal(v.cta.label, 'Grab 15 min');
 });
+
+import { checkMp4 } from '../src/mp4check.js';
+
+function box(type, payload = new Uint8Array(0)) {
+  const out = new Uint8Array(8 + payload.length);
+  new DataView(out.buffer).setUint32(0, out.length);
+  out.set([...type].map((c) => c.charCodeAt(0)), 4);
+  out.set(payload, 8);
+  return out;
+}
+const cat = (...parts) => { const n = parts.reduce((a, p) => a + p.length, 0); const o = new Uint8Array(n); let i = 0; for (const p of parts) { o.set(p, i); i += p.length; } return o; };
+const moovWith = (...codecs) => box('moov', cat(...codecs.map((c) => box(c))));
+
+test('Safari check accepts H.264 + AAC faststart', () => {
+  assert.equal(checkMp4(cat(box('ftyp'), moovWith('avc1', 'mp4a'), box('mdat'))).ok, true);
+  assert.equal(checkMp4(cat(box('ftyp'), moovWith('avc1'), box('mdat'))).ok, true); // no audio is fine
+});
+
+test('Safari check rejects everything Apple cannot play', () => {
+  const bad = {
+    opus: cat(box('ftyp'), moovWith('avc1', 'Opus'), box('mdat')),
+    hevc_hev1: cat(box('ftyp'), moovWith('hev1', 'mp4a'), box('mdat')),
+    vp9: cat(box('ftyp'), moovWith('vp09', 'mp4a'), box('mdat')),
+    fragmented: cat(box('ftyp'), moovWith('avc1', 'mp4a', 'mvex'), box('moof'), box('mdat')),
+    index_at_end: cat(box('ftyp'), box('mdat'), moovWith('avc1', 'mp4a')),
+    no_index: cat(box('ftyp'), box('mdat')),
+  };
+  for (const [name, bytes] of Object.entries(bad)) assert.equal(checkMp4(bytes).ok, false, name);
+});

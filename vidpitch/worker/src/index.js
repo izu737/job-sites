@@ -5,6 +5,14 @@
 // The extension builds the GIF and images itself, so this Worker only
 // stores and serves files. That keeps it inside the free plan.
 import { serialize, sharePage, messagePage } from './views.js';
+import { readBoxHeader, verdict } from './mp4check.js';
+import shareCss from '../public/static/share.css';
+import playerJs from '../public/static/player.js';
+
+const STATIC = {
+  'share.css': { body: shareCss, type: 'text/css; charset=utf-8' },
+  'player.js': { body: playerJs, type: 'text/javascript; charset=utf-8' },
+};
 
 const ID_RE = /^[A-Za-z0-9]{12}$/;
 const ID_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
@@ -13,7 +21,8 @@ const FILES = {
   'poster.jpg': 'image/jpeg',
   'og.jpg': 'image/jpeg',
 };
-const VIDEO_TYPES = { 'video/mp4': 'mp4', 'video/webm': 'webm' };
+// MP4 only: every video must play in Safari and on iPhone.
+const VIDEO_TYPES = { 'video/mp4': 'mp4' };
 
 function newId() {
   const bytes = crypto.getRandomValues(new Uint8Array(12));
@@ -69,6 +78,31 @@ async function authorized(request, env) {
 const getVideo = (env, id) => env.DB.prepare('SELECT * FROM videos WHERE id = ?').bind(id).first();
 
 // ---------------- media ----------------
+/**
+ * Reads the stored video's box layout and codecs with small ranged reads
+ * (never the whole file) and applies the Safari rules from mp4check.js.
+ */
+async function checkStoredVideo(env, key) {
+  const head = await env.MEDIA.head(key);
+  if (!head) return { ok: false, problems: ['video file missing'] };
+  const order = [];
+  let moov = null;
+  let offset = 0;
+  while (offset < head.size && order.length < 16 && !order.includes('mdat')) {
+    const obj = await env.MEDIA.get(key, { range: { offset, length: 16 } });
+    const box = readBoxHeader(new Uint8Array(await obj.arrayBuffer()));
+    if (!box || box.size < 8) break;
+    order.push(box.type);
+    if (box.type === 'moov') {
+      if (box.size > 16 * 1024 * 1024) return { ok: false, problems: ['index too large to check'] };
+      const m = await env.MEDIA.get(key, { range: { offset, length: box.size } });
+      moov = new Uint8Array(await m.arrayBuffer());
+    }
+    offset += box.size;
+  }
+  return verdict({ order, moov });
+}
+
 async function serveMedia(request, env, id, file) {
   if (!ID_RE.test(id)) return new Response('Not found', { status: 404 });
   const object = await env.MEDIA.get(`${id}/${file}`, { range: request.headers, onlyIf: request.headers });
@@ -118,7 +152,7 @@ async function api(request, env, cfg, parts) {
   if (!id && method === 'POST') {
     const body = await request.json().catch(() => ({}));
     const ext = VIDEO_TYPES[String(body.videoType || '').split(';')[0].trim().toLowerCase()];
-    if (!ext) return fail(415, 'Send videoType video/mp4 or video/webm.');
+    if (!ext) return fail(415, 'Only MP4 (H.264 + AAC) is accepted, so every video plays in Safari and on iPhone.');
     const vid = newId();
     const duration = Number(body.duration);
     const title = (typeof body.title === 'string' && body.title.trim()) ||
@@ -184,6 +218,12 @@ async function api(request, env, cfg, parts) {
     const body = await request.json().catch(() => ({}));
     if (!body.uploadId || !Array.isArray(body.parts) || !body.parts.length) return fail(400, 'Missing parts');
     await env.MEDIA.resumeMultipartUpload(key, body.uploadId).complete(body.parts);
+    // Last line of defence: nothing goes live unless Safari can play it.
+    const check = await checkStoredVideo(env, key);
+    if (!check.ok) {
+      await env.MEDIA.delete(key);
+      return fail(422, `Video rejected because it would not play on iPhone or Safari: ${check.problems.join(', ')}.`);
+    }
     const missing = [];
     for (const f of Object.keys(FILES)) if (!(await env.MEDIA.head(`${id}/${f}`))) missing.push(f);
     if (missing.length) return fail(400, `Missing ${missing.join(', ')}`);
@@ -214,7 +254,7 @@ export default {
 
       if (parts[0] === 'media' && parts.length === 3 && (request.method === 'GET' || request.method === 'HEAD')) {
         const [, id, file] = parts;
-        if (!FILES[file] && !/^video\.(mp4|webm)$/.test(file)) return new Response('Not found', { status: 404 });
+        if (!FILES[file] && file !== 'video.mp4') return new Response('Not found', { status: 404 });
         return await serveMedia(request, env, id, file);
       }
 
@@ -227,6 +267,10 @@ export default {
         return html(sharePage(cfg, video));
       }
 
+      if (parts[0] === 'static' && parts.length === 2 && STATIC[parts[1]]) {
+        const f = STATIC[parts[1]];
+        return new Response(f.body, { headers: { 'Content-Type': f.type, 'Cache-Control': 'public, max-age=600' } });
+      }
       if (parts[0] === 'health') return json({ ok: true });
       if (!parts.length) return html(messagePage('Vidpitch', 'Videos live at their own links. Nothing to see here.', 200).html);
       return html(messagePage('Not found', 'There is nothing at this address.').html, 404);

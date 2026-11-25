@@ -209,6 +209,11 @@
       return;
     }
     state.streams.push(display);
+    // Cap at 1080p: Retina screens capture far larger, which bloats files
+    // and is harder for phones to play.
+    try {
+      await display.getVideoTracks()[0].applyConstraints({ width: { max: 1920 }, height: { max: 1080 } });
+    } catch { /* keep the original size */ }
 
     let mic = null;
     if ($('#mic').checked) {
@@ -385,11 +390,15 @@
           state.finalBlob = await window.VidpitchConvert.toUniversalMp4(state.blob, state.recordedMime, {
             duration: state.duration,
             onProgress: (f) => { $('#upload-bar').style.width = Math.round(f * 100) + '%'; },
+            onStage: (stage) => {
+              if (stage === 'full') $('#upload-sub').textContent = 'Re-encoding so it plays everywhere. Longer videos take a few minutes.';
+            },
           });
         } catch (err) {
+          // Never upload a file that would not play on iPhone or Safari.
           console.error('MP4 conversion failed', err);
-          state.finalBlob = state.blob;
-          toast('Could not convert for Safari, so uploading the original. It plays in Chrome, Edge and Firefox.');
+          uploadFailed('This recording could not be made iPhone and Safari compatible, so it was not uploaded. Save it to your computer, or try again.');
+          return;
         }
         $('#upload-bar').style.width = '0%';
         $('#upload-sub').textContent = 'Keep this tab open.';

@@ -3,9 +3,11 @@ main = "src/index.js"
 compatibility_date = "2026-10-01"
 workers_dev = true
 
-# Share page CSS and player script.
-[assets]
-directory = "./public"
+# The share page CSS and player script are bundled into the Worker as text.
+[[rules]]
+type = "Text"
+globs = ["**/public/static/*.css", "**/public/static/*.js"]
+fallthrough = false
 
 [[d1_databases]]
 binding = "DB"

@@ -13,7 +13,8 @@ Vidpitch is a working name. Rename it whenever you like.
 | GIF preview | `extension/preview.js` | Built in the browser from the first 3 seconds while you record (face bubble included), with a play button, kept under 1 MB. Also makes the poster and link preview image. |
 | Upload | `extension/recorder.js` | Uploads the images, then the video in 20 MB parts with a progress bar. Retry or save locally if it fails. |
 | Gmail | `extension/gmail.js` | "Insert into Gmail" puts the video block at your cursor. Pasting or typing one of your video links into a draft turns it into the GIF preview automatically. |
-| Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Free plan. |
+| Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Rejects any video that would not play in Safari or on iPhone. Free plan. |
+| Safari guarantee | `extension/convert.js`, `mp4check.js` | Every recording is rewritten to a standard MP4 (H.264 + AAC, index at the front) and checked before upload; the Worker checks again before publishing. |
 | Share page | `worker/src/views.js`, `worker/public/static/` | Custom player, booking button that slides in for the last 6 seconds, end card with your booking link, light and dark mode. |
 
 ## How the Gmail preview works
@@ -33,7 +34,7 @@ npx wrangler secret put API_TOKEN
 npx wrangler deploy
 ```
 
-Your name, booking link and button text are in `worker/wrangler.toml` under `[vars]`. Change them and run `npx wrangler deploy` again.
+Live at https://vidpitch.izuu.workers.dev. Your name, booking link and button text are in `worker/wrangler.toml` under `[vars]`. Change them and run `npx wrangler deploy` again.
 
 ## Load the extension
 
