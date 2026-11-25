@@ -15,6 +15,7 @@ Vidpitch is a working name. Rename it whenever you like.
 | Gmail | `extension/gmail.js` | "Insert into Gmail" puts the video block at your cursor. Pasting or typing one of your video links into a draft turns it into the GIF preview automatically. |
 | Backend | `worker/` (Cloudflare Worker + R2 + D1) | Stores files in R2, records in D1, serves the share page and video with seeking. Notes whether each video passes the Safari check (never rejects one). Free plan. |
 | Safari guarantee | `extension/convert.js`, `mp4check.js` | Every recording is rewritten to a standard MP4 (H.264 + AAC, index at the front) and checked. If the fast conversion (seconds) does not pass, the video is fully re-encoded. A recording is never refused or lost. Recordings over 300 MB are read from disk so long videos do not run out of memory. |
+| Website | `worker/src/library.js`, `worker/src/session.js` | Your library at the Worker address (sign in with your access key): every video with link, copy for email, rename, delete, search. Record from the browser at `/record`, which runs the extension's own recorder files. |
 | Share page | `worker/src/views.js`, `worker/public/static/` | Custom player, booking button that slides in for the last 6 seconds, end card with your booking link, light and dark mode. |
 
 ## How the Gmail preview works
@@ -32,6 +33,9 @@ npx wrangler r2 bucket create vidpitch-media
 npx wrangler d1 migrations apply vidpitch --remote
 npx wrangler secret put API_TOKEN
 npx wrangler deploy
+# Upload the converter for the website recorder (31 MB, too big to bundle)
+npx wrangler r2 object put vidpitch-media/app/vendor/ffmpeg-core/ffmpeg-core.wasm --remote --file ../extension/vendor/ffmpeg-core/ffmpeg-core.wasm --content-type application/wasm
+npx wrangler r2 object put vidpitch-media/app/vendor/ffmpeg-core/ffmpeg-core.js --remote --file ../extension/vendor/ffmpeg-core/ffmpeg-core.js --content-type text/javascript
 ```
 
 Live at https://vidpitch.izuu.workers.dev. Your name, booking link and button text are in `worker/wrangler.toml` under `[vars]`. Change them and run `npx wrangler deploy` again.

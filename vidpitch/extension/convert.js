@@ -15,12 +15,18 @@ import { checkMp4 } from './mp4check.js';
 
 let ffmpeg = null;
 
+// Inside the extension files come from the extension; on the website they
+// are served from /app/.
+const assetUrl = (path) => (globalThis.chrome?.runtime?.getURL
+  ? chrome.runtime.getURL(path)
+  : new URL(`/app/${path}`, location.origin).href);
+
 async function load() {
   if (ffmpeg) return ffmpeg;
   const ff = new FFmpeg();
   await ff.load({
-    coreURL: chrome.runtime.getURL('vendor/ffmpeg-core/ffmpeg-core.js'),
-    wasmURL: chrome.runtime.getURL('vendor/ffmpeg-core/ffmpeg-core.wasm'),
+    coreURL: assetUrl('vendor/ffmpeg-core/ffmpeg-core.js'),
+    wasmURL: assetUrl('vendor/ffmpeg-core/ffmpeg-core.wasm'),
   });
   ffmpeg = ff;
   return ff;

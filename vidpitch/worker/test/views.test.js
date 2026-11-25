@@ -28,7 +28,7 @@ test('email block links the GIF to the share page and escapes the title', () => 
 
 test('share page has the booking button, end card and preview tags', () => {
   const page = sharePage(cfg, video);
-  assert.equal((page.match(/href="https:\/\/cal\.com\/someone\/intro"/g) || []).length, 4);
+  assert.equal((page.match(/href="https:\/\/cal\.com\/someone\/intro"/g) || []).length, 3); // slide in card, end card, bar under the video
   assert.ok(page.includes('class="endcard" hidden'));
   assert.ok(page.includes('<meta property="og:image" content="https://videos.example.com/media/AbCdEfGhJkLm/og.jpg">'));
   assert.ok(page.includes('src="https://videos.example.com/media/AbCdEfGhJkLm/video.mp4" type="video/mp4"'));

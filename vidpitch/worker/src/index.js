@@ -1,17 +1,28 @@
 // Vidpitch on Cloudflare.
-//   /v/:id              share page
+//   /                   your video library (sign in required)
+//   /record             record from the browser (sign in required)
+//   /login, /logout     sign in with your access key
+//   /v/:id              public share page
 //   /media/:id/:file    video, GIF and images from R2 (with seeking support)
-//   /api/...            used by the Chrome extension (Bearer token)
+//   /app/...            the recorder's files, shared with the extension
+//   /api/...            used by the extension (Bearer token) and the website (sign in cookie)
 // The extension builds the GIF and images itself, so this Worker only
 // stores and serves files. That keeps it inside the free plan.
 import { serialize, sharePage, messagePage } from './views.js';
 import { readBoxHeader, verdict } from './mp4check.js';
 import shareCss from '../public/static/share.css';
 import playerJs from '../public/static/player.js';
+import appCss from '../public/static/app.css';
+import libraryJs from '../public/static/library.js';
+import { APP_FILES, RECORDER_HTML } from './appfiles.js';
+import { loginPage, libraryPage, recordPage } from './library.js';
+import { keyMatches, newSessionCookie, clearSessionCookie, hasSession, sameOrigin, safeNext } from './session.js';
 
 const STATIC = {
   'share.css': { body: shareCss, type: 'text/css; charset=utf-8' },
   'player.js': { body: playerJs, type: 'text/javascript; charset=utf-8' },
+  'app.css': { body: appCss, type: 'text/css; charset=utf-8' },
+  'library.js': { body: libraryJs, type: 'text/javascript; charset=utf-8' },
 };
 
 const ID_RE = /^[A-Za-z0-9]{12}$/;
@@ -70,10 +81,16 @@ function html(body, status = 200) {
 
 async function authorized(request, env) {
   const header = request.headers.get('Authorization') || '';
-  const given = new TextEncoder().encode(header.startsWith('Bearer ') ? header.slice(7).trim() : '');
-  const want = new TextEncoder().encode(env.API_TOKEN || '');
-  if (!want.length || given.length !== want.length) return false;
-  return crypto.subtle.timingSafeEqual(given, want);
+  if (header.startsWith('Bearer ')) return keyMatches(env, header.slice(7)); // the extension
+  // The website: signed in cookie, and changes only from our own pages.
+  if (!(await hasSession(request, env))) return false;
+  return request.method === 'GET' || sameOrigin(request);
+}
+
+function redirect(location, cookie) {
+  const headers = { Location: location, 'Cache-Control': 'no-store' };
+  if (cookie) headers['Set-Cookie'] = cookie;
+  return new Response(null, { status: 303, headers });
 }
 
 const getVideo = (env, id) => env.DB.prepare('SELECT * FROM videos WHERE id = ?').bind(id).first();
@@ -106,7 +123,11 @@ async function checkStoredVideo(env, key) {
 
 async function serveMedia(request, env, id, file) {
   if (!ID_RE.test(id)) return new Response('Not found', { status: 404 });
-  const object = await env.MEDIA.get(`${id}/${file}`, { range: request.headers, onlyIf: request.headers });
+  return serveObject(request, env, `${id}/${file}`);
+}
+
+async function serveObject(request, env, key) {
+  const object = await env.MEDIA.get(key, { range: request.headers, onlyIf: request.headers });
   if (object === null) return new Response('Not found', { status: 404 });
 
   const headers = new Headers();
@@ -145,7 +166,7 @@ async function api(request, env, cfg, parts) {
 
   // List
   if (!id && method === 'GET') {
-    const { results } = await env.DB.prepare("SELECT * FROM videos WHERE status = 'ready' ORDER BY created_at DESC LIMIT 50").all();
+    const { results } = await env.DB.prepare("SELECT * FROM videos WHERE status = 'ready' ORDER BY created_at DESC LIMIT 500").all();
     return json({ videos: results.map((v) => serialize(cfg, v)) });
   }
 
@@ -267,12 +288,50 @@ export default {
         return html(sharePage(cfg, video));
       }
 
+      // ---- website: library, recorder, sign in ----
+      if (!parts.length && request.method === 'GET') {
+        if (!(await hasSession(request, env))) return redirect('/login');
+        const { results } = await env.DB.prepare("SELECT * FROM videos WHERE status = 'ready' ORDER BY created_at DESC LIMIT 500").all();
+        return html(libraryPage(cfg, results));
+      }
+      if (parts[0] === 'record' && parts.length === 1 && request.method === 'GET') {
+        if (!(await hasSession(request, env))) return redirect('/login?next=/record');
+        return html(recordPage(RECORDER_HTML));
+      }
+      if (parts[0] === 'login' && parts.length === 1) {
+        const next = safeNext(url.searchParams.get('next'));
+        if (request.method === 'GET') {
+          if (await hasSession(request, env)) return redirect(next);
+          return html(loginPage({ next }));
+        }
+        if (request.method === 'POST') {
+          const form = await request.formData().catch(() => null);
+          const target = safeNext(form?.get('next'));
+          if (!keyMatches(env, form?.get('key'))) {
+            await new Promise((r) => setTimeout(r, 600)); // slow down guessing
+            return html(loginPage({ error: 'That access key is not right.', next: target }), 401);
+          }
+          return redirect(target, await newSessionCookie(env));
+        }
+      }
+      if (parts[0] === 'logout' && parts.length === 1) return redirect('/login', clearSessionCookie());
+
+      // ---- the recorder's files (public: they hold no data) ----
+      if (parts[0] === 'app' && parts.length > 1 && (request.method === 'GET' || request.method === 'HEAD')) {
+        const path = parts.slice(1).join('/');
+        const file = APP_FILES[path];
+        if (file) {
+          return new Response(file[0], { headers: { 'Content-Type': file[1], 'Cache-Control': 'public, max-age=300' } });
+        }
+        if (/^vendor\/ffmpeg-core\/ffmpeg-core\.(js|wasm)$/.test(path)) return await serveObject(request, env, `app/${path}`);
+        return new Response('Not found', { status: 404 });
+      }
+
       if (parts[0] === 'static' && parts.length === 2 && STATIC[parts[1]]) {
         const f = STATIC[parts[1]];
         return new Response(f.body, { headers: { 'Content-Type': f.type, 'Cache-Control': 'public, max-age=600' } });
       }
       if (parts[0] === 'health') return json({ ok: true });
-      if (!parts.length) return html(messagePage('Vidpitch', 'Videos live at their own links. Nothing to see here.', 200).html);
       return html(messagePage('Not found', 'There is nothing at this address.').html, 404);
     } catch (err) {
       console.error(err);

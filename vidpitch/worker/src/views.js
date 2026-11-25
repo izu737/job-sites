@@ -130,7 +130,6 @@ export function sharePage(cfg, video) {
   const body = `
 <header class="top">
   <div class="who"><span class="avatar">${esc(initials(owner))}</span><span class="who-name">${esc(owner)}</span></div>
-  ${cta.url ? ctaLink('btn btn-quiet', `${CAL}<span>${esc(cta.label)}</span>`) : ''}
 </header>
 
 <main class="wrap">

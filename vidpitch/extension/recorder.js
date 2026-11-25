@@ -1,4 +1,23 @@
 (() => {
+  // The same recorder runs in the Chrome extension and on the website
+  // (vidpitch.../record). Only storage, tab focus and Gmail differ.
+  const IS_EXT = !!(globalThis.chrome && chrome.runtime && chrome.runtime.id);
+  const store = IS_EXT
+    ? { get: (keys) => chrome.storage.local.get(keys), set: (obj) => chrome.storage.local.set(obj) }
+    : {
+        async get(keys) {
+          const out = {};
+          for (const k of keys) {
+            try { const v = localStorage.getItem('vp_' + k); if (v !== null) out[k] = JSON.parse(v); } catch { /* private mode */ }
+          }
+          return out;
+        },
+        async set(obj) {
+          for (const [k, v] of Object.entries(obj)) {
+            try { localStorage.setItem('vp_' + k, JSON.stringify(v)); } catch { /* private mode */ }
+          }
+        },
+      };
   const $ = (sel) => document.querySelector(sel);
   const views = document.querySelectorAll('[data-view]');
   const state = {
@@ -28,7 +47,7 @@
   // ---------- small helpers ----------
   function show(name) {
     views.forEach((v) => { v.hidden = v.dataset.view !== name; });
-    $('#open-settings').hidden = name === 'setup' || !state.token;
+    $('#open-settings').hidden = !IS_EXT || name === 'setup' || !state.token;
     document.title = name === 'recording' ? '● Recording | Vidpitch' : 'Vidpitch Recorder';
   }
 
@@ -56,7 +75,7 @@
   async function api(path, opts = {}) {
     const res = await fetch(state.serverUrl + path, {
       ...opts,
-      headers: { Authorization: `Bearer ${state.token}`, ...(opts.headers || {}) },
+      headers: { ...(state.token ? { Authorization: `Bearer ${state.token}` } : {}), ...(opts.headers || {}) },
     });
     const body = res.status === 204 ? null : await res.json().catch(() => null);
     if (!res.ok) throw new Error(body?.error || `Server answered ${res.status}`);
@@ -65,7 +84,7 @@
 
   // ---------- setup ----------
   async function loadSettings() {
-    const saved = await chrome.storage.local.get(['serverUrl', 'token']);
+    const saved = await store.get(['serverUrl', 'token']);
     state.serverUrl = saved.serverUrl || '';
     state.token = saved.token || '';
     $('#server-url').value = state.serverUrl;
@@ -86,7 +105,7 @@
       setError('#setup-error', /fetch/i.test(err.message) ? `Could not reach ${serverUrl}. Check the address and that the server is running.` : err.message);
       return;
     }
-    await chrome.storage.local.set({ serverUrl, token, publicUrl: state.me.publicUrl || serverUrl });
+    await store.set({ serverUrl, token, publicUrl: state.me.publicUrl || serverUrl });
     toast(`Connected as ${state.me.ownerName}`);
     goReady();
   });
@@ -111,7 +130,7 @@
 
   // ---------- face bubble ----------
   async function loadCamPrefs() {
-    const p = await chrome.storage.local.get(['camOn', 'camPosition', 'camSize']);
+    const p = await store.get(['camOn', 'camPosition', 'camSize']);
     if (p.camOn === false) $('#cam').checked = false;
     if (p.camPosition) state.camPosition = p.camPosition;
     if (p.camSize) state.camSize = p.camSize;
@@ -147,17 +166,17 @@
   }
 
   $('#cam').addEventListener('change', () => {
-    chrome.storage.local.set({ camOn: $('#cam').checked });
+    store.set({ camOn: $('#cam').checked });
     syncCamera();
   });
   document.querySelectorAll('[data-pos]').forEach((b) => b.addEventListener('click', () => {
     state.camPosition = b.dataset.pos;
-    chrome.storage.local.set({ camPosition: state.camPosition });
+    store.set({ camPosition: state.camPosition });
     document.querySelectorAll('[data-pos]').forEach((x) => x.classList.toggle('on', x === b));
   }));
   document.querySelectorAll('[data-size]').forEach((b) => b.addEventListener('click', () => {
     state.camSize = b.dataset.size;
-    chrome.storage.local.set({ camSize: state.camSize });
+    store.set({ camSize: state.camSize });
     document.querySelectorAll('[data-size]').forEach((x) => x.classList.toggle('on', x === b));
   }));
 
@@ -313,7 +332,8 @@
     state.recorder = null;
 
     // Bring this tab back so you can watch the upload.
-    try {
+    if (!IS_EXT) window.focus();
+    else try {
       const tab = await chrome.tabs.getCurrent();
       await chrome.tabs.update(tab.id, { active: true });
       await chrome.windows.update(tab.windowId, { focused: true });
@@ -358,7 +378,7 @@
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', url);
-      xhr.setRequestHeader('Authorization', `Bearer ${state.token}`);
+      if (state.token) xhr.setRequestHeader('Authorization', `Bearer ${state.token}`);
       if (contentType) xhr.setRequestHeader('Content-Type', contentType);
       xhr.upload.onprogress = (e) => { if (e.lengthComputable && onProgress) onProgress(e.loaded); };
       xhr.onload = () => {
@@ -540,6 +560,7 @@
 
   // ---------- recent videos ----------
   async function loadRecent() {
+    if (!IS_EXT) return; // the website has its own library page
     let videos = [];
     try { videos = (await api('/api/videos')).videos.slice(0, 8); } catch { return; }
     const list = $('#recent-list');
@@ -582,12 +603,31 @@
 
   // ---------- boot ----------
   (async () => {
-    await loadSettings();
     await loadCamPrefs();
+    if (!IS_EXT) {
+      state.serverUrl = location.origin;
+      state.token = '';
+      // On the website, Gmail insert needs the extension; copying works everywhere.
+      $('#insert-gmail').hidden = true;
+      $('#copy-email').classList.replace('btn-ghost', 'btn-primary');
+      $('#copy-email').classList.add('grow');
+      document.querySelector('.brand').addEventListener('click', () => { location.href = '/'; });
+      document.querySelector('.brand').style.cursor = 'pointer';
+      $('#new-recording').insertAdjacentHTML('afterend', '<a class="link" href="/">Back to my videos</a>');
+      try {
+        state.me = await api('/api/me');
+      } catch {
+        location.href = '/login?next=' + encodeURIComponent(location.pathname);
+        return;
+      }
+      goReady();
+      return;
+    }
+    await loadSettings();
     if (!state.serverUrl || !state.token) return show('setup');
     try {
       state.me = await api('/api/me');
-      await chrome.storage.local.set({ publicUrl: state.me.publicUrl || state.serverUrl });
+      await store.set({ publicUrl: state.me.publicUrl || state.serverUrl });
       goReady();
     } catch (err) {
       setError('#setup-error', `Could not connect: ${err.message}`);

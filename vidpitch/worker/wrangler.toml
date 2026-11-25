@@ -6,7 +6,13 @@ workers_dev = true
 # The share page CSS and player script are bundled into the Worker as text.
 [[rules]]
 type = "Text"
-globs = ["**/public/static/*.css", "**/public/static/*.js"]
+globs = ["**/public/static/*.css", "**/public/static/*.js", "**/extension/*.js", "**/extension/*.css", "**/extension/*.html", "**/extension/vendor/**/*.js"]
+fallthrough = false
+
+# Extension icons, reused by the website.
+[[rules]]
+type = "Data"
+globs = ["**/extension/icons/*.png"]
 fallthrough = false
 
 [[d1_databases]]
