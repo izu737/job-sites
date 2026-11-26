@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preparing your video | Vidpitch</title>
+<link rel="icon" href="icons/icon32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
+<style>
+  :root { --bg: #fff; --bg-2: #f8f8f8; --grey2: #f0f1f2; --grey3: #dddee1; --dim: #6b6e76; --body: #292a2e; --primary: #1868db; --border: rgba(11,18,40,.14);
+    --font: Inter, "Atlassian Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { min-height: 100vh; background: var(--bg); color: var(--body); font: 14px/1.57 var(--font); -webkit-font-smoothing: antialiased; }
+  [hidden] { display: none !important; }
+  .top { display: flex; align-items: center; gap: 10px; height: 64px; padding: 0 24px; border-bottom: 1px solid var(--grey2); font-size: 18px; font-weight: 653; }
+  .top img { border-radius: 7px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 436px; min-height: calc(100vh - 65px); }
+  .title-row { padding: 16px 24px; }
+  h1 { margin: 0; font-size: 24px; line-height: 1.33; font-weight: 653; letter-spacing: -.01em; overflow-wrap: anywhere; }
+  .byline { margin: 2px 0 0; color: var(--dim); }
+  .stage { padding: 24px 32px 40px; background: var(--bg-2); min-height: 100%; }
+  .player { position: relative; aspect-ratio: 16 / 9; border-radius: 12px; background: #000; display: grid; place-items: center; color: #fff; overflow: hidden; }
+  .status { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 16px; }
+  .spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255,255,255,.2); border-top-color: #fff; animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .stage-text { font-size: 16px; font-weight: 653; }
+  .bar { width: 240px; height: 6px; border-radius: 3px; background: rgba(255,255,255,.18); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: #4c8df6; transition: width .2s ease-out; }
+  .note { color: #b7b9be; font-size: 13px; }
+  .side { border-left: 1px solid var(--grey2); padding: 24px; }
+  .sk { height: 12px; border-radius: 6px; background: var(--grey2); margin-bottom: 12px; }
+  .error { color: #ffb3b0; max-width: 360px; }
+  .btns { display: flex; gap: 8px; }
+  .btn { height: 40px; padding: 0 16px; border-radius: 8px; border: 1px solid transparent; font: inherit; font-weight: 500; cursor: pointer; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-quiet { background: #fff; color: var(--body); }
+  @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .side { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+</style>
+</head>
+<body>
+<header class="top"><img src="icons/icon48.png" alt="" width="28" height="28"><span>Vidpitch</span></header>
+<div class="layout">
+  <main>
+    <div class="title-row">
+      <h1 id="title">Your video</h1>
+      <p class="byline">Just now</p>
+    </div>
+    <div class="stage">
+      <div class="player">
+        <div class="status" id="working">
+          <div class="spinner" aria-hidden="true"></div>
+          <div class="stage-text" id="stage" role="status" aria-live="polite">Preparing your video</div>
+          <div class="bar"><i id="bar"></i></div>
+          <div class="note">Keep Chrome open. Your video page opens here when it is ready.</div>
+        </div>
+        <div class="status" id="failed" hidden>
+          <div class="stage-text">Upload failed</div>
+          <p class="error" id="error"></p>
+          <div class="btns">
+            <button class="btn btn-primary" id="retry" type="button">Try again</button>
+            <button class="btn btn-quiet" id="save" type="button">Save to my computer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <aside class="side" aria-hidden="true"><div class="sk" style="width:40%"></div><div class="sk" style="width:85%"></div><div class="sk" style="width:70%"></div></aside>
+</div>
+<form id="handoff" method="post" hidden><input type="hidden" name="key"><input type="hidden" name="next"></form>
+<script type="module" src="processing.js"></script>
+</body>
+</html>

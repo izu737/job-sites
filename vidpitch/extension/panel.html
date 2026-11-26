@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vidpitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<div class="panel" id="panel">
+  <header class="head">
+    <button class="icon" id="home" type="button" title="My Library" aria-label="Open my library">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="tabs" role="tablist" aria-label="Recording type">
+      <span class="tab on" role="tab" aria-selected="true" title="Video">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="6.5" width="12.5" height="11" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 11 5-3v8l-5-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </span>
+    </div>
+    <button class="icon" id="close" type="button" title="Close" aria-label="Close recorder">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="m6 6 12 12m0-12L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </header>
+
+  <div class="rows">
+    <!-- capture source -->
+    <div class="row-wrap">
+      <button class="row" id="source-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <svg class="row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="1.8"/></svg>
+        <span class="row-label" id="source-label">Current tab</span>
+      </button>
+      <ul class="menu" id="source-menu" role="listbox" hidden>
+        <li role="option" data-mode="tab">Current tab</li>
+        <li role="option" data-mode="window">Window</li>
+        <li role="option" data-mode="screen">Full screen</li>
+        <li role="option" data-mode="camera">Camera only</li>
+      </ul>
+    </div>
+
+    <!-- camera -->
+    <div class="row-wrap">
+      <div class="row">
+        <button class="row-main" id="cam-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <svg class="row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="6.5" width="12.5" height="11" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m15.5 11 5-3v8l-5-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <span class="row-label" id="cam-label">Camera</span>
+        </button>
+        <button class="onoff" id="cam-toggle" type="button" aria-pressed="true">On</button>
+      </div>
+      <ul class="menu" id="cam-menu" role="listbox" hidden></ul>
+    </div>
+
+    <!-- microphone -->
+    <div class="row-wrap">
+      <div class="row mic-row">
+        <button class="row-main" id="mic-btn" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <svg class="row-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="9" y="3.5" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="row-label" id="mic-label">Microphone</span>
+        </button>
+        <button class="onoff" id="mic-toggle" type="button" aria-pressed="true">On</button>
+        <span class="level" id="mic-level" aria-hidden="true"></span>
+      </div>
+      <ul class="menu" id="mic-menu" role="listbox" hidden></ul>
+    </div>
+  </div>
+
+  <div class="allow" id="allow" hidden>
+    <p>Vidpitch needs your camera and microphone.</p>
+    <button class="btn-quiet" id="allow-btn" type="button">Allow access</button>
+  </div>
+
+  <p class="error" id="error" role="alert" hidden></p>
+  <button class="start" id="start" type="button">Start Recording</button>
+
+  <footer class="foot">
+    <button class="foot-btn" id="countdown" type="button" aria-pressed="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="13" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 9.5V13l2.5 1.5M9.5 2.8h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span id="countdown-label">3s timer</span>
+    </button>
+    <button class="foot-btn" id="flip" type="button" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M8 7 3.5 12 8 17V7zM16 7l4.5 5L16 17V7z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <span>Flip</span>
+    </button>
+    <button class="foot-btn" id="library" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span>Library</span>
+    </button>
+    <button class="foot-btn" id="settings" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.5" cy="12" r="1.7" fill="currentColor"/></svg>
+      <span>More</span>
+    </button>
+  </footer>
+</div>
+<script src="panel.js"></script>
+</body>
+</html>

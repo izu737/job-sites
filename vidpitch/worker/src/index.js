@@ -8,12 +8,13 @@
 //   /api/...            used by the extension (Bearer token) and the website (sign in cookie)
 // The extension builds the GIF and images itself, so this Worker only
 // stores and serves files. That keeps it inside the free plan.
-import { serialize, sharePage, messagePage } from './views.js';
+import { serialize, sharePage, messagePage, emailHtml, emailText } from './views.js';
 import { readBoxHeader, verdict } from './mp4check.js';
 import shareCss from '../public/static/share.css';
 import playerJs from '../public/static/player.js';
 import appCss from '../public/static/app.css';
 import libraryJs from '../public/static/library.js';
+import ownerJs from '../public/static/owner.js';
 import { APP_FILES, RECORDER_HTML } from './appfiles.js';
 import { loginPage, libraryPage, recordPage } from './library.js';
 import { keyMatches, newSessionCookie, clearSessionCookie, hasSession, sameOrigin, safeNext } from './session.js';
@@ -23,9 +24,12 @@ const STATIC = {
   'player.js': { body: playerJs, type: 'text/javascript; charset=utf-8' },
   'app.css': { body: appCss, type: 'text/css; charset=utf-8' },
   'library.js': { body: libraryJs, type: 'text/javascript; charset=utf-8' },
+  'owner.js': { body: ownerJs, type: 'text/javascript; charset=utf-8' },
 };
 
 const ID_RE = /^[A-Za-z0-9]{12}$/;
+// Link previews and crawlers fetch the page too; they are not views.
+const BOT_RE = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|whatsapp|telegram|slack|discord|linkedin|skype|google|bing|yahoo|curl|wget|python|go-http|headless|lighthouse/i;
 const ID_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
 const FILES = {
   'preview.gif': 'image/gif',
@@ -265,7 +269,7 @@ async function api(request, env, cfg, parts) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const parts = url.pathname.split('/').filter(Boolean);
     const cfg = configFor(env, request);
@@ -285,7 +289,15 @@ export default {
           const m = messagePage('Video not found', 'This link may be wrong, or the video was deleted.');
           return html(m.html, 404);
         }
-        return html(sharePage(cfg, video));
+        const owner = await hasSession(request, env);
+        if (!owner && !BOT_RE.test(request.headers.get('User-Agent') || '')) {
+          // A real visitor, not you and not a link preview bot.
+          video.views = (video.views || 0) + 1;
+          ctx.waitUntil(env.DB.prepare('UPDATE videos SET views = views + 1 WHERE id = ?').bind(video.id).run());
+        }
+        return html(sharePage(cfg, video, owner
+          ? { owner: true, justRecorded: url.searchParams.get('new') === '1', emailHtml: emailHtml(cfg, video), emailText: emailText(cfg, video) }
+          : {}));
       }
 
       // ---- website: library, recorder, sign in ----

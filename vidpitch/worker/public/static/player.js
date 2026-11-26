@@ -1,15 +1,17 @@
 (() => {
-  // Copy link button in the title row.
+  // Copy link buttons (title row, and the Share split button for the owner).
   const toastEl = document.getElementById('toast');
   let toastTimer;
-  document.querySelector('[data-copy-link]')?.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(location.href.split('#')[0]); } catch { return; }
+  const shareUrl = document.getElementById('vp-meta')?.dataset.shareUrl || (location.origin + location.pathname);
+  document.querySelectorAll('[data-copy-link]').forEach((btn) => btn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(shareUrl); } catch { return; }
     if (!toastEl) return;
     toastEl.textContent = 'Link copied';
     toastEl.hidden = false;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => { toastEl.hidden = true; }, 2000);
-  });
+    document.getElementById('share-pop')?.setAttribute('hidden', '');
+  }));
 
   const root = document.getElementById('player');
   if (!root) return;
@@ -96,11 +98,16 @@
 
   root.querySelector('[data-act="play"]').addEventListener('click', toggle);
   root.querySelector('[data-act="mute"]').addEventListener('click', () => { video.muted = !video.muted; });
-  speedBtn.addEventListener('click', () => {
+  const chip = root.querySelector('[data-chip-speed]');
+  const chipText = root.querySelector('[data-chip-speed-text]');
+  function cycleSpeed() {
     const next = SPEEDS[(SPEEDS.indexOf(video.playbackRate) + 1) % SPEEDS.length] || 1;
     video.playbackRate = next;
     speedBtn.textContent = next + 'x';
-  });
+    if (chipText) chipText.textContent = next + '×';
+  }
+  speedBtn.addEventListener('click', cycleSpeed);
+  chip?.addEventListener('click', (e) => { e.stopPropagation(); cycleSpeed(); });
   root.querySelector('[data-act="fullscreen"]').addEventListener('click', toggleFullscreen);
 
   function toggleFullscreen() {

@@ -13,6 +13,25 @@ export function formatDuration(seconds) {
   return h ? `${h}:${String(m).padStart(2, '0')}:${r}` : `${m}:${r}`;
 }
 
+/** "4 sec", "1 min 38 sec": the duration chip under Loom's play button. */
+export function durationWords(seconds) {
+  if (!Number.isFinite(seconds) || seconds <= 0) return '';
+  const s = Math.max(1, Math.round(seconds));
+  const m = Math.floor(s / 60);
+  return m ? `${m} min${s % 60 ? ` ${s % 60} sec` : ''}` : `${s} sec`;
+}
+
+/** "1 minute ago", like Loom's byline. */
+export function timeAgo(iso, now = Date.now()) {
+  const sec = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
+  const units = [[31536000, 'year'], [2592000, 'month'], [604800, 'week'], [86400, 'day'], [3600, 'hour'], [60, 'minute']];
+  for (const [size, name] of units) {
+    const n = Math.floor(sec / size);
+    if (n >= 1) return `${n} ${name}${n === 1 ? '' : 's'} ago`;
+  }
+  return 'just now';
+}
+
 export function urlsFor(cfg, video) {
   const media = `${cfg.publicUrl}/media/${video.id}`;
   return {
@@ -71,6 +90,7 @@ export function serialize(cfg, video) {
     createdAt: video.created_at,
     duration: video.duration,
     status: video.status,
+    views: Number(video.views || 0),
     shareUrl: urls.shareUrl,
     gifUrl: urls.gifUrl,
     posterUrl: urls.posterUrl,
@@ -86,7 +106,11 @@ function initials(name) {
 
 const ARROW = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const CAL = '<svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 8.5h14M7 2.8v3.4M13 2.8v3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
-const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6a.8.8 0 0 0 1.2.7l10.8-6.8a.8.8 0 0 0 0-1.4L9.2 4.5A.8.8 0 0 0 8 5.2z" fill="currentColor"/></svg>';
+const LINK = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+const GLOBE = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="7.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M2.8 10h14.4M10 2.8c2 2 3 4.4 3 7.2s-1 5.2-3 7.2c-2-2-3-4.4-3-7.2s1-5.2 3-7.2z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+const MAIL = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="2.8" y="4.5" width="14.4" height="11" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m3.5 5.5 6.5 5 6.5-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+const SPEED = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3.3 12.5A7 7 0 1 1 10 17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="m10 10 3-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="10" cy="10" r="1.3" fill="currentColor"/></svg>';
 
 function page({ title, head = '', body }) {
   return `<!doctype html>
@@ -107,12 +131,16 @@ ${body}
 </html>`;
 }
 
-export function sharePage(cfg, video) {
+export function sharePage(cfg, video, opts = {}) {
+  const isOwner = !!opts.owner;
   const urls = urlsFor(cfg, video);
   const cta = ctaFor(cfg, video);
   const owner = cfg.ownerName;
   const date = new Date(video.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const dur = formatDuration(video.duration);
+  const durWords = durationWords(video.duration);
+  const ago = timeAgo(video.created_at);
+  const views = Number(video.views || 0);
   const ctaLink = (cls, inner) => `<a class="${cls}" href="${esc(cta.url)}" target="_blank" rel="noopener" data-cta>${inner}</a>`;
 
   const head = `
@@ -130,7 +158,22 @@ export function sharePage(cfg, video) {
   const body = `
 <header class="top">
   <div class="top-inner">
-    <div class="who"><span class="avatar">${esc(initials(owner))}</span><span class="who-name">${esc(owner)}</span></div>
+    ${isOwner
+      ? `<a class="brand" href="/" title="My Library"><img src="/app/icons/icon48.png" alt="" width="28" height="28"><span>Vidpitch</span></a>
+    <div class="top-actions">
+      <div class="split">
+        <button type="button" class="split-main" data-share-open aria-haspopup="dialog" aria-expanded="false">${GLOBE}<span>Share</span></button>
+        <button type="button" class="split-link" data-copy-link title="Copy link" aria-label="Copy link">${LINK}</button>
+      </div>
+      <a class="avatar" href="/" title="My Library">${esc(initials(owner))}</a>
+      <div class="share-pop" id="share-pop" role="dialog" aria-label="Share this video" hidden>
+        <p class="share-pop-title">Share this video</p>
+        <button type="button" class="btn btn-primary btn-block" data-copy-link>${LINK}<span>Copy link</span></button>
+        <button type="button" class="btn btn-quiet btn-block" data-copy-email>${MAIL}<span>Copy for email (with GIF)</span></button>
+        <p class="share-pop-hint">With the Vidpitch extension, paste the link into Gmail and it turns into the moving preview.</p>
+      </div>
+    </div>`
+      : `<div class="who"><span class="avatar">${esc(initials(owner))}</span><span class="who-name">${esc(owner)}</span></div>`}
   </div>
 </header>
 
@@ -138,11 +181,12 @@ export function sharePage(cfg, video) {
   <main class="main">
     <div class="title-row">
       <div class="title-text">
-        <h1>${esc(video.title)}</h1>
-        <p class="byline"><span>${esc(owner)}</span><span class="sep" aria-hidden="true">·</span><span>${esc(date)}</span></p>
+        <h1${isOwner ? ' class="editable" data-edit-title tabindex="0" title="Click to rename"' : ''}>${esc(video.title)}</h1>
+        <p class="byline"><span>${esc(owner)}</span><span class="sep" aria-hidden="true">·</span><span title="${esc(date)}">${esc(ago)}</span></p>
       </div>
       <div class="title-actions">
-        <button type="button" class="icon-btn" data-copy-link aria-label="Copy link to this video" title="Copy link"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+        ${isOwner ? `<span class="views-pill">${views} view${views === 1 ? '' : 's'}</span>` : ''}
+        ${isOwner ? '' : `<button type="button" class="icon-btn" data-copy-link aria-label="Copy link to this video" title="Copy link"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>`}
       </div>
     </div>
 
@@ -154,7 +198,10 @@ export function sharePage(cfg, video) {
           <source src="${esc(urls.videoUrl)}" type="${esc(urls.videoType)}">
         </video>
 
-        <button class="bigplay" type="button" aria-label="Play video">${PLAY}</button>
+        <div class="play-wrap">
+          <button class="bigplay" type="button" aria-label="Play video">${PLAY}</button>
+          ${durWords ? `<button class="play-chip" type="button" data-chip-speed aria-label="Playback speed"><span class="chip-speed">${SPEED}<b data-chip-speed-text>1×</b></span><span class="chip-dur">${esc(durWords)}</span></button>` : ''}
+        </div>
 
         ${cta.url ? ctaLink('cta-pop', `<span class="cta-pop-icon">${CAL}</span><span class="cta-pop-text"><strong>${esc(cta.label)}</strong><small>with ${esc(owner)}</small></span><span class="cta-pop-arrow">${ARROW}</span>`) : ''}
 
@@ -207,6 +254,42 @@ export function sharePage(cfg, video) {
     </div>
   </main>
 
+  ${isOwner ? `
+  <aside class="side">
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab on" role="tab" aria-selected="true" data-tab="share">Share</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="settings">Settings</button>
+    </div>
+    <div class="side-body" data-panel="share">
+      <div class="side-section">
+        <h2>Send it</h2>
+        <p class="side-note">This is how it lands in their inbox.</p>
+        <img class="email-gif" src="${esc(urls.gifUrl)}" alt="Email preview: the first 3 seconds of your video">
+        <button type="button" class="btn btn-primary btn-block" data-copy-email>${MAIL}<span>Copy for email</span></button>
+        <button type="button" class="btn btn-quiet btn-block" data-copy-link>${LINK}<span>Copy link</span></button>
+        <p class="side-note">With the Vidpitch extension, paste the link into Gmail and it turns into the moving preview.</p>
+      </div>
+      <div class="side-section stat">
+        <span class="stat-num">${views}</span><span class="stat-label">view${views === 1 ? '' : 's'} so far</span>
+      </div>
+    </div>
+    <div class="side-body" data-panel="settings" hidden>
+      <form class="side-section" data-cta-form>
+        <h2>Booking button</h2>
+        <p class="side-note">Shown near the end of the video and under it.</p>
+        <label class="field"><span>Booking link</span><input name="ctaUrl" type="url" value="${esc(video.cta_url || '')}" placeholder="${esc(cfg.bookingUrl || 'https://calendly.com/you')}"></label>
+        <label class="field"><span>Button text</span><input name="ctaLabel" type="text" maxlength="60" value="${esc(video.cta_label || '')}" placeholder="${esc(cfg.ctaLabel)}"></label>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+      <div class="side-section">
+        <h2>Delete video</h2>
+        <p class="side-note">The link stops working for anyone you sent it to.</p>
+        <button type="button" class="btn btn-danger" data-delete>Delete video</button>
+      </div>
+    </div>
+  </aside>
+  <template id="email-html">${opts.emailHtml || ''}</template>
+  <template id="email-text">${esc(opts.emailText || '')}</template>` : `
   <aside class="side">
     <div class="tabs" role="presentation"><span class="tab on">About</span></div>
     <div class="side-body">
@@ -221,10 +304,12 @@ export function sharePage(cfg, video) {
         ${ctaLink('btn btn-primary btn-block', `${CAL}<span>${esc(cta.label)}</span>`)}
       </div>` : ''}
     </div>
-  </aside>
+  </aside>`}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-<script src="/static/player.js" defer></script>`;
+<div id="vp-meta" data-id="${esc(video.id)}" data-share-url="${esc(urls.shareUrl)}" data-new="${opts.justRecorded ? '1' : ''}" hidden></div>
+<script src="/static/player.js" defer></script>
+${isOwner ? `<script src="/static/owner.js" defer></script>` : ''}`;
 
   return page({ title: `${video.title} | ${owner}`, head, body });
 }

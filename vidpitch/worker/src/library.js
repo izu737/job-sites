@@ -87,7 +87,7 @@ function card(cfg, row) {
           </div>
         </details>
       </div>
-      <div class="card-meta"><span class="avatar avatar-xs">${esc(initials(cfg.ownerName))}</span><span>${esc(cfg.ownerName)}</span><span class="sep" aria-hidden="true">·</span><span>${esc(date)}</span></div>
+      <div class="card-meta"><span class="avatar avatar-xs">${esc(initials(cfg.ownerName))}</span><span>${esc(cfg.ownerName)}</span><span class="sep" aria-hidden="true">·</span><span>${esc(date)}</span><span class="sep" aria-hidden="true">·</span><span>${Number(row.views || 0)} view${Number(row.views || 0) === 1 ? '' : 's'}</span></div>
     </div>
     <template class="email-html">${v.emailHtml}</template>
     <template class="email-text">${esc(v.emailText)}</template>

@@ -225,6 +225,10 @@
       ctaLabel: $('#cta-label').value.trim(),
     };
 
+    const { countdownOn } = await store.get(['countdownOn']);
+    const wantCountdown = countdownOn !== false;
+    // Keep this page in front during the countdown so you can see it.
+    const controller = wantCountdown && 'CaptureController' in window ? new CaptureController() : null;
     let display;
     try {
       display = await navigator.mediaDevices.getDisplayMedia({
@@ -233,7 +237,9 @@
         selfBrowserSurface: 'exclude',
         surfaceSwitching: 'include',
         systemAudio: 'include',
+        ...(controller ? { controller } : {}),
       });
+      try { controller?.setFocusBehavior('no-focus-change'); } catch { /* window or screen capture */ }
     } catch (err) {
       if (err.name !== 'NotAllowedError') setError('#ready-error', `Could not start screen capture: ${err.message}`);
       return;
@@ -287,6 +293,10 @@
     // Chrome's own "Stop sharing" button ends the video track.
     display.getVideoTracks()[0].addEventListener('ended', stopRecording);
 
+    if (wantCountdown) {
+      const go = await countdown(3);
+      if (!go || state.discard) { cleanupStreams(); goReady(); return; }
+    }
     recorder.start(1000);
     // Build the email GIF and preview images from the same video, live.
     state.preview = window.VidpitchPreview
@@ -503,8 +513,44 @@
     setTimeout(() => URL.revokeObjectURL(a.href), 10000);
   });
 
-  // ---------- done: share it ----------
+  // ---------- 3, 2, 1 (like Loom's) ----------
+  function countdown(seconds) {
+    return new Promise((resolve) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'countdown';
+      wrap.innerHTML = '<div class="count" role="timer" aria-live="assertive"></div><p class="count-note">Recording starts after the countdown</p><button type="button" class="count-skip">Skip</button>';
+      document.body.append(wrap);
+      const count = wrap.querySelector('.count');
+      let n = seconds;
+      const showN = () => { count.textContent = String(n); count.classList.remove('tick'); void count.offsetWidth; count.classList.add('tick'); };
+      const done = (ok) => { clearInterval(iv); wrap.remove(); resolve(ok); };
+      showN();
+      const iv = setInterval(() => { n -= 1; if (n <= 0) done(true); else showN(); }, 1000);
+      wrap.querySelector('.count-skip').addEventListener('click', () => done(true));
+    });
+  }
+
+  // ---------- done: open the video page, like Loom ----------
+  async function openVideoPage(video) {
+    if (!IS_EXT) {
+      location.href = `/v/${video.id}?new=1`;
+      return;
+    }
+    // From the extension: sign in to the website with the access key, then land on the video page.
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = `${state.serverUrl}/login`;
+    form.target = '_blank';
+    form.innerHTML = '<input type="hidden" name="key"><input type="hidden" name="next">';
+    form.key.value = state.token;
+    form.next.value = `/v/${video.id}?new=1`;
+    document.body.append(form);
+    form.submit();
+    form.remove();
+  }
+
   function showDone(video) {
+    openVideoPage(video);
     state.video = video;
     $('#done-title').textContent = video.title;
     $('#done-gif').src = video.gifUrl;
