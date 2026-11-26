@@ -67,7 +67,7 @@ function inTriangle(px, py, [ax, ay], [bx, by], [cx, cy]) {
   return !(neg && pos);
 }
 
-export const ACCENT = [91, 75, 255];
+export const ACCENT = [24, 104, 219];
 
 /** Round accent badge with a white play triangle. */
 export function playButtonPng(size = 256, { ring = true } = {}) {

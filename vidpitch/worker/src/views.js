@@ -53,7 +53,7 @@ export function emailHtml(cfg, video) {
     `<img src="${esc(gifUrl)}" alt="${esc(video.title)} (click to watch)" width="${width}" style="display:block;width:${width}px;max-width:100%;height:auto;border:1px solid #e6e6ea;border-radius:10px">`,
     '</a>',
     '<br>',
-    `<a href="${esc(shareUrl)}" target="_blank" style="color:#5b4bff;${font};font-size:13px;font-weight:600;text-decoration:none">&#9654; ${esc(label)}</a>`,
+    `<a href="${esc(shareUrl)}" target="_blank" style="color:#1868db;${font};font-size:13px;font-weight:600;text-decoration:none">&#9654; ${esc(label)}</a>`,
     '</div>',
   ].join('');
 }
@@ -98,7 +98,7 @@ function page({ title, head = '', body }) {
 ${head}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
 <link rel="stylesheet" href="/static/share.css">
 </head>
 <body>
@@ -129,74 +129,101 @@ export function sharePage(cfg, video) {
 
   const body = `
 <header class="top">
-  <div class="who"><span class="avatar">${esc(initials(owner))}</span><span class="who-name">${esc(owner)}</span></div>
+  <div class="top-inner">
+    <div class="who"><span class="avatar">${esc(initials(owner))}</span><span class="who-name">${esc(owner)}</span></div>
+  </div>
 </header>
 
-<main class="wrap">
-  <div class="player" id="player" tabindex="-1"
-       data-duration="${esc(video.duration ?? '')}"
-       data-cta-lead="${esc(cfg.ctaLeadSeconds)}">
-    <video id="video" playsinline preload="metadata" poster="${esc(urls.posterUrl)}">
-      <source src="${esc(urls.videoUrl)}" type="${esc(urls.videoType)}">
-    </video>
+<div class="layout">
+  <main class="main">
+    <div class="title-row">
+      <div class="title-text">
+        <h1>${esc(video.title)}</h1>
+        <p class="byline"><span>${esc(owner)}</span><span class="sep" aria-hidden="true">·</span><span>${esc(date)}</span></p>
+      </div>
+      <div class="title-actions">
+        <button type="button" class="icon-btn" data-copy-link aria-label="Copy link to this video" title="Copy link"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
 
-    <button class="bigplay" type="button" aria-label="Play video">${PLAY}</button>
+    <div class="stage">
+      <div class="player" id="player" tabindex="-1"
+           data-duration="${esc(video.duration ?? '')}"
+           data-cta-lead="${esc(cfg.ctaLeadSeconds)}">
+        <video id="video" playsinline preload="metadata" poster="${esc(urls.posterUrl)}">
+          <source src="${esc(urls.videoUrl)}" type="${esc(urls.videoType)}">
+        </video>
 
-    ${cta.url ? ctaLink('cta-pop', `<span class="cta-pop-icon">${CAL}</span><span class="cta-pop-text"><strong>${esc(cta.label)}</strong><small>with ${esc(owner)}</small></span><span class="cta-pop-arrow">${ARROW}</span>`) : ''}
+        <button class="bigplay" type="button" aria-label="Play video">${PLAY}</button>
 
-    <div class="endcard" hidden>
-      <div class="endcard-inner">
-        ${cta.url ? `
-        <span class="avatar avatar-lg">${esc(initials(owner))}</span>
+        ${cta.url ? ctaLink('cta-pop', `<span class="cta-pop-icon">${CAL}</span><span class="cta-pop-text"><strong>${esc(cta.label)}</strong><small>with ${esc(owner)}</small></span><span class="cta-pop-arrow">${ARROW}</span>`) : ''}
+
+        <div class="endcard" hidden>
+          <div class="endcard-inner">
+            ${cta.url ? `
+            <span class="avatar avatar-lg">${esc(initials(owner))}</span>
+            <h2>${esc(cta.headline)}</h2>
+            <p>${esc(cta.subtext)}</p>
+            ${ctaLink('btn btn-primary btn-lg', `${CAL}<span>${esc(cta.label)}</span>${ARROW}`)}
+            ` : '<h2>Thanks for watching</h2>'}
+            <button class="replay" type="button">
+              <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10a6 6 0 1 0 1.8-4.3M4 3.5v3.2h3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Watch again
+            </button>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="scrub" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+            <div class="scrub-track"><div class="scrub-buffer"></div><div class="scrub-fill"></div></div>
+          </div>
+          <div class="bar">
+            <button type="button" class="ctl" data-act="play" aria-label="Play">
+              <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
+            </button>
+            <button type="button" class="ctl" data-act="mute" aria-label="Mute">
+              <svg class="i-vol" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a4.5 4.5 0 0 1 0 7M18 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              <svg class="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </button>
+            <span class="time"><span data-cur>0:00</span><span class="sep">/</span><span data-dur>${esc(dur || '0:00')}</span></span>
+            <span class="grow"></span>
+            <button type="button" class="ctl ctl-text" data-act="speed" aria-label="Playback speed">1x</button>
+            <button type="button" class="ctl" data-act="fullscreen" aria-label="Full screen">
+              <svg viewBox="0 0 24 24"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      ${cta.url ? `
+      <div class="cta-strip">
+        <span class="avatar">${esc(initials(owner))}</span>
+        <div class="cta-strip-copy">
+          <strong>${esc(cta.headline)}</strong>
+          <span>${esc(cta.subtext)}</span>
+        </div>
+        ${ctaLink('btn btn-primary', `${CAL}<span>${esc(cta.label)}</span>`)}
+      </div>` : ''}
+    </div>
+  </main>
+
+  <aside class="side">
+    <div class="tabs" role="presentation"><span class="tab on">About</span></div>
+    <div class="side-body">
+      <div class="creator">
+        <span class="avatar avatar-md">${esc(initials(owner))}</span>
+        <div class="creator-text"><b>${esc(owner)}</b><span>${esc(date)}${dur ? ` · ${esc(dur)}` : ''}</span></div>
+      </div>
+      ${cta.url ? `
+      <div class="book-card">
         <h2>${esc(cta.headline)}</h2>
         <p>${esc(cta.subtext)}</p>
-        ${ctaLink('btn btn-primary btn-lg', `${CAL}<span>${esc(cta.label)}</span>${ARROW}`)}
-        ` : '<h2>Thanks for watching</h2>'}
-        <button class="replay" type="button">
-          <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10a6 6 0 1 0 1.8-4.3M4 3.5v3.2h3.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Watch again
-        </button>
-      </div>
+        ${ctaLink('btn btn-primary btn-block', `${CAL}<span>${esc(cta.label)}</span>`)}
+      </div>` : ''}
     </div>
-
-    <div class="controls">
-      <div class="scrub" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-        <div class="scrub-track"><div class="scrub-buffer"></div><div class="scrub-fill"></div></div>
-      </div>
-      <div class="bar">
-        <button type="button" class="ctl" data-act="play" aria-label="Play">
-          <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>
-          <svg class="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>
-        </button>
-        <button type="button" class="ctl" data-act="mute" aria-label="Mute">
-          <svg class="i-vol" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 8.5a4.5 4.5 0 0 1 0 7M18 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-          <svg class="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="m16 9.5 5 5m0-5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </button>
-        <span class="time"><span data-cur>0:00</span><span class="sep">/</span><span data-dur>${esc(dur || '0:00')}</span></span>
-        <span class="grow"></span>
-        <button type="button" class="ctl ctl-text" data-act="speed" aria-label="Playback speed">1x</button>
-        <button type="button" class="ctl" data-act="fullscreen" aria-label="Full screen">
-          <svg viewBox="0 0 24 24"><path d="M4.5 9V4.5H9M15 4.5h4.5V9M19.5 15v4.5H15M9 19.5H4.5V15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <section class="meta">
-    <h1>${esc(video.title)}</h1>
-    <p><span>${esc(owner)}</span><span class="dot"></span><span>${esc(date)}</span>${dur ? `<span class="dot"></span><span>${esc(dur)}</span>` : ''}</p>
-  </section>
-
-  ${cta.url ? `
-  <section class="cta-strip">
-    <span class="avatar">${esc(initials(owner))}</span>
-    <div class="cta-strip-copy">
-      <strong>${esc(cta.headline)}</strong>
-      <span>${esc(cta.subtext)}</span>
-    </div>
-    ${ctaLink('btn btn-primary', `<span>${esc(cta.label)}</span>${ARROW}`)}
-  </section>` : ''}
-</main>
+  </aside>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <script src="/static/player.js" defer></script>`;
 
   return page({ title: `${video.title} | ${owner}`, head, body });

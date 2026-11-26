@@ -7,7 +7,7 @@ const SECONDS = 3;
 const FPS = 10;
 const GIF_TARGET_BYTES = 1024 * 1024;
 const GIF_WIDTHS = [480, 400, 320];
-const ACCENT = '#5b4bff';
+const ACCENT = '#1868db';
 
 function drawPlayButton(ctx, cx, cy, d) {
   const r = d / 2;

@@ -47,6 +47,7 @@
   // ---------- small helpers ----------
   function show(name) {
     views.forEach((v) => { v.hidden = v.dataset.view !== name; });
+    document.body.dataset.screen = name; // the floating camera bubble shows only while getting ready
     $('#open-settings').hidden = !IS_EXT || name === 'setup' || !state.token;
     document.title = name === 'recording' ? '● Recording | Vidpitch' : 'Vidpitch Recorder';
   }
@@ -136,6 +137,14 @@
     if (p.camSize) state.camSize = p.camSize;
     document.querySelectorAll('[data-pos]').forEach((b) => b.classList.toggle('on', b.dataset.pos === state.camPosition));
     document.querySelectorAll('[data-size]').forEach((b) => b.classList.toggle('on', b.dataset.size === state.camSize));
+    syncFrame();
+  }
+
+  // The layout preview shows where and how big the bubble will be.
+  function syncFrame() {
+    const frame = $('#cam-preview');
+    frame.dataset.pos = state.camPosition;
+    frame.dataset.size = state.camSize;
   }
 
   async function syncCamera() {
@@ -173,11 +182,13 @@
     state.camPosition = b.dataset.pos;
     store.set({ camPosition: state.camPosition });
     document.querySelectorAll('[data-pos]').forEach((x) => x.classList.toggle('on', x === b));
+    syncFrame();
   }));
   document.querySelectorAll('[data-size]').forEach((b) => b.addEventListener('click', () => {
     state.camSize = b.dataset.size;
     store.set({ camSize: state.camSize });
     document.querySelectorAll('[data-size]').forEach((x) => x.classList.toggle('on', x === b));
+    syncFrame();
   }));
 
   // ---------- recording ----------
@@ -609,8 +620,7 @@
       state.token = '';
       // On the website, Gmail insert needs the extension; copying works everywhere.
       $('#insert-gmail').hidden = true;
-      $('#copy-email').classList.replace('btn-ghost', 'btn-primary');
-      $('#copy-email').classList.add('grow');
+      $('#copy-email').classList.replace('btn-quiet', 'btn-primary');
       document.querySelector('.brand').addEventListener('click', () => { location.href = '/'; });
       document.querySelector('.brand').style.cursor = 'pointer';
       $('#new-recording').insertAdjacentHTML('afterend', '<a class="link" href="/">Back to my videos</a>');

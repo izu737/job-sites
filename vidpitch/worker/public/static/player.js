@@ -1,4 +1,16 @@
 (() => {
+  // Copy link button in the title row.
+  const toastEl = document.getElementById('toast');
+  let toastTimer;
+  document.querySelector('[data-copy-link]')?.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(location.href.split('#')[0]); } catch { return; }
+    if (!toastEl) return;
+    toastEl.textContent = 'Link copied';
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastEl.hidden = true; }, 2000);
+  });
+
   const root = document.getElementById('player');
   if (!root) return;
 

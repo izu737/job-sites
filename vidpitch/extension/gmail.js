@@ -178,7 +178,7 @@
       padding: '12px 18px', borderRadius: '12px', maxWidth: 'min(520px, calc(100vw - 32px))',
       background: tone === 'error' ? '#2a1720' : '#17151f', color: '#fff',
       font: '500 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      boxShadow: '0 16px 40px -8px rgba(0,0,0,.45)', borderLeft: `4px solid ${tone === 'error' ? '#ff5c7a' : '#5b4bff'}`,
+      boxShadow: '0 16px 40px -8px rgba(0,0,0,.45)', borderLeft: `4px solid ${tone === 'error' ? '#ff5c7a' : '#1868db'}`,
     });
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 6000);
