@@ -61,8 +61,7 @@ export function ctaFor(cfg, video) {
 export function emailHtml(cfg, video) {
   const { shareUrl, gifUrl } = urlsFor(cfg, video);
   const width = Math.min(400, video.gif_width || 400);
-  const dur = formatDuration(video.duration);
-  const label = `Watch video${dur ? ` (${dur})` : ''}`;
+  const label = 'Watch video';
   const font = "font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   return [
     '<div>',
@@ -78,8 +77,7 @@ export function emailHtml(cfg, video) {
 }
 
 export function emailText(cfg, video) {
-  const dur = formatDuration(video.duration);
-  return `${video.title}${dur ? ` (${dur})` : ''}: ${urlsFor(cfg, video).shareUrl}`;
+  return `${video.title}: ${urlsFor(cfg, video).shareUrl}`;
 }
 
 export function serialize(cfg, video) {

@@ -23,7 +23,8 @@ test('email block links the GIF to the share page and escapes the title', () => 
   assert.ok(html.includes('Idea for &lt;Acme&gt; &amp; &quot;you&quot;'));
   assert.ok(!html.includes('<Acme>'));
   assert.ok(html.includes('width="400"'));
-  assert.ok(html.includes('Watch video (1:23)'));
+  assert.ok(html.includes('Watch video</a>'));
+  assert.ok(!html.includes('1:23'), 'no duration in the email');
 });
 
 test('share page has the booking button, end card and preview tags', () => {
